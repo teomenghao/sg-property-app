@@ -64,7 +64,7 @@
         <div id="mod-affordability" class="space-y-6 max-w-5xl mx-auto w-full">
             <div>
                 <h2 class="text-xl font-bold text-white tracking-tight">Multi-Buyer Affordability & MSR/TDSR Engine</h2>
-                <p class="text-xs text-slate-400 mt-0.5">Enforces MSR (30%) for HDB flats and TDSR (55%) for private properties, with individual age-capped tenures.</p>
+                <p class="text-xs text-slate-400 mt-0.5">Enforces MSR (30%) for HDB flats (max 25 yrs) and TDSR (55%) for private properties (max 35 yrs).</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -117,10 +117,10 @@
             <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4 shadow-xl">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                        <label class="text-[11px] font-semibold text-slate-400">Property Type (Enforces MSR vs TDSR)</label>
+                        <label class="text-[11px] font-semibold text-slate-400">Property Type (HDB Max 25 Yrs / Private Max 35 Yrs)</label>
                         <select id="prop-type-tenure" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-blue-500 outline-none">
-                            <option value="private">Private Property (TDSR 55% Cap | Max 35 Yrs)</option>
-                            <option value="hdb">HDB Flat / EC (MSR 30% Cap | Max 30 Yrs)</option>
+                            <option value="private">Private Property (TDSR 55% | Max 35 Yrs)</option>
+                            <option value="hdb">HDB Flat / EC (MSR 30% | Max 25 Yrs)</option>
                         </select>
                     </div>
                     <div>
@@ -411,8 +411,9 @@
             }
             const iwaa = Math.ceil(rawIwaa); // Rounded up to whole number
 
+            // HDB maximum tenure cap is strictly 25 years; Private is 35 years.
+            const absoluteMaxTenure = propType === 'hdb' ? 25 : 35;
             const maxAllowedTenureByAge = Math.max(5, 65 - iwaa);
-            const absoluteMaxTenure = propType === 'hdb' ? 30 : 35;
             const finalTenure = Math.min(maxAllowedTenureByAge, absoluteMaxTenure);
 
             // Helper to calculate loan based on monthly payment capacity, tenure in years, and annual interest rate
@@ -431,7 +432,6 @@
                 return loanAmt * (mRate * Math.pow(1 + mRate, months)) / (Math.pow(1 + mRate, months) - 1);
             };
 
-            // Rule selector: HDB/EC enforces MSR (30%), Private enforces TDSR (55%)
             const isHDB = propType === 'hdb';
 
             // Buyer 1 Alone
@@ -442,7 +442,7 @@
             const b1Down = b1Price * downpaymentPct;
             const b1Inst = calcInstallment(b1Loan, b1Tenure, marketRate);
 
-            // Buyer 2 Alone (Corrected to use Buyer 2's individual age & tenure cap)
+            // Buyer 2 Alone (Corrected and fully isolated using Buyer 2's specific age, income, and debt)
             const b2Tenure = Math.min(absoluteMaxTenure, Math.max(5, 65 - age2));
             const b2MaxPmt = isHDB ? (inc2 * 0.30) : Math.max(0, (inc2 * 0.55) - debt2);
             const b2Loan = calcLoan(b2MaxPmt, b2Tenure, stressRate);
