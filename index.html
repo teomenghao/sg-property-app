@@ -63,8 +63,8 @@
         <!-- MODULE 1: AFFORDABILITY & BUYERS CHECK -->
         <div id="mod-affordability" class="space-y-6 max-w-5xl mx-auto w-full">
             <div>
-                <h2 class="text-xl font-bold text-white tracking-tight">Multi-Buyer Affordability & IWAA Tenure Engine</h2>
-                <p class="text-xs text-slate-400 mt-0.5">Calculates individual max loans, Income-Weighted Average Age (IWAA), and max tenure caps under MAS guidelines.</p>
+                <h2 class="text-xl font-bold text-white tracking-tight">Multi-Buyer Affordability & LTV Financing Engine</h2>
+                <p class="text-xs text-slate-400 mt-0.5">Calculates rounded IWAA, loan count LTV tiers, max purchase budgets, downpayments, and actual market installments.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -113,28 +113,37 @@
                 </div>
             </div>
 
-            <!-- Global Parameters & Trigger -->
+            <!-- Global Parameters & Financing Toggles -->
             <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4 shadow-xl">
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                        <label class="text-[11px] font-semibold text-slate-400">Property Type (Tenure Cap Rule)</label>
+                        <label class="text-[11px] font-semibold text-slate-400">Property Type (Tenure Cap)</label>
                         <select id="prop-type-tenure" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-blue-500 outline-none">
-                            <option value="private">Private Property (Max 35 Years Tenure)</option>
-                            <option value="hdb">HDB Flat (Max 30 Years Tenure)</option>
+                            <option value="private">Private Property (Max 35 Yrs)</option>
+                            <option value="hdb">HDB Flat (Max 30 Yrs)</option>
                         </select>
                     </div>
                     <div>
-                        <label class="text-[11px] font-semibold text-slate-400">Stress Test Interest Rate (%)</label>
-                        <input type="number" step="0.1" id="global-rate" value="4.0" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-blue-500 outline-none">
+                        <label class="text-[11px] font-semibold text-slate-400">Housing Loan Count & LTV Tier</label>
+                        <select id="loan-tier" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-blue-500 outline-none">
+                            <option value="1">1st Loan (75% LTV / 25% Down)</option>
+                            <option value="2">2nd Loan (45% LTV / 55% Down)</option>
+                            <option value="3">3rd Loan (35% LTV / 65% Down)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-semibold text-slate-400">Actual Market Interest Rate (%)</label>
+                        <input type="number" step="0.05" id="market-rate" value="2.8" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-blue-500 outline-none">
                     </div>
                 </div>
-                <button onclick="runAffordability()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3.5 rounded-xl text-xs transition shadow-lg shadow-blue-600/20">Compute IWAA, Max Tenure & Combined Affordability</button>
+
+                <button onclick="runAffordability()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3.5 rounded-xl text-xs transition shadow-lg shadow-blue-600/20">Compute Full LTV & Installment Breakdown</button>
 
                 <!-- Results Matrix -->
-                <div id="res-afford-box" class="bg-slate-950 border border-slate-800 p-5 rounded-xl space-y-3 hidden font-mono text-xs">
+                <div id="res-afford-box" class="bg-slate-950 border border-slate-800 p-5 rounded-xl space-y-4 hidden font-mono text-xs">
                     <div class="grid grid-cols-2 gap-4 border-b border-slate-800 pb-3 text-center">
                         <div class="bg-slate-900 p-3 rounded-xl border border-slate-800">
-                            <div class="text-slate-400 text-[10px] uppercase">Income-Weighted Average Age (IWAA)</div>
+                            <div class="text-slate-400 text-[10px] uppercase">Income-Weighted Avg Age (IWAA)</div>
                             <div id="out-iwaa" class="text-emerald-400 font-bold text-base mt-1"></div>
                         </div>
                         <div class="bg-slate-900 p-3 rounded-xl border border-slate-800">
@@ -142,28 +151,38 @@
                             <div id="out-max-tenure" class="text-blue-400 font-bold text-base mt-1"></div>
                         </div>
                     </div>
-                    <div class="grid grid-cols-3 gap-4 border-b border-slate-800 pb-3 text-center pt-2">
-                        <div>
-                            <div class="text-slate-400 text-[10px] uppercase">Buyer 1 Max Loan</div>
-                            <div id="out-b1-loan" class="text-white font-bold text-sm mt-1"></div>
+
+                    <!-- Individual vs Combined Breakdown Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 border-b border-slate-800 pb-4">
+                        <!-- Buyer 1 Summary -->
+                        <div class="bg-slate-900 p-3.5 rounded-xl border border-slate-800 space-y-2">
+                            <div class="text-blue-400 font-bold text-xs uppercase border-b border-slate-800 pb-1">Buyer 1 Alone</div>
+                            <div class="flex justify-between text-slate-400"><span>Max Loan:</span> <span id="out-b1-loan" class="text-white"></span></div>
+                            <div class="flex justify-between text-slate-400"><span>Max Price:</span> <span id="out-b1-price" class="text-emerald-400"></span></div>
+                            <div class="flex justify-between text-slate-400"><span>Downpayment:</span> <span id="out-b1-down" class="text-white"></span></div>
+                            <div class="flex justify-between text-slate-400 border-t border-slate-800 pt-1"><span>Est. Installment:</span> <span id="out-b1-installment" class="text-amber-400 font-bold"></span></div>
                         </div>
-                        <div>
-                            <div class="text-slate-400 text-[10px] uppercase">Buyer 2 Max Loan</div>
-                            <div id="out-b2-loan" class="text-white font-bold text-sm mt-1"></div>
+                        <!-- Buyer 2 Summary -->
+                        <div class="bg-slate-900 p-3.5 rounded-xl border border-slate-800 space-y-2">
+                            <div class="text-indigo-400 font-bold text-xs uppercase border-b border-slate-800 pb-1">Buyer 2 Alone</div>
+                            <div class="flex justify-between text-slate-400"><span>Max Loan:</span> <span id="out-b2-loan" class="text-white"></span></div>
+                            <div class="flex justify-between text-slate-400"><span>Max Price:</span> <span id="out-b2-price" class="text-emerald-400"></span></div>
+                            <div class="flex justify-between text-slate-400"><span>Downpayment:</span> <span id="out-b2-down" class="text-white"></span></div>
+                            <div class="flex justify-between text-slate-400 border-t border-slate-800 pt-1"><span>Est. Installment:</span> <span id="out-b2-installment" class="text-amber-400 font-bold"></span></div>
                         </div>
-                        <div>
-                            <div class="text-slate-400 text-[10px] uppercase">Combined Max Loan</div>
-                            <div id="out-combined-loan" class="text-blue-400 font-bold text-sm mt-1"></div>
+                        <!-- Combined Summary -->
+                        <div class="bg-slate-900 p-3.5 rounded-xl border border-blue-900/50 space-y-2">
+                            <div class="text-emerald-400 font-bold text-xs uppercase border-b border-slate-800 pb-1">Combined Buyers</div>
+                            <div class="flex justify-between text-slate-400"><span>Max Loan:</span> <span id="out-combined-loan" class="text-white"></span></div>
+                            <div class="flex justify-between text-slate-400"><span>Max Price:</span> <span id="out-combined-price" class="text-emerald-400 font-bold"></span></div>
+                            <div class="flex justify-between text-slate-400"><span>Downpayment:</span> <span id="out-combined-down" class="text-white"></span></div>
+                            <div class="flex justify-between text-slate-400 border-t border-slate-800 pt-1"><span>Est. Installment:</span> <span id="out-combined-installment" class="text-emerald-400 font-bold"></span></div>
                         </div>
                     </div>
-                    <div class="flex justify-between text-slate-400 pt-1">
-                        <span>Combined Allowable Debt Service (TDSR 55%):</span> <span id="out-combined-tdsr" class="text-white"></span>
-                    </div>
-                    <div class="flex justify-between text-slate-400">
-                        <span>Combined Allowable MSR Cap (HDB/EC 30%):</span> <span id="out-combined-msr" class="text-white"></span>
-                    </div>
-                    <div class="flex justify-between border-t border-slate-800 pt-2 text-sm font-bold text-white">
-                        <span>Est. Max Purchase Budget (Assuming 75% LTV Bank Loan):</span> <span id="out-max-purchase" class="text-emerald-400"></span>
+
+                    <div class="space-y-1.5 text-slate-400">
+                        <div class="flex justify-between"><span>Combined Allowable Debt Service (TDSR 55%):</span> <span id="out-combined-tdsr" class="text-white"></span></div>
+                        <div class="flex justify-between"><span>Combined Allowable MSR Cap (HDB/EC 30%):</span> <span id="out-combined-msr" class="text-white"></span></div>
                     </div>
                 </div>
             </div>
@@ -376,56 +395,92 @@
             const debt2 = parseFloat(document.getElementById('b2-debt').value) || 0;
             
             const propType = document.getElementById('prop-type-tenure').value;
-            const rate = (parseFloat(document.getElementById('global-rate').value) || 4.0) / 100;
+            const loanTier = parseInt(document.getElementById('loan-tier').value);
+            const stressRate = 0.04; // MAS 4% stress test for loan quantum limit
+            const marketRate = (parseFloat(document.getElementById('market-rate').value) || 2.8) / 100;
+
+            // LTV mapping: 1st loan = 75% LTV (25% down), 2nd loan = 45% LTV (55% down), 3rd loan = 35% LTV (65% down)
+            const ltvMap = { 1: 0.75, 2: 0.45, 3: 0.35 };
+            const currentLtv = ltvMap[loanTier];
+            const downpaymentPct = 1 - currentLtv;
 
             const totalInc = inc1 + inc2;
-            let iwaa = 35; // default fallback
+            let rawIwaa = 35;
             if (totalInc > 0) {
-                iwaa = ((age1 * inc1) + (age2 * inc2)) / totalInc;
+                rawIwaa = ((age1 * inc1) + (age2 * inc2)) / totalInc;
             } else {
-                iwaa = (age1 + age2) / 2;
+                rawIwaa = (age1 + age2) / 2;
             }
+            const iwaa = Math.ceil(rawIwaa); // Rounded up to whole number
 
-            // MAS rules: max age cap for full LTV is 65. Max tenure = 65 - IWAA, capped at 30 for HDB or 35 for Private.
-            const maxAllowedTenureByAge = Math.max(5, 65 - Math.floor(iwaa));
+            const maxAllowedTenureByAge = Math.max(5, 65 - iwaa);
             const absoluteMaxTenure = propType === 'hdb' ? 30 : 35;
             const finalTenure = Math.min(maxAllowedTenureByAge, absoluteMaxTenure);
 
-            const monthlyRate = rate / 12;
-            const months = finalTenure * 12;
-            const calcLoan = (pmt, tenureMonths) => {
-                const mRate = rate / 12;
-                return pmt * (Math.pow(1 + mRate, tenureMonths) - 1) / (mRate * Math.pow(1 + mRate, tenureMonths));
+            // Helper to calculate loan based on monthly payment, tenure in years, and annual interest rate
+            const calcLoan = (pmt, tenureYrs, annualRate) => {
+                if (pmt <= 0 || tenureYrs <= 0) return 0;
+                const mRate = annualRate / 12;
+                const months = tenureYrs * 12;
+                return pmt * (Math.pow(1 + mRate, months) - 1) / (mRate * Math.pow(1 + mRate, months));
             };
 
-            // Individual 1 Max Loan (TDSR 55% cap based on individual income/debt, using individual tenure or combined tenure framework)
+            // Helper to calculate monthly installment based on loan amount
+            const calcInstallment = (loanAmt, tenureYrs, annualRate) => {
+                if (loanAmt <= 0 || tenureYrs <= 0) return 0;
+                const mRate = annualRate / 12;
+                const months = tenureYrs * 12;
+                return loanAmt * (mRate * Math.pow(1 + mRate, months)) / (Math.pow(1 + mRate, months) - 1);
+            };
+
+            // Buyer 1 Alone
             const b1MaxPmt = Math.max(0, (inc1 * 0.55) - debt1);
-            const b1Tenure = Math.min(finalTenure, Math.max(5, 65 - age1));
-            const b1Loan = calcLoan(b1MaxPmt, b1Tenure * 12);
+            const b1Tenure = Math.min(propType === 'hdb' ? 30 : 35, Math.max(5, 65 - age1));
+            const b1Loan = calcLoan(b1MaxPmt, b1Tenure, stressRate);
+            const b1Price = b1Loan / currentLtv;
+            const b1Down = b1Price * downpaymentPct;
+            const b1Inst = calcInstallment(b1Loan, b1Tenure, marketRate);
 
-            // Individual 2 Max Loan
+            // Buyer 2 Alone
             const b2MaxPmt = Math.max(0, (inc2 * 0.55) - debt2);
-            const b2Tenure = Math.min(finalTenure, Math.max(5, 65 - age2));
-            const b2Loan = calcLoan(b2MaxPmt, b2Tenure * 12);
+            const b2Tenure = Math.min(propType === 'hdb' ? 30 : 35, Math.max(5, 65 - age2));
+            const b2Loan = calcLoan(b2MaxPmt, b2Tenure, stressRate);
+            const b2Price = b2Loan / currentLtv;
+            const b2Down = b2Price * downpaymentPct;
+            const b2Inst = calcInstallment(b2Loan, b2Tenure, marketRate);
 
-            // Combined Calculation using IWAA-derived tenure
+            // Combined Buyers
             const totalDebt = debt1 + debt2;
             const combinedMaxDebt = totalInc * 0.55;
             const combinedAvailPmt = Math.max(0, combinedMaxDebt - totalDebt);
             const combinedMSR = totalInc * 0.30;
-            const combinedLoan = calcLoan(combinedAvailPmt, finalTenure * 12);
-            
-            // Assume 75% LTV bank loan max purchase budget estimation
-            const estMaxPurchase = combinedLoan / 0.75;
+            const combinedLoan = calcLoan(combinedAvailPmt, finalTenure, stressRate);
+            const combinedPrice = combinedLoan / currentLtv;
+            const combinedDown = combinedPrice * downpaymentPct;
+            const combinedInst = calcInstallment(combinedLoan, finalTenure, marketRate);
 
-            document.getElementById('out-iwaa').innerText = `${iwaa.toFixed(1)} Years Old`;
+            // Inject Results
+            document.getElementById('out-iwaa').innerText = `${iwaa} Years Old`;
             document.getElementById('out-max-tenure').innerText = `${finalTenure} Years`;
+
             document.getElementById('out-b1-loan').innerText = `$${Math.round(b1Loan).toLocaleString()}`;
+            document.getElementById('out-b1-price').innerText = `$${Math.round(b1Price).toLocaleString()}`;
+            document.getElementById('out-b1-down').innerText = `$${Math.round(b1Down).toLocaleString()}`;
+            document.getElementById('out-b1-installment').innerText = `$${Math.round(b1Inst).toLocaleString()}/mo`;
+
             document.getElementById('out-b2-loan').innerText = `$${Math.round(b2Loan).toLocaleString()}`;
+            document.getElementById('out-b2-price').innerText = `$${Math.round(b2Price).toLocaleString()}`;
+            document.getElementById('out-b2-down').innerText = `$${Math.round(b2Down).toLocaleString()}`;
+            document.getElementById('out-b2-installment').innerText = `$${Math.round(b2Inst).toLocaleString()}/mo`;
+
             document.getElementById('out-combined-loan').innerText = `$${Math.round(combinedLoan).toLocaleString()}`;
+            document.getElementById('out-combined-price').innerText = `$${Math.round(combinedPrice).toLocaleString()}`;
+            document.getElementById('out-combined-down').innerText = `$${Math.round(combinedDown).toLocaleString()}`;
+            document.getElementById('out-combined-installment').innerText = `$${Math.round(combinedInst).toLocaleString()}/mo`;
+
             document.getElementById('out-combined-tdsr').innerText = `$${combinedMaxDebt.toLocaleString('en-US', {maximumFractionDigits:0})}`;
             document.getElementById('out-combined-msr').innerText = `$${combinedMSR.toLocaleString('en-US', {maximumFractionDigits:0})}`;
-            document.getElementById('out-max-purchase').innerText = `$${Math.round(estMaxPurchase).toLocaleString()}`;
+
             document.getElementById('res-afford-box').classList.remove('hidden');
         }
 
