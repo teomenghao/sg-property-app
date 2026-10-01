@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SG Real Estate Super App</title>
-    <!-- Tailwind CSS for styling -->
+    <title>SG Real Estate Super App - Pro Agent Suite</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Leaflet CSS for Maps -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -13,180 +13,222 @@
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 pb-20">
+<body class="bg-slate-50 text-slate-800 pb-24">
 
     <!-- Header -->
     <header class="bg-slate-900 text-white p-4 sticky top-0 z-50 shadow-md">
         <div class="max-w-md mx-auto flex justify-between items-center">
-            <h1 class="text-lg font-bold tracking-tight">SG Property Suite</h1>
-            <span class="text-xs bg-emerald-600 text-white px-2 py-1 rounded-full font-medium">Live Web App</span>
+            <h1 class="text-sm font-bold tracking-tight">SG Pro Agent Suite</h1>
+            <span class="text-xs bg-emerald-600 text-white px-2 py-1 rounded-full font-medium">Elite Edition</span>
         </div>
     </header>
 
     <!-- Main Container -->
-    <main class="max-w-md mx-auto p-4 space-y-6">
+    <main class="max-w-md mx-auto p-4 space-y-5">
 
-        <!-- Module Selector Tabs -->
-        <div class="grid grid-cols-3 gap-2 bg-slate-200 p-1 rounded-xl text-xs font-semibold text-center">
-            <button onclick="switchTab('calculators')" id="tab-calculators" class="py-2 rounded-lg bg-white shadow-sm text-slate-900 transition">Calculators</button>
-            <button onclick="switchTab('properties')" id="tab-properties" class="py-2 rounded-lg text-slate-600 transition">Market Data</button>
-            <button onclick="switchTab('tracker')" id="tab-tracker" class="py-2 rounded-lg text-slate-600 transition">New Launch / En Bloc</button>
+        <!-- Module Navigation Selector -->
+        <div class="grid grid-cols-4 gap-1 bg-slate-200 p-1 rounded-xl text-[11px] font-semibold text-center">
+            <button onclick="switchTab('calculators')" id="tab-calculators" class="py-2 rounded-lg bg-white shadow-sm text-slate-900 transition">Calcs</button>
+            <button onclick="switchTab('crm')" id="tab-crm" class="py-2 rounded-lg text-slate-600 transition">CRM</button>
+            <button onclick="switchTab('decouple')" id="tab-decouple" class="py-2 rounded-lg text-slate-600 transition">Tax & Decouple</button>
+            <button onclick="switchTab('marketing')" id="tab-marketing" class="py-2 rounded-lg text-slate-600 transition">AI & CMA</button>
         </div>
 
-        <!-- TAB 1: CALCULATORS -->
-        <div id="content-calculators" class="space-y-6">
-            <!-- Calc Sub-tabs -->
-            <div class="flex space-x-2 border-b border-slate-200 pb-2 text-sm font-medium">
-                <button onclick="switchCalcSub('tdsr')" id="subtab-tdsr" class="text-blue-600 border-b-2 border-blue-600 pb-1">TDSR / MSR</button>
-                <button onclick="switchCalcSub('proceeds')" id="subtab-proceeds" class="text-slate-500 pb-1">Cash Proceeds</button>
-                <button onclick="switchCalcSub('purchase')" id="subtab-purchase" class="text-slate-500 pb-1">Purchase Outlay</button>
+        <!-- TAB 1: CALCULATORS & MARKET DATA & MAP TRACKER -->
+        <div id="content-calculators" class="space-y-4">
+            <div class="flex space-x-2 border-b border-slate-200 pb-2 text-xs font-semibold">
+                <button onclick="switchSubTab('calc','tdsr')" id="subtab-calc-tdsr" class="text-blue-600 border-b-2 border-blue-600 pb-1">TDSR/MSR</button>
+                <button onclick="switchSubTab('calc','proceeds')" id="subtab-calc-proceeds" class="text-slate-500 pb-1">Proceeds</button>
+                <button onclick="switchSubTab('calc','map')" id="subtab-calc-map" class="text-slate-500 pb-1">New Launch Map</button>
             </div>
 
             <!-- TDSR / MSR Calculator -->
-            <div id="calc-tdsr" class="space-y-4 bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
-                <h2 class="font-bold text-slate-900">TDSR & MSR Affordability Calculator</h2>
+            <div id="subcontent-calc-tdsr" class="space-y-3 bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+                <h2 class="font-bold text-slate-900 text-sm">Affordability & Loan Stress Test</h2>
                 <div>
-                    <label class="text-xs font-semibold text-slate-600">Monthly Gross Income (SGD)</label>
-                    <input type="number" id="tdsr-income" value="10000" class="w-full mt-1 p-3 border rounded-xl bg-slate-50 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    <label class="text-[11px] font-semibold text-slate-600">Monthly Gross Income (SGD)</label>
+                    <input type="number" id="tdsr-income" value="12000" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
                 </div>
                 <div>
-                    <label class="text-xs font-semibold text-slate-600">Existing Monthly Debt Obligations (Car loan, etc.)</label>
-                    <input type="number" id="tdsr-debt" value="1000" class="w-full mt-1 p-3 border rounded-xl bg-slate-50 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    <label class="text-[11px] font-semibold text-slate-600">Existing Monthly Debts</label>
+                    <input type="number" id="tdsr-debt" value="800" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
                 </div>
-                <div>
-                    <label class="text-xs font-semibold text-slate-600">Loan Tenure (Years)</label>
-                    <input type="number" id="tdsr-tenure" value="30" class="w-full mt-1 p-3 border rounded-xl bg-slate-50 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[11px] font-semibold text-slate-600">Tenure (Yrs)</label>
+                        <input type="number" id="tdsr-tenure" value="30" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-semibold text-slate-600">Stress Rate (%)</label>
+                        <input type="number" step="0.1" id="tdsr-rate" value="4.0" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
+                    </div>
                 </div>
-                <div>
-                    <label class="text-xs font-semibold text-slate-600">Interest Rate (%) [Stress test approx 4%]</label>
-                    <input type="number" step="0.1" id="tdsr-rate" value="4.0" class="w-full mt-1 p-3 border rounded-xl bg-slate-50 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                </div>
-                <button onclick="calculateTDSR()" class="w-full bg-blue-600 text-white font-semibold py-3 rounded-xl shadow-md hover:bg-blue-700 transition">Calculate Max Loan & Budget</button>
+                <button onclick="calculateTDSR()" class="w-full bg-blue-600 text-white font-semibold py-2.5 rounded-xl text-xs shadow-md hover:bg-blue-700 transition">Compute Maximum Loan Limit</button>
                 
-                <div id="tdsr-results" class="mt-4 p-4 bg-slate-50 rounded-xl space-y-2 text-sm hidden border border-slate-200">
-                    <div class="flex justify-between"><span class="text-slate-600">Max TDSR Allowable Debt:</span> <span id="res-tdsr-limit" class="font-bold"></span></div>
-                    <div class="flex justify-between"><span class="text-slate-600">Max MSR Allowable (HDB/EC):</span> <span id="res-msr-limit" class="font-bold"></span></div>
-                    <div class="flex justify-between border-t pt-2"><span class="text-slate-800 font-semibold">Max Recommended Loan:</span> <span id="res-max-loan" class="font-bold text-blue-600"></span></div>
+                <div id="tdsr-results" class="mt-3 p-3 bg-slate-50 rounded-xl space-y-1.5 text-xs hidden border">
+                    <div class="flex justify-between"><span class="text-slate-600">Max Allowable Debt (55%):</span> <span id="res-tdsr-limit" class="font-bold"></span></div>
+                    <div class="flex justify-between"><span class="text-slate-600">Max MSR (HDB/EC 30%):</span> <span id="res-msr-limit" class="font-bold"></span></div>
+                    <div class="flex justify-between border-t pt-1.5"><span class="text-slate-800 font-semibold">Max Loan Available:</span> <span id="res-max-loan" class="font-bold text-blue-600"></span></div>
                 </div>
             </div>
 
-            <!-- Cash Proceeds Calculator -->
-            <div id="calc-proceeds" class="space-y-4 bg-white p-4 rounded-2xl shadow-sm border border-slate-100 hidden">
-                <h2 class="font-bold text-slate-900">HDB / Private Property Cash Proceeds</h2>
+            <!-- Proceeds Calculator -->
+            <div id="subcontent-calc-proceeds" class="space-y-3 bg-white p-4 rounded-2xl shadow-sm border border-slate-100 hidden">
+                <h2 class="font-bold text-slate-900 text-sm">Cash Proceeds & Purchase Outlay</h2>
                 <div>
-                    <label class="text-xs font-semibold text-slate-600">Expected Selling Price (SGD)</label>
-                    <input type="number" id="proc-price" value="800000" class="w-full mt-1 p-3 border rounded-xl bg-slate-50 text-sm outline-none">
+                    <label class="text-[11px] font-semibold text-slate-600">Expected Selling Price</label>
+                    <input type="number" id="proc-price" value="950000" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
                 </div>
                 <div>
-                    <label class="text-xs font-semibold text-slate-600">Outstanding Housing Loan (SGD)</label>
-                    <input type="number" id="proc-loan" value="350000" class="w-full mt-1 p-3 border rounded-xl bg-slate-50 text-sm outline-none">
+                    <label class="text-[11px] font-semibold text-slate-600">Outstanding Loan Balance</label>
+                    <input type="number" id="proc-loan" value="400000" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
                 </div>
                 <div>
-                    <label class="text-xs font-semibold text-slate-600">Total CPF Refund (Principal + Accrued Interest)</label>
-                    <input type="number" id="proc-cpf" value="250000" class="w-full mt-1 p-3 border rounded-xl bg-slate-50 text-sm outline-none">
+                    <label class="text-[11px] font-semibold text-slate-600">CPF Refund (Principal + Accrued Interest)</label>
+                    <input type="number" id="proc-cpf" value="280000" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
                 </div>
-                <button onclick="calculateProceeds()" class="w-full bg-blue-600 text-white font-semibold py-3 rounded-xl shadow-md hover:bg-blue-700 transition">Calculate Estimated Cash Proceeds</button>
+                <button onclick="calculateProceeds()" class="w-full bg-blue-600 text-white font-semibold py-2.5 rounded-xl text-xs shadow-md hover:bg-blue-700 transition">Calculate Net Cash Proceeds</button>
 
-                <div id="proceeds-results" class="mt-4 p-4 bg-slate-50 rounded-xl space-y-2 text-sm hidden border border-slate-200">
-                    <div class="flex justify-between"><span class="text-slate-600">Sale Price:</span> <span id="res-sale-price" class="font-bold"></span></div>
+                <div id="proceeds-results" class="mt-3 p-3 bg-slate-50 rounded-xl space-y-1.5 text-xs hidden border">
+                    <div class="flex justify-between"><span class="text-slate-600">Gross Sale Price:</span> <span id="res-sale-price" class="font-bold"></span></div>
                     <div class="flex justify-between"><span class="text-slate-600">Less Loan & CPF:</span> <span id="res-deductions" class="font-bold text-red-600"></span></div>
-                    <div class="flex justify-between border-t pt-2"><span class="text-slate-800 font-semibold">Estimated Cash Proceeds:</span> <span id="res-cash-proceeds" class="font-bold text-emerald-600"></span></div>
+                    <div class="flex justify-between border-t pt-1.5"><span class="text-slate-800 font-semibold">Estimated Cash Proceeds:</span> <span id="res-cash-proceeds" class="font-bold text-emerald-600"></span></div>
                 </div>
             </div>
 
-            <!-- Purchase Outlay Calculator -->
-            <div id="calc-purchase" class="space-y-4 bg-white p-4 rounded-2xl shadow-sm border border-slate-100 hidden">
-                <h2 class="font-bold text-slate-900">Purchase Financial Breakdown</h2>
+            <!-- Map Tracker -->
+            <div id="subcontent-calc-map" class="space-y-3 bg-white p-4 rounded-2xl shadow-sm border border-slate-100 hidden">
+                <h2 class="font-bold text-slate-900 text-sm">New Launch & En Bloc Breakeven Map</h2>
+                <p class="text-[11px] text-slate-500">Tap pins to inspect land bids and developer breakeven costs.</p>
+                <div id="map" class="w-full h-72 rounded-xl z-10 border"></div>
+            </div>
+        </div>
+
+        <!-- TAB 2: CLIENT CRM & TIMELINE TRACKER -->
+        <div id="content-crm" class="space-y-4 hidden">
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
+                <div class="flex justify-between items-center">
+                    <h2 class="font-bold text-slate-900 text-sm">Client Pipeline & Milestone Tracker</h2>
+                    <button onclick="openNewClientModal()" class="bg-slate-900 text-white text-[11px] px-3 py-1.5 rounded-lg font-medium">+ Add Client</button>
+                </div>
+                <div id="client-list" class="space-y-2.5 mt-2">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: TAX & DECOUPLING SIMULATOR -->
+        <div id="content-decouple" class="space-y-4 hidden">
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
+                <h2 class="font-bold text-slate-900 text-sm">Decoupling & ABSD Optimizer</h2>
+                <p class="text-[11px] text-slate-500">Simulate tax savings when transferring a co-owned property share to buy a second property.</p>
                 <div>
-                    <label class="text-xs font-semibold text-slate-600">Purchase Price (SGD)</label>
-                    <input type="number" id="buy-price" value="1200000" class="w-full mt-1 p-3 border rounded-xl bg-slate-50 text-sm outline-none">
+                    <label class="text-[11px] font-semibold text-slate-600">Current Valuation of Property (SGD)</label>
+                    <input type="number" id="dec-val" value="1800000" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
                 </div>
                 <div>
-                    <label class="text-xs font-semibold text-slate-600">Buyer Profile</label>
-                    <select id="buy-profile" class="w-full mt-1 p-3 border rounded-xl bg-slate-50 text-sm outline-none">
-                        <option value="sc-1">Singapore Citizen (1st Property)</option>
-                        <option value="sc-2">Singapore Citizen (2nd Property - 20% ABSD)</option>
-                        <option value="pr-1">Permanent Resident (1st Property - 5% ABSD)</option>
+                    <label class="text-[11px] font-semibold text-slate-600">Target 2nd Property Price (SGD)</label>
+                    <input type="number" id="dec-newprice" value="2000000" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
+                </div>
+                <div>
+                    <label class="text-[11px] font-semibold text-slate-600">Buyer Profile</label>
+                    <select id="dec-profile" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
+                        <option value="sc">Singapore Citizen (Save 20% ABSD)</option>
+                        <option value="pr">Permanent Resident (Save 30% ABSD)</option>
                     </select>
                 </div>
-                <button onclick="calculatePurchase()" class="w-full bg-blue-600 text-white font-semibold py-3 rounded-xl shadow-md hover:bg-blue-700 transition">Calculate Upfront Funds Needed</button>
+                <button onclick="calculateDecoupling()" class="w-full bg-blue-600 text-white font-semibold py-2.5 rounded-xl text-xs shadow-md hover:bg-blue-700 transition">Calculate Decoupling Tax Savings</button>
 
-                <div id="purchase-results" class="mt-4 p-4 bg-slate-50 rounded-xl space-y-2 text-sm hidden border border-slate-200">
-                    <div class="flex justify-between"><span class="text-slate-600">Buyer's Stamp Duty (BSD):</span> <span id="res-bsd" class="font-bold"></span></div>
-                    <div class="flex justify-between"><span class="text-slate-600">ABSD:</span> <span id="res-absd" class="font-bold"></span></div>
-                    <div class="flex justify-between"><span class="text-slate-600">Min. Cash Downpayment (5%):</span> <span id="res-cash-down" class="font-bold"></span></div>
-                    <div class="flex justify-between border-t pt-2"><span class="text-slate-800 font-semibold">Total Upfront Cash + CPF:</span> <span id="res-total-upfront" class="font-bold text-blue-600"></span></div>
+                <div id="decouple-results" class="mt-3 p-3 bg-slate-50 rounded-xl space-y-1.5 text-xs hidden border">
+                    <div class="flex justify-between"><span class="text-slate-600">Direct Purchase ABSD:</span> <span id="res-direct-absd" class="font-bold text-red-600"></span></div>
+                    <div class="flex justify-between"><span class="text-slate-600">Transfer BSD (50% share):</span> <span id="res-transfer-bsd" class="font-bold"></span></div>
+                    <div class="flex justify-between"><span class="text-slate-600">New Purchase ABSD (Post-Decouple):</span> <span id="res-post-absd" class="font-bold"></span></div>
+                    <div class="flex justify-between border-t pt-1.5"><span class="text-slate-800 font-semibold">Total Estimated Net Savings:</span> <span id="res-net-savings" class="font-bold text-emerald-600"></span></div>
                 </div>
             </div>
         </div>
 
-        <!-- TAB 2: MARKET DATA (HDB / Non-Landed / Landed) -->
-        <div id="content-properties" class="space-y-4 hidden">
+        <!-- TAB 4: AI COPYWRITER & CMA ENGINE -->
+        <div id="content-marketing" class="space-y-4 hidden">
+            <!-- AI Copywriter -->
             <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
-                <h2 class="font-bold text-slate-900">Singapore Real Estate Live Directory</h2>
-                <input type="text" id="prop-search" oninput="filterProperties()" placeholder="Search by town, project name or type..." class="w-full p-3 border rounded-xl bg-slate-50 text-sm outline-none">
-                
-                <div id="property-list" class="space-y-3 mt-3">
-                    <!-- Populated via JavaScript -->
+                <h2 class="font-bold text-slate-900 text-sm">AI Listing & WhatsApp Generator</h2>
+                <div>
+                    <label class="text-[11px] font-semibold text-slate-600">Property District / Name</label>
+                    <input type="text" id="ai-prop" value="District 15 Freehold Condo" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
                 </div>
-            </div>
-        </div>
+                <div>
+                    <label class="text-[11px] font-semibold text-slate-600">Target Audience</label>
+                    <select id="ai-audience" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
+                        <option value="upgrader">HDB Upgrader Looking for Private Condo</option>
+                        <option value="investor">Yield-Focused Investor (District 15)</option>
+                    </select>
+                </div>
+                <button onclick="generateAICopy()" class="w-full bg-slate-900 text-white font-semibold py-2.5 rounded-xl text-xs shadow-md hover:bg-slate-800 transition">Generate WhatsApp Broadcast Copy</button>
 
-        <!-- TAB 3: NEW LAUNCH & EN BLOC MAP TRACKER -->
-        <div id="content-tracker" class="space-y-4 hidden">
+                <div id="ai-output-box" class="mt-2 p-3 bg-slate-50 rounded-xl text-xs hidden border font-mono whitespace-pre-wrap"></div>
+            </div>
+
+            <!-- CMA Engine -->
             <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
-                <h2 class="font-bold text-slate-900">New Launch & En Bloc Breakeven Tracker</h2>
-                <p class="text-xs text-slate-500">Tap markers on the map to inspect land bid prices, plot ratios, and developer breakeven costs.</p>
-                <div id="map" class="w-full h-80 rounded-xl z-10 border border-slate-200"></div>
+                <h2 class="font-bold text-slate-900 text-sm">Instant Comparative Market Analysis (CMA)</h2>
+                <div>
+                    <label class="text-[11px] font-semibold text-slate-600">Select Region / Estate</label>
+                    <select id="cma-region" onchange="runCMA()" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
+                        <option value="cck">Choa Chu Kang / Northvale Area</option>
+                        <option value="katong">Katong / Joo Chiat (District 15)</option>
+                        <option value="boonlay">Boon Lay / Jurong West HDB</option>
+                    </select>
+                </div>
+                <div id="cma-results" class="p-3 bg-slate-50 rounded-xl text-xs space-y-1.5 border">
+                    <!-- Populated dynamically -->
+                </div>
             </div>
         </div>
 
     </main>
 
-    <!-- JavaScript Logic -->
+    <!-- JavaScript Execution Logic -->
     <script>
-        // Tab Navigation
+        // Main Tab Switcher
         function switchTab(tab) {
-            ['calculators', 'properties', 'tracker'].forEach(t => {
+            ['calculators', 'crm', 'decouple', 'marketing'].forEach(t => {
                 document.getElementById(`content-${t}`).classList.add('hidden');
                 document.getElementById(`tab-${t}`).className = "py-2 rounded-lg text-slate-600 transition";
             });
             document.getElementById(`content-${tab}`).classList.remove('hidden');
             document.getElementById(`tab-${tab}`).className = "py-2 rounded-lg bg-white shadow-sm text-slate-900 transition font-semibold";
-            if(tab === 'tracker') { setTimeout(() => { map.invalidateSize(); }, 200); }
+            if(tab === 'calculators') { setTimeout(() => { map.invalidateSize(); }, 200); }
         }
 
-        function switchCalcSub(sub) {
-            ['tdsr', 'proceeds', 'purchase'].forEach(s => {
-                document.getElementById(`calc-${s}`).classList.add('hidden');
-                document.getElementById(`subtab-${s}`).className = "text-slate-500 pb-1";
+        function switchSubTab(parent, sub) {
+            ['tdsr', 'proceeds', 'map'].forEach(s => {
+                document.getElementById(`subcontent-${parent}-${s}`).classList.add('hidden');
+                document.getElementById(`subtab-${parent}-${s}`).className = "text-slate-500 pb-1";
             });
-            document.getElementById(`calc-${sub}`).classList.remove('hidden');
-            document.getElementById(`subtab-${sub}`).className = "text-blue-600 border-b-2 border-blue-600 pb-1 font-semibold";
+            document.getElementById(`subcontent-${parent}-${sub}`).classList.remove('hidden');
+            document.getElementById(`subtab-${parent}-${sub}`).className = "text-blue-600 border-b-2 border-blue-600 pb-1 font-semibold";
+            if(sub === 'map') { setTimeout(() => { map.invalidateSize(); }, 200); }
         }
 
-        // Calculations
+        // Financial Calculators
         function calculateTDSR() {
             const income = parseFloat(document.getElementById('tdsr-income').value);
             const debt = parseFloat(document.getElementById('tdsr-debt').value);
             const tenure = parseInt(document.getElementById('tdsr-tenure').value);
             const rate = parseFloat(document.getElementById('tdsr-rate').value) / 100;
 
-            const maxAllowedDebtService = income * 0.55;
-            const availableForMortgageTDSR = maxAllowedDebtService - debt;
-            const availableForMortgageMSR = income * 0.30;
+            const maxDebt = income * 0.55;
+            const availTDSR = Math.max(0, maxDebt - debt);
+            const availMSR = income * 0.30;
 
-            // Monthly mortgage formula: M = P [ r(1+r)^n ] / [ (1+r)^n – 1]
             const monthlyRate = rate / 12;
             const months = tenure * 12;
-            const calculateLoan = (pmt) => pmt * (Math.pow(1 + monthlyRate, months) - 1) / (monthlyRate * Math.pow(1 + monthlyRate, months));
+            const calcLoan = (pmt) => pmt * (Math.pow(1 + monthlyRate, months) - 1) / (monthlyRate * Math.pow(1 + monthlyRate, months));
 
-            const maxLoanTDSR = calculateLoan(Math.max(0, availableForMortgageTDSR));
-            const maxLoanMSR = calculateLoan(Math.max(0, availableForMortgageMSR));
-
-            document.getElementById('res-tdsr-limit').innerText = `$${maxAllowedDebtService.toLocaleString('en-US', {maximumFractionDigits:0})}`;
-            document.getElementById('res-msr-limit').innerText = `$${availableForMortgageMSR.toLocaleString('en-US', {maximumFractionDigits:0})}`;
-            document.getElementById('res-max-loan').innerText = `$${Math.round(maxLoanTDSR).toLocaleString()}`;
+            document.getElementById('res-tdsr-limit').innerText = `$${maxDebt.toLocaleString('en-US', {maximumFractionDigits:0})}`;
+            document.getElementById('res-msr-limit').innerText = `$${availMSR.toLocaleString('en-US', {maximumFractionDigits:0})}`;
+            document.getElementById('res-max-loan').innerText = `$${Math.round(calcLoan(availTDSR)).toLocaleString()}`;
             document.getElementById('tdsr-results').classList.remove('hidden');
         }
 
@@ -194,7 +236,6 @@
             const price = parseFloat(document.getElementById('proc-price').value);
             const loan = parseFloat(document.getElementById('proc-loan').value);
             const cpf = parseFloat(document.getElementById('proc-cpf').value);
-
             const deductions = loan + cpf;
             const proceeds = price - deductions;
 
@@ -204,62 +245,101 @@
             document.getElementById('proceeds-results').classList.remove('hidden');
         }
 
-        function calculatePurchase() {
-            const price = parseFloat(document.getElementById('buy-price').value);
-            const profile = document.getElementById('buy-profile').value;
+        // Decoupling Simulator
+        function calculateDecoupling() {
+            const val = parseFloat(document.getElementById('dec-val').value);
+            const newPrice = parseFloat(document.getElementById('dec-newprice').value);
+            const profile = document.getElementById('dec-profile').value;
 
-            // BSD Calculation
+            // Half-share transfer valuation
+            const shareVal = val / 2;
             let bsd = 0;
-            if (price <= 180000) bsd = price * 0.01;
-            else if (price <= 360000) bsd = 1800 + (price - 180000) * 0.02;
-            else if (price <= 1000000) bsd = 5400 + (price - 360000) * 0.03;
-            else bsd = 24600 + (price - 1000000) * 0.04;
+            if (shareVal <= 180000) bsd = shareVal * 0.01;
+            else if (shareVal <= 360000) bsd = 1800 + (shareVal - 180000) * 0.02;
+            else if (shareVal <= 1000000) bsd = 5400 + (shareVal - 360000) * 0.03;
+            else bsd = 24600 + (shareVal - 1000000) * 0.04;
 
-            let absdRate = 0;
-            if (profile === 'sc-2') absdRate = 0.20;
-            if (profile === 'pr-1') absdRate = 0.05;
-            const absd = price * absdRate;
+            const directAbsdRate = profile === 'sc' ? 0.20 : 0.30;
+            const directAbsd = newPrice * directAbsdRate;
+            const postDecoupleAbsd = 0; // 1st property for the outgoing spouse
 
-            const minCashDown = price * 0.05;
-            const totalUpfront = minCashDown + bsd + absd;
+            const netSavings = directAbsd - (bsd + postDecoupleAbsd);
 
-            document.getElementById('res-bsd').innerText = `$${Math.round(bsd).toLocaleString()}`;
-            document.getElementById('res-absd').innerText = `$${Math.round(absd).toLocaleString()}`;
-            document.getElementById('res-cash-down').innerText = `$${Math.round(minCashDown).toLocaleString()}`;
-            document.getElementById('res-total-upfront').innerText = `$${Math.round(totalUpfront).toLocaleString()}`;
-            document.getElementById('purchase-results').classList.remove('hidden');
+            document.getElementById('res-direct-absd').innerText = `$${Math.round(directAbsd).toLocaleString()}`;
+            document.getElementById('res-transfer-bsd').innerText = `$${Math.round(bsd).toLocaleString()}`;
+            document.getElementById('res-post-absd').innerText = `$${Math.round(postDecoupleAbsd).toLocaleString()}`;
+            document.getElementById('res-net-savings').innerText = `$${Math.round(netSavings).toLocaleString()}`;
+            document.getElementById('decouple-results').classList.remove('hidden');
         }
 
-        // Mock Property Data Directory
-        const properties = [
-            { name: "The Continuum", type: "Non-Landed Private", town: "Thiam Siew Avenue / Katong", price: "$2,650 psf", details: "Freehold | 816 units" },
-            { name: "Tembusu Grand", type: "Non-Landed Private", town: "Tanjong Katong", price: "$2,450 psf", details: "99-year leasehold | 638 units" },
-            { name: "Boon Lay Place HDB 4-Room", type: "HDB", town: "Boon Lay", price: "$520,000", details: "91 sqm | Balance lease: 61 years" },
-            { name: "Northvale Executive Condo", type: "Non-Landed Private", town: "Choa Chu Kang", price: "$1,420 psf", details: "Resale EC" },
-            { name: "District 10 Good Class Bungalow", type: "Private Landed", town: "Bukit Timah", price: "$32,000,000", details: "Freehold Landed" }
+        // CRM Client Pipeline Tracker Data
+        let clients = [
+            { name: "Mr & Mrs Tan", type: "HDB Upgrader", stage: "HDB Resale Completion (8-Wk Window)", status: "Completion due in 12 days" },
+            { name: "David Lim", type: "Private Investor", stage: "New Launch OTP & Progressive Payment", status: "5% Exercise Fee Paid" },
+            { name: "Sarah Wong", type: "First-Time Buyer", stage: "HFE Letter & IPA Approval", status: "Ready for viewings" }
         ];
 
-        function renderProperties(list) {
-            const container = document.getElementById('property-list');
-            container.innerHTML = list.map(p => `
+        function renderClients() {
+            const container = document.getElementById('client-list');
+            container.innerHTML = clients.map(c => `
                 <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 flex justify-between items-center">
                     <div>
-                        <div class="text-xs font-bold text-blue-600">${p.type} • ${p.town}</div>
-                        <div class="text-sm font-bold text-slate-900">${p.name}</div>
-                        <div class="text-xs text-slate-500">${p.details}</div>
+                        <div class="text-[10px] font-bold text-blue-600 uppercase">${c.type}</div>
+                        <div class="text-xs font-bold text-slate-900">${c.name}</div>
+                        <div class="text-[11px] text-slate-500">${c.stage}</div>
                     </div>
-                    <div class="text-right font-bold text-slate-800 text-sm">${p.price}</div>
+                    <div class="text-right">
+                        <span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-medium">${c.status}</span>
+                    </div>
                 </div>
             `).join('');
         }
+        renderClients();
 
-        function filterProperties() {
-            const query = document.getElementById('prop-search').value.toLowerCase();
-            const filtered = properties.filter(p => p.name.toLowerCase().includes(query) || p.town.toLowerCase().includes(query) || p.type.toLowerCase().includes(query));
-            renderProperties(filtered);
+        function openNewClientModal() {
+            const name = prompt("Enter Client Name:");
+            const type = prompt("Enter Client Type (e.g., HDB Upgrader / Investor):");
+            if(name && type) {
+                clients.push({ name, type, stage: "Initial Consultation / Financial Check", status: "Active Lead" });
+                renderClients();
+            }
         }
 
-        renderProperties(properties);
+        // AI Copywriter Generator
+        function generateAICopy() {
+            const prop = document.getElementById('ai-prop').value;
+            const aud = document.getElementById('ai-audience').value;
+            let text = "";
+
+            if(aud === 'upgrader') {
+                text = `🔥 EXCLUSIVE FOR HDB UPGRADERS!\n\nStuck wondering how to transition from your HDB to a brand new ${prop} without ABSD stress or cash flow gaps? \n\nWe’ve mapped out a seamless timeline for family upgraders in 2026. Let's calculate your exact cash proceeds today!\n\n📲 WhatsApp me for a zero-obligation financial health check!`;
+            } else {
+                text = `💎 HIGH-YIELD ASSET CLASS: ${prop}\n\nLooking to hedge against inflation and capture strong rental yields in Singapore's current market? \n\nPrime location, robust tenant pool, and strong capital preservation traits. Request the full stack analysis and transacted psf breakdown now.\n\n📲 DM to schedule a private presentation.`;
+            }
+
+            const box = document.getElementById('ai-output-box');
+            box.innerText = text;
+            box.classList.remove('hidden');
+        }
+
+        // CMA Engine
+        const cmaData = {
+            cck: { area: "Choa Chu Kang / Northvale", median: "$1,410 psf", range: "$1,280 - $1,550 psf", trend: "+2.4% YoY" },
+            katong: { area: "Katong / District 15", median: "$2,480 psf", range: "$2,100 - $2,850 psf", trend: "+1.8% YoY" },
+            boonlay: { area: "Boon Lay / Jurong West HDB", median: "$515,000 (4-Room)", range: "$460k - $580k", trend: "+3.2% YoY" }
+        };
+
+        function runCMA() {
+            const val = document.getElementById('cma-region').value;
+            const data = cmaData[val];
+            document.getElementById('cma-results').innerHTML = `
+                <div class="flex justify-between font-bold text-slate-900"><span>Area:</span> <span>${data.area}</span></div>
+                <div class="flex justify-between text-slate-600"><span>Rolling Median:</span> <span class="font-semibold text-blue-600">${data.median}</span></div>
+                <div class="flex justify-between text-slate-600"><span>Transacted Range:</span> <span>${data.range}</span></div>
+                <div class="flex justify-between text-slate-600 border-t pt-1"><span>Market Trend:</span> <span class="text-emerald-600 font-semibold">${data.trend}</span></div>
+            `;
+        }
+        runCMA();
 
         // Map Initialization
         const map = L.map('map').setView([1.3521, 103.8198], 11);
@@ -268,9 +348,9 @@
         }).addTo(map);
 
         const launches = [
-            { name: "Rivelle Tampines (New Launch)", lat: 1.3543, lng: 103.9455, bid: "$885 psf ppr", breakeven: "$1,620 psf" },
+            { name: "Rivelle Tampines", lat: 1.3543, lng: 103.9455, bid: "$885 psf ppr", breakeven: "$1,620 psf" },
             { name: "Lentor Mansion", lat: 1.3820, lng: 103.8430, bid: "$985 psf ppr", breakeven: "$2,100 psf" },
-            { name: "Normanton Park (En Bloc Success)", lat: 1.2860, lng: 103.7900, bid: "$965 psf ppr", breakeven: "$1,750 psf" }
+            { name: "Normanton Park (En Bloc)", lat: 1.2860, lng: 103.7900, bid: "$965 psf ppr", breakeven: "$1,750 psf" }
         ];
 
         launches.forEach(l => {
