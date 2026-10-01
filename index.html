@@ -3,360 +3,332 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SG Real Estate Super App - Pro Agent Suite</title>
+    <title>SG Elite Agent - iPad Command Center</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Leaflet CSS for Maps -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; background-color: #0f172a; color: #f8fafc; }
+        /* Custom iPad scrollbar style */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 pb-24">
+<body class="h-screen flex overflow-hidden">
 
-    <!-- Header -->
-    <header class="bg-slate-900 text-white p-4 sticky top-0 z-50 shadow-md">
-        <div class="max-w-md mx-auto flex justify-between items-center">
-            <h1 class="text-sm font-bold tracking-tight">SG Pro Agent Suite</h1>
-            <span class="text-xs bg-emerald-600 text-white px-2 py-1 rounded-full font-medium">Elite Edition</span>
-        </div>
-    </header>
-
-    <!-- Main Container -->
-    <main class="max-w-md mx-auto p-4 space-y-5">
-
-        <!-- Module Navigation Selector -->
-        <div class="grid grid-cols-4 gap-1 bg-slate-200 p-1 rounded-xl text-[11px] font-semibold text-center">
-            <button onclick="switchTab('calculators')" id="tab-calculators" class="py-2 rounded-lg bg-white shadow-sm text-slate-900 transition">Calcs</button>
-            <button onclick="switchTab('crm')" id="tab-crm" class="py-2 rounded-lg text-slate-600 transition">CRM</button>
-            <button onclick="switchTab('decouple')" id="tab-decouple" class="py-2 rounded-lg text-slate-600 transition">Tax & Decouple</button>
-            <button onclick="switchTab('marketing')" id="tab-marketing" class="py-2 rounded-lg text-slate-600 transition">AI & CMA</button>
-        </div>
-
-        <!-- TAB 1: CALCULATORS & MARKET DATA & MAP TRACKER -->
-        <div id="content-calculators" class="space-y-4">
-            <div class="flex space-x-2 border-b border-slate-200 pb-2 text-xs font-semibold">
-                <button onclick="switchSubTab('calc','tdsr')" id="subtab-calc-tdsr" class="text-blue-600 border-b-2 border-blue-600 pb-1">TDSR/MSR</button>
-                <button onclick="switchSubTab('calc','proceeds')" id="subtab-calc-proceeds" class="text-slate-500 pb-1">Proceeds</button>
-                <button onclick="switchSubTab('calc','map')" id="subtab-calc-map" class="text-slate-500 pb-1">New Launch Map</button>
+    <!-- SIDEBAR NAVIGATION (iPad Master View) -->
+    <aside class="w-72 bg-slate-900 border-r border-slate-800 flex flex-col justify-between p-4 select-none">
+        <div class="space-y-6">
+            <div class="flex items-center space-x-3 px-2 pt-2">
+                <div class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
+                <div>
+                    <h1 class="text-sm font-bold tracking-wide text-white">SG ELITE AGENT</h1>
+                    <p class="text-[10px] text-slate-400">iPad Pro Command Center</p>
+                </div>
             </div>
 
-            <!-- TDSR / MSR Calculator -->
-            <div id="subcontent-calc-tdsr" class="space-y-3 bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
-                <h2 class="font-bold text-slate-900 text-sm">Affordability & Loan Stress Test</h2>
-                <div>
-                    <label class="text-[11px] font-semibold text-slate-600">Monthly Gross Income (SGD)</label>
-                    <input type="number" id="tdsr-income" value="12000" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
+            <nav class="space-y-1.5">
+                <button onclick="switchModule('calc', this)" id="nav-calc" class="w-full flex items-center space-x-3 px-3 py-3 rounded-xl text-xs font-semibold bg-blue-600 text-white transition shadow-lg shadow-blue-900/20">
+                    <span class="text-base">🧮</span>
+                    <span>Affordability & Proceeds</span>
+                </button>
+                <button onclick="switchModule('tracker', this)" id="nav-tracker" class="w-full flex items-center space-x-3 px-3 py-3 rounded-xl text-xs font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition">
+                    <span class="text-base">🏗️</span>
+                    <span>New Launch & Land Bids</span>
+                </button>
+                <button onclick="switchModule('decouple', this)" id="nav-decouple" class="w-full flex items-center space-x-3 px-3 py-3 rounded-xl text-xs font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition">
+                    <span class="text-base">⚖️</span>
+                    <span>Decoupling & ABSD Planner</span>
+                </button>
+                <button onclick="switchModule('script', this)" id="nav-script" class="w-full flex items-center space-x-3 px-3 py-3 rounded-xl text-xs font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition">
+                    <span class="text-base">💬</span>
+                    <span>WhatsApp Pitch Scripts</span>
+                </button>
+            </nav>
+        </div>
+
+        <div class="p-3 bg-slate-800/50 rounded-xl border border-slate-700/50 text-[11px] text-slate-400 space-y-1">
+            <div class="font-semibold text-slate-200">System Status</div>
+            <div>Database: <span class="text-emerald-400 font-mono">Live Sync</span></div>
+            <div>MAS Stress Rate: <span class="text-blue-400 font-mono">4.0% Active</span></div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT PANE (iPad Detail View) -->
+    <main class="flex-1 flex flex-col bg-slate-950 overflow-y-auto p-6 lg:p-8">
+
+        <!-- MODULE 1: AFFORDABILITY & PROCEEDS -->
+        <div id="mod-calc" class="space-y-6 max-w-5xl mx-auto w-full">
+            <div>
+                <h2 class="text-xl font-bold text-white tracking-tight">Client Financial & Loan Health Check</h2>
+                <p class="text-xs text-slate-400 mt-0.5">Run real-time TDSR/MSR stress tests and net cash proceeds breakdowns live during client pitch.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- TDSR / MSR Box -->
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4 shadow-xl">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                        <h3 class="font-bold text-sm text-blue-400">1. TDSR / MSR & Max Loan Calculator</h3>
+                        <span class="text-[10px] bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded border border-blue-500/20 font-mono">MAS Framework</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="text-[11px] font-semibold text-slate-400">Combined Monthly Gross Income (SGD)</label>
+                            <input type="number" id="c-income" value="14000" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-blue-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="text-[11px] font-semibold text-slate-400">Existing Monthly Debt Commitments (Car/Loans)</label>
+                            <input type="number" id="c-debt" value="1200" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-blue-500 outline-none">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-[11px] font-semibold text-slate-400">Tenure (Years)</label>
+                                <input type="number" id="c-tenure" value="30" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-blue-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-semibold text-slate-400">Interest Rate (%)</label>
+                                <input type="number" step="0.1" id="c-rate" value="4.0" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-blue-500 outline-none">
+                            </div>
+                        </div>
+                        <button onclick="runTDSR()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 rounded-xl text-xs transition shadow-lg shadow-blue-600/20">Calculate Maximum Allowable Loan</button>
+                    </div>
+                    <div id="res-tdsr-box" class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-2 text-xs hidden font-mono">
+                        <div class="flex justify-between text-slate-400"><span>Max Allowable Monthly Debt (55%):</span> <span id="out-tdsr" class="text-white"></span></div>
+                        <div class="flex justify-between text-slate-400"><span>Max MSR Cap (HDB/EC 30%):</span> <span id="out-msr" class="text-white"></span></div>
+                        <div class="flex justify-between border-t border-slate-800 pt-2 text-sm font-bold"><span>Max Loan Available:</span> <span id="out-maxloan" class="text-blue-400"></span></div>
+                    </div>
                 </div>
-                <div>
-                    <label class="text-[11px] font-semibold text-slate-600">Existing Monthly Debts</label>
-                    <input type="number" id="tdsr-debt" value="800" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
+
+                <!-- Cash Proceeds Box -->
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4 shadow-xl">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                        <h3 class="font-bold text-sm text-emerald-400">2. Seller Cash Proceeds Estimator</h3>
+                        <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20 font-mono">HDB / Private</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="text-[11px] font-semibold text-slate-400">Expected Valuation / Selling Price (SGD)</label>
+                            <input type="number" id="p-price" value="980000" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-emerald-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="text-[11px] font-semibold text-slate-400">Outstanding HDB/Bank Loan Balance</label>
+                            <input type="number" id="p-loan" value="340000" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-emerald-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="text-[11px] font-semibold text-slate-400">Total CPF Refund (Principal + Accrued Interest)</label>
+                            <input type="number" id="p-cpf" value="290000" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-emerald-500 outline-none">
+                        </div>
+                        <button onclick="runProceeds()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 rounded-xl text-xs transition shadow-lg shadow-emerald-600/20">Compute Net Cash Proceeds</button>
+                    </div>
+                    <div id="res-proceeds-box" class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-2 text-xs hidden font-mono">
+                        <div class="flex justify-between text-slate-400"><span>Selling Price:</span> <span id="out-sprice" class="text-white"></span></div>
+                        <div class="flex justify-between text-slate-400"><span>Deductions (Loan + CPF):</span> <span id="out-deduct" class="text-rose-400"></span></div>
+                        <div class="flex justify-between border-t border-slate-800 pt-2 text-sm font-bold"><span>Estimated Cash Proceeds:</span> <span id="out-cash" class="text-emerald-400"></span></div>
+                    </div>
                 </div>
-                <div class="grid grid-cols-2 gap-2">
+            </div>
+        </div>
+
+        <!-- MODULE 2: NEW LAUNCH & LAND BIDS TRACKER -->
+        <div id="mod-tracker" class="space-y-6 max-w-5xl mx-auto w-full hidden">
+            <div>
+                <h2 class="text-xl font-bold text-white tracking-tight">New Launch Pipeline & Land Bid Breakevens</h2>
+                <p class="text-xs text-slate-400 mt-0.5">Equip your presentation with official land rates and estimated developer breakeven margins.</p>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-950 text-slate-400 border-b border-slate-800 font-semibold uppercase tracking-wider">
+                            <tr>
+                                <th class="p-4">Project / Location</th>
+                                <th class="p-4">District / Region</th>
+                                <th class="p-4">Land Bid (psf ppr)</th>
+                                <th class="p-4">Est. Breakeven</th>
+                                <th class="p-4">Indicative Launch</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800 font-mono text-slate-300">
+                            <tr class="hover:bg-slate-800/50 transition">
+                                <td class="p-4 font-bold text-white">Lentor Gardens Residences</td>
+                                <td class="p-4 text-slate-400">D26 (OCR)</td>
+                                <td class="p-4 text-emerald-400">$920 psf</td>
+                                <td class="p-4">$1,709 psf</td>
+                                <td class="p-4 text-blue-400">Active / Selling</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/50 transition">
+                                <td class="p-4 font-bold text-white">Telok Blangah Road (GSW)</td>
+                                <td class="p-4 text-slate-400">D04 (RCR)</td>
+                                <td class="p-4 text-emerald-400">$1,326 psf</td>
+                                <td class="p-4">$2,444 psf</td>
+                                <td class="p-4 text-amber-400">Upcoming</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/50 transition">
+                                <td class="p-4 font-bold text-white">Hougang Central Mixed-Use</td>
+                                <td class="p-4 text-slate-400">D19 (OCR)</td>
+                                <td class="p-4 text-emerald-400">$1,179 psf</td>
+                                <td class="p-4">$2,245 psf</td>
+                                <td class="p-4 text-blue-400">Active / Selling</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/50 transition">
+                                <td class="p-4 font-bold text-white">Tanjong Rhu Close</td>
+                                <td class="p-4 text-slate-400">D15 (RCR)</td>
+                                <td class="p-4 text-emerald-400">$1,455 psf</td>
+                                <td class="p-4">$2,560 psf</td>
+                                <td class="p-4 text-amber-400">Upcoming</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/50 transition">
+                                <td class="p-4 font-bold text-white">East Coast Road Parcel</td>
+                                <td class="p-4 text-slate-400">D15 (CCR/RCR)</td>
+                                <td class="p-4 text-emerald-400">$1,537 psf</td>
+                                <td class="p-4">$2,650 psf</td>
+                                <td class="p-4 text-amber-400">Tender Closing Soon</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 3: DECOUPLING & ABSD PLANNER -->
+        <div id="mod-decouple" class="space-y-6 max-w-5xl mx-auto w-full hidden">
+            <div>
+                <h2 class="text-xl font-bold text-white tracking-tight">Decoupling & ABSD Tax Structuring Simulator</h2>
+                <p class="text-xs text-slate-400 mt-0.5">Show married clients exactly how much ABSD and Stamp Duty they save by restructuring share ownership.</p>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-5 shadow-xl max-w-2xl">
+                <div class="space-y-4">
                     <div>
-                        <label class="text-[11px] font-semibold text-slate-600">Tenure (Yrs)</label>
-                        <input type="number" id="tdsr-tenure" value="30" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
+                        <label class="text-[11px] font-semibold text-slate-400">Current Valuation of Co-Owned Property (SGD)</label>
+                        <input type="number" id="d-val" value="1900000" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-blue-500 outline-none">
                     </div>
                     <div>
-                        <label class="text-[11px] font-semibold text-slate-600">Stress Rate (%)</label>
-                        <input type="number" step="0.1" id="tdsr-rate" value="4.0" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
+                        <label class="text-[11px] font-semibold text-slate-400">Target Purchase Price for 2nd Investment Property (SGD)</label>
+                        <input type="number" id="d-newprice" value="2100000" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-blue-500 outline-none">
                     </div>
+                    <div>
+                        <label class="text-[11px] font-semibold text-slate-400">Citizen Profile</label>
+                        <select id="d-profile" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-blue-500 outline-none">
+                            <option value="sc">Singapore Citizen (Avoids 20% ABSD)</option>
+                            <option value="pr">Permanent Resident (Avoids 30% ABSD)</option>
+                        </select>
+                    </div>
+                    <button onclick="runDecouple()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 rounded-xl text-xs transition shadow-lg shadow-blue-600/20">Calculate Net Tax Savings</button>
                 </div>
-                <button onclick="calculateTDSR()" class="w-full bg-blue-600 text-white font-semibold py-2.5 rounded-xl text-xs shadow-md hover:bg-blue-700 transition">Compute Maximum Loan Limit</button>
-                
-                <div id="tdsr-results" class="mt-3 p-3 bg-slate-50 rounded-xl space-y-1.5 text-xs hidden border">
-                    <div class="flex justify-between"><span class="text-slate-600">Max Allowable Debt (55%):</span> <span id="res-tdsr-limit" class="font-bold"></span></div>
-                    <div class="flex justify-between"><span class="text-slate-600">Max MSR (HDB/EC 30%):</span> <span id="res-msr-limit" class="font-bold"></span></div>
-                    <div class="flex justify-between border-t pt-1.5"><span class="text-slate-800 font-semibold">Max Loan Available:</span> <span id="res-max-loan" class="font-bold text-blue-600"></span></div>
-                </div>
-            </div>
 
-            <!-- Proceeds Calculator -->
-            <div id="subcontent-calc-proceeds" class="space-y-3 bg-white p-4 rounded-2xl shadow-sm border border-slate-100 hidden">
-                <h2 class="font-bold text-slate-900 text-sm">Cash Proceeds & Purchase Outlay</h2>
-                <div>
-                    <label class="text-[11px] font-semibold text-slate-600">Expected Selling Price</label>
-                    <input type="number" id="proc-price" value="950000" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
-                </div>
-                <div>
-                    <label class="text-[11px] font-semibold text-slate-600">Outstanding Loan Balance</label>
-                    <input type="number" id="proc-loan" value="400000" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
-                </div>
-                <div>
-                    <label class="text-[11px] font-semibold text-slate-600">CPF Refund (Principal + Accrued Interest)</label>
-                    <input type="number" id="proc-cpf" value="280000" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
-                </div>
-                <button onclick="calculateProceeds()" class="w-full bg-blue-600 text-white font-semibold py-2.5 rounded-xl text-xs shadow-md hover:bg-blue-700 transition">Calculate Net Cash Proceeds</button>
-
-                <div id="proceeds-results" class="mt-3 p-3 bg-slate-50 rounded-xl space-y-1.5 text-xs hidden border">
-                    <div class="flex justify-between"><span class="text-slate-600">Gross Sale Price:</span> <span id="res-sale-price" class="font-bold"></span></div>
-                    <div class="flex justify-between"><span class="text-slate-600">Less Loan & CPF:</span> <span id="res-deductions" class="font-bold text-red-600"></span></div>
-                    <div class="flex justify-between border-t pt-1.5"><span class="text-slate-800 font-semibold">Estimated Cash Proceeds:</span> <span id="res-cash-proceeds" class="font-bold text-emerald-600"></span></div>
-                </div>
-            </div>
-
-            <!-- Map Tracker -->
-            <div id="subcontent-calc-map" class="space-y-3 bg-white p-4 rounded-2xl shadow-sm border border-slate-100 hidden">
-                <h2 class="font-bold text-slate-900 text-sm">New Launch & En Bloc Breakeven Map</h2>
-                <p class="text-[11px] text-slate-500">Tap pins to inspect land bids and developer breakeven costs.</p>
-                <div id="map" class="w-full h-72 rounded-xl z-10 border"></div>
-            </div>
-        </div>
-
-        <!-- TAB 2: CLIENT CRM & TIMELINE TRACKER -->
-        <div id="content-crm" class="space-y-4 hidden">
-            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
-                <div class="flex justify-between items-center">
-                    <h2 class="font-bold text-slate-900 text-sm">Client Pipeline & Milestone Tracker</h2>
-                    <button onclick="openNewClientModal()" class="bg-slate-900 text-white text-[11px] px-3 py-1.5 rounded-lg font-medium">+ Add Client</button>
-                </div>
-                <div id="client-list" class="space-y-2.5 mt-2">
-                    <!-- Populated dynamically -->
+                <div id="res-decouple-box" class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-2 text-xs hidden font-mono">
+                    <div class="flex justify-between text-slate-400"><span>Direct Purchase ABSD (Without Decoupling):</span> <span id="out-direct-absd" class="text-rose-400"></span></div>
+                    <div class="flex justify-between text-slate-400"><span>Transfer Buyer's Stamp Duty (50% share):</span> <span id="out-transfer-bsd" class="text-white"></span></div>
+                    <div class="flex justify-between text-slate-400"><span>New Property ABSD (Post-Decouple):</span> <span class="text-emerald-400">$0 (1st Property Clean Slate)</span></div>
+                    <div class="flex justify-between border-t border-slate-800 pt-2 text-sm font-bold"><span>Total Net Tax Savings:</span> <span id="out-netsavings" class="text-emerald-400"></span></div>
                 </div>
             </div>
         </div>
 
-        <!-- TAB 3: TAX & DECOUPLING SIMULATOR -->
-        <div id="content-decouple" class="space-y-4 hidden">
-            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
-                <h2 class="font-bold text-slate-900 text-sm">Decoupling & ABSD Optimizer</h2>
-                <p class="text-[11px] text-slate-500">Simulate tax savings when transferring a co-owned property share to buy a second property.</p>
-                <div>
-                    <label class="text-[11px] font-semibold text-slate-600">Current Valuation of Property (SGD)</label>
-                    <input type="number" id="dec-val" value="1800000" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
-                </div>
-                <div>
-                    <label class="text-[11px] font-semibold text-slate-600">Target 2nd Property Price (SGD)</label>
-                    <input type="number" id="dec-newprice" value="2000000" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
-                </div>
-                <div>
-                    <label class="text-[11px] font-semibold text-slate-600">Buyer Profile</label>
-                    <select id="dec-profile" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
-                        <option value="sc">Singapore Citizen (Save 20% ABSD)</option>
-                        <option value="pr">Permanent Resident (Save 30% ABSD)</option>
-                    </select>
-                </div>
-                <button onclick="calculateDecoupling()" class="w-full bg-blue-600 text-white font-semibold py-2.5 rounded-xl text-xs shadow-md hover:bg-blue-700 transition">Calculate Decoupling Tax Savings</button>
-
-                <div id="decouple-results" class="mt-3 p-3 bg-slate-50 rounded-xl space-y-1.5 text-xs hidden border">
-                    <div class="flex justify-between"><span class="text-slate-600">Direct Purchase ABSD:</span> <span id="res-direct-absd" class="font-bold text-red-600"></span></div>
-                    <div class="flex justify-between"><span class="text-slate-600">Transfer BSD (50% share):</span> <span id="res-transfer-bsd" class="font-bold"></span></div>
-                    <div class="flex justify-between"><span class="text-slate-600">New Purchase ABSD (Post-Decouple):</span> <span id="res-post-absd" class="font-bold"></span></div>
-                    <div class="flex justify-between border-t pt-1.5"><span class="text-slate-800 font-semibold">Total Estimated Net Savings:</span> <span id="res-net-savings" class="font-bold text-emerald-600"></span></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 4: AI COPYWRITER & CMA ENGINE -->
-        <div id="content-marketing" class="space-y-4 hidden">
-            <!-- AI Copywriter -->
-            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
-                <h2 class="font-bold text-slate-900 text-sm">AI Listing & WhatsApp Generator</h2>
-                <div>
-                    <label class="text-[11px] font-semibold text-slate-600">Property District / Name</label>
-                    <input type="text" id="ai-prop" value="District 15 Freehold Condo" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
-                </div>
-                <div>
-                    <label class="text-[11px] font-semibold text-slate-600">Target Audience</label>
-                    <select id="ai-audience" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
-                        <option value="upgrader">HDB Upgrader Looking for Private Condo</option>
-                        <option value="investor">Yield-Focused Investor (District 15)</option>
-                    </select>
-                </div>
-                <button onclick="generateAICopy()" class="w-full bg-slate-900 text-white font-semibold py-2.5 rounded-xl text-xs shadow-md hover:bg-slate-800 transition">Generate WhatsApp Broadcast Copy</button>
-
-                <div id="ai-output-box" class="mt-2 p-3 bg-slate-50 rounded-xl text-xs hidden border font-mono whitespace-pre-wrap"></div>
+        <!-- MODULE 4: WHATSAPP SCRIPTS -->
+        <div id="mod-script" class="space-y-6 max-w-5xl mx-auto w-full hidden">
+            <div>
+                <h2 class="text-xl font-bold text-white tracking-tight">Targeted WhatsApp Broadcast Templates</h2>
+                <p class="text-xs text-slate-400 mt-0.5">High-conversion broadcast copy tuned for Singapore property owners and upgraders.</p>
             </div>
 
-            <!-- CMA Engine -->
-            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
-                <h2 class="font-bold text-slate-900 text-sm">Instant Comparative Market Analysis (CMA)</h2>
-                <div>
-                    <label class="text-[11px] font-semibold text-slate-600">Select Region / Estate</label>
-                    <select id="cma-region" onchange="runCMA()" class="w-full mt-1 p-2.5 border rounded-xl bg-slate-50 text-sm outline-none">
-                        <option value="cck">Choa Chu Kang / Northvale Area</option>
-                        <option value="katong">Katong / Joo Chiat (District 15)</option>
-                        <option value="boonlay">Boon Lay / Jurong West HDB</option>
-                    </select>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-3 flex flex-col justify-between">
+                    <div>
+                        <div class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20 font-mono inline-block mb-2">HDB Upgrader Campaign</div>
+                        <h3 class="font-bold text-sm text-white">Transitioning from HDB to Private</h3>
+                        <p class="text-xs text-slate-400 mt-2 font-mono bg-slate-950 p-3 rounded-xl border border-slate-800 leading-relaxed">
+                            "Hi [Name], seeing how mature HDB resale values have peaked recently, many owners in your cluster are locking in gains now to step into a private RCR/OCR condo without touching their retirement savings. Would you be keen on a quick 5-min cash proceeds calculation for your block?"
+                        </p>
+                    </div>
+                    <button onclick="navigator.clipboard.writeText(this.previousElementSibling.querySelector('p').innerText); alert('Copied to clipboard!');" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2.5 rounded-xl text-xs transition">Copy Script</button>
                 </div>
-                <div id="cma-results" class="p-3 bg-slate-50 rounded-xl text-xs space-y-1.5 border">
-                    <!-- Populated dynamically -->
+
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-3 flex flex-col justify-between">
+                    <div>
+                        <div class="text-[10px] bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded border border-blue-500/20 font-mono inline-block mb-2">Investor Yield Pitch</div>
+                        <h3 class="font-bold text-sm text-white">New Launch Breakeven Advisory</h3>
+                        <p class="text-xs text-slate-400 mt-2 font-mono bg-slate-950 p-3 rounded-xl border border-slate-800 leading-relaxed">
+                            "Hi [Name], with recent land bids clustering around the $1,300–$1,500 psf ppr mark, upcoming launches are projected to price above $2,300+ psf breakeven. If you're looking at value preservation or rental yield protection in 2026, let's review the stack analysis before Phase 1 previews begin."
+                        </p>
+                    </div>
+                    <button onclick="navigator.clipboard.writeText(this.previousElementSibling.querySelector('p').innerText); alert('Copied to clipboard!');" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2.5 rounded-xl text-xs transition">Copy Script</button>
                 </div>
             </div>
         </div>
 
     </main>
 
-    <!-- JavaScript Execution Logic -->
+    <!-- JavaScript Tablet Logic -->
     <script>
-        // Main Tab Switcher
-        function switchTab(tab) {
-            ['calculators', 'crm', 'decouple', 'marketing'].forEach(t => {
-                document.getElementById(`content-${t}`).classList.add('hidden');
-                document.getElementById(`tab-${t}`).className = "py-2 rounded-lg text-slate-600 transition";
+        function switchModule(modId, btnElement) {
+            ['calc', 'tracker', 'decouple', 'script'].forEach(m => {
+                document.getElementById(`mod-${m}`).classList.add('hidden');
             });
-            document.getElementById(`content-${tab}`).classList.remove('hidden');
-            document.getElementById(`tab-${tab}`).className = "py-2 rounded-lg bg-white shadow-sm text-slate-900 transition font-semibold";
-            if(tab === 'calculators') { setTimeout(() => { map.invalidateSize(); }, 200); }
+            document.querySelectorAll('aside nav button').forEach(b => {
+                b.className = "w-full flex items-center space-x-3 px-3 py-3 rounded-xl text-xs font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition";
+            });
+
+            document.getElementById(`mod-${modId}`).classList.remove('hidden');
+            btnElement.className = "w-full flex items-center space-x-3 px-3 py-3 rounded-xl text-xs font-semibold bg-blue-600 text-white transition shadow-lg shadow-blue-900/20";
         }
 
-        function switchSubTab(parent, sub) {
-            ['tdsr', 'proceeds', 'map'].forEach(s => {
-                document.getElementById(`subcontent-${parent}-${s}`).classList.add('hidden');
-                document.getElementById(`subtab-${parent}-${s}`).className = "text-slate-500 pb-1";
-            });
-            document.getElementById(`subcontent-${parent}-${sub}`).classList.remove('hidden');
-            document.getElementById(`subtab-${parent}-${sub}`).className = "text-blue-600 border-b-2 border-blue-600 pb-1 font-semibold";
-            if(sub === 'map') { setTimeout(() => { map.invalidateSize(); }, 200); }
-        }
+        function runTDSR() {
+            const income = parseFloat(document.getElementById('c-income').value);
+            const debt = parseFloat(document.getElementById('c-debt').value);
+            const tenure = parseInt(document.getElementById('c-tenure').value);
+            const rate = parseFloat(document.getElementById('c-rate').value) / 100;
 
-        // Financial Calculators
-        function calculateTDSR() {
-            const income = parseFloat(document.getElementById('tdsr-income').value);
-            const debt = parseFloat(document.getElementById('tdsr-debt').value);
-            const tenure = parseInt(document.getElementById('tdsr-tenure').value);
-            const rate = parseFloat(document.getElementById('tdsr-rate').value) / 100;
-
-            const maxDebt = income * 0.55;
-            const availTDSR = Math.max(0, maxDebt - debt);
-            const availMSR = income * 0.30;
+            const maxDebtAllowed = income * 0.55;
+            const availForMortgage = Math.max(0, maxDebtAllowed - debt);
+            const maxMSR = income * 0.30;
 
             const monthlyRate = rate / 12;
             const months = tenure * 12;
-            const calcLoan = (pmt) => pmt * (Math.pow(1 + monthlyRate, months) - 1) / (monthlyRate * Math.pow(1 + monthlyRate, months));
+            const maxLoan = availForMortgage * (Math.pow(1 + monthlyRate, months) - 1) / (monthlyRate * Math.pow(1 + monthlyRate, months));
 
-            document.getElementById('res-tdsr-limit').innerText = `$${maxDebt.toLocaleString('en-US', {maximumFractionDigits:0})}`;
-            document.getElementById('res-msr-limit').innerText = `$${availMSR.toLocaleString('en-US', {maximumFractionDigits:0})}`;
-            document.getElementById('res-max-loan').innerText = `$${Math.round(calcLoan(availTDSR)).toLocaleString()}`;
-            document.getElementById('tdsr-results').classList.remove('hidden');
+            document.getElementById('out-tdsr').innerText = `$${maxDebtAllowed.toLocaleString('en-US', {maximumFractionDigits:0})}`;
+            document.getElementById('out-msr').innerText = `$${maxMSR.toLocaleString('en-US', {maximumFractionDigits:0})}`;
+            document.getElementById('out-maxloan').innerText = `$${Math.round(maxLoan).toLocaleString()}`;
+            document.getElementById('res-tdsr-box').classList.remove('hidden');
         }
 
-        function calculateProceeds() {
-            const price = parseFloat(document.getElementById('proc-price').value);
-            const loan = parseFloat(document.getElementById('proc-loan').value);
-            const cpf = parseFloat(document.getElementById('proc-cpf').value);
-            const deductions = loan + cpf;
-            const proceeds = price - deductions;
+        function runProceeds() {
+            const price = parseFloat(document.getElementById('p-price').value);
+            const loan = parseFloat(document.getElementById('p-loan').value);
+            const cpf = parseFloat(document.getElementById('p-cpf').value);
 
-            document.getElementById('res-sale-price').innerText = `$${price.toLocaleString()}`;
-            document.getElementById('res-deductions').innerText = `-$${deductions.toLocaleString()}`;
-            document.getElementById('res-cash-proceeds').innerText = `$${Math.max(0, proceeds).toLocaleString()}`;
-            document.getElementById('proceeds-results').classList.remove('hidden');
+            const totalDeductions = loan + cpf;
+            const netCash = price - totalDeductions;
+
+            document.getElementById('out-sprice').innerText = `$${price.toLocaleString()}`;
+            document.getElementById('out-deduct').innerText = `-$${totalDeductions.toLocaleString()}`;
+            document.getElementById('out-cash').innerText = `$${Math.max(0, netCash).toLocaleString()}`;
+            document.getElementById('res-proceeds-box').classList.remove('hidden');
         }
 
-        // Decoupling Simulator
-        function calculateDecoupling() {
-            const val = parseFloat(document.getElementById('dec-val').value);
-            const newPrice = parseFloat(document.getElementById('dec-newprice').value);
-            const profile = document.getElementById('dec-profile').value;
+        function runDecouple() {
+            const val = parseFloat(document.getElementById('d-val').value);
+            const newPrice = parseFloat(document.getElementById('d-newprice').value);
+            const profile = document.getElementById('d-profile').value;
 
-            // Half-share transfer valuation
-            const shareVal = val / 2;
+            const halfShare = val / 2;
             let bsd = 0;
-            if (shareVal <= 180000) bsd = shareVal * 0.01;
-            else if (shareVal <= 360000) bsd = 1800 + (shareVal - 180000) * 0.02;
-            else if (shareVal <= 1000000) bsd = 5400 + (shareVal - 360000) * 0.03;
-            else bsd = 24600 + (shareVal - 1000000) * 0.04;
+            if (halfShare <= 180000) bsd = halfShare * 0.01;
+            else if (halfShare <= 360000) bsd = 1800 + (halfShare - 180000) * 0.02;
+            else if (halfShare <= 1000000) bsd = 5400 + (halfShare - 360000) * 0.03;
+            else bsd = 24600 + (halfShare - 1000000) * 0.04;
 
-            const directAbsdRate = profile === 'sc' ? 0.20 : 0.30;
-            const directAbsd = newPrice * directAbsdRate;
-            const postDecoupleAbsd = 0; // 1st property for the outgoing spouse
+            const absdRate = profile === 'sc' ? 0.20 : 0.30;
+            const directAbsd = newPrice * absdRate;
+            const netSavings = directAbsd - bsd;
 
-            const netSavings = directAbsd - (bsd + postDecoupleAbsd);
-
-            document.getElementById('res-direct-absd').innerText = `$${Math.round(directAbsd).toLocaleString()}`;
-            document.getElementById('res-transfer-bsd').innerText = `$${Math.round(bsd).toLocaleString()}`;
-            document.getElementById('res-post-absd').innerText = `$${Math.round(postDecoupleAbsd).toLocaleString()}`;
-            document.getElementById('res-net-savings').innerText = `$${Math.round(netSavings).toLocaleString()}`;
-            document.getElementById('decouple-results').classList.remove('hidden');
+            document.getElementById('out-direct-absd').innerText = `$${Math.round(directAbsd).toLocaleString()} (${profile === 'sc' ? '20%' : '30%'} ABSD)`;
+            document.getElementById('out-transfer-bsd').innerText = `$${Math.round(bsd).toLocaleString()} (50% share BSD)`;
+            document.getElementById('out-netsavings').innerText = `$${Math.round(netSavings).toLocaleString()}`;
+            document.getElementById('res-decouple-box').classList.remove('hidden');
         }
-
-        // CRM Client Pipeline Tracker Data
-        let clients = [
-            { name: "Mr & Mrs Tan", type: "HDB Upgrader", stage: "HDB Resale Completion (8-Wk Window)", status: "Completion due in 12 days" },
-            { name: "David Lim", type: "Private Investor", stage: "New Launch OTP & Progressive Payment", status: "5% Exercise Fee Paid" },
-            { name: "Sarah Wong", type: "First-Time Buyer", stage: "HFE Letter & IPA Approval", status: "Ready for viewings" }
-        ];
-
-        function renderClients() {
-            const container = document.getElementById('client-list');
-            container.innerHTML = clients.map(c => `
-                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 flex justify-between items-center">
-                    <div>
-                        <div class="text-[10px] font-bold text-blue-600 uppercase">${c.type}</div>
-                        <div class="text-xs font-bold text-slate-900">${c.name}</div>
-                        <div class="text-[11px] text-slate-500">${c.stage}</div>
-                    </div>
-                    <div class="text-right">
-                        <span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-medium">${c.status}</span>
-                    </div>
-                </div>
-            `).join('');
-        }
-        renderClients();
-
-        function openNewClientModal() {
-            const name = prompt("Enter Client Name:");
-            const type = prompt("Enter Client Type (e.g., HDB Upgrader / Investor):");
-            if(name && type) {
-                clients.push({ name, type, stage: "Initial Consultation / Financial Check", status: "Active Lead" });
-                renderClients();
-            }
-        }
-
-        // AI Copywriter Generator
-        function generateAICopy() {
-            const prop = document.getElementById('ai-prop').value;
-            const aud = document.getElementById('ai-audience').value;
-            let text = "";
-
-            if(aud === 'upgrader') {
-                text = `🔥 EXCLUSIVE FOR HDB UPGRADERS!\n\nStuck wondering how to transition from your HDB to a brand new ${prop} without ABSD stress or cash flow gaps? \n\nWe’ve mapped out a seamless timeline for family upgraders in 2026. Let's calculate your exact cash proceeds today!\n\n📲 WhatsApp me for a zero-obligation financial health check!`;
-            } else {
-                text = `💎 HIGH-YIELD ASSET CLASS: ${prop}\n\nLooking to hedge against inflation and capture strong rental yields in Singapore's current market? \n\nPrime location, robust tenant pool, and strong capital preservation traits. Request the full stack analysis and transacted psf breakdown now.\n\n📲 DM to schedule a private presentation.`;
-            }
-
-            const box = document.getElementById('ai-output-box');
-            box.innerText = text;
-            box.classList.remove('hidden');
-        }
-
-        // CMA Engine
-        const cmaData = {
-            cck: { area: "Choa Chu Kang / Northvale", median: "$1,410 psf", range: "$1,280 - $1,550 psf", trend: "+2.4% YoY" },
-            katong: { area: "Katong / District 15", median: "$2,480 psf", range: "$2,100 - $2,850 psf", trend: "+1.8% YoY" },
-            boonlay: { area: "Boon Lay / Jurong West HDB", median: "$515,000 (4-Room)", range: "$460k - $580k", trend: "+3.2% YoY" }
-        };
-
-        function runCMA() {
-            const val = document.getElementById('cma-region').value;
-            const data = cmaData[val];
-            document.getElementById('cma-results').innerHTML = `
-                <div class="flex justify-between font-bold text-slate-900"><span>Area:</span> <span>${data.area}</span></div>
-                <div class="flex justify-between text-slate-600"><span>Rolling Median:</span> <span class="font-semibold text-blue-600">${data.median}</span></div>
-                <div class="flex justify-between text-slate-600"><span>Transacted Range:</span> <span>${data.range}</span></div>
-                <div class="flex justify-between text-slate-600 border-t pt-1"><span>Market Trend:</span> <span class="text-emerald-600 font-semibold">${data.trend}</span></div>
-            `;
-        }
-        runCMA();
-
-        // Map Initialization
-        const map = L.map('map').setView([1.3521, 103.8198], 11);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
-
-        const launches = [
-            { name: "Rivelle Tampines", lat: 1.3543, lng: 103.9455, bid: "$885 psf ppr", breakeven: "$1,620 psf" },
-            { name: "Lentor Mansion", lat: 1.3820, lng: 103.8430, bid: "$985 psf ppr", breakeven: "$2,100 psf" },
-            { name: "Normanton Park (En Bloc)", lat: 1.2860, lng: 103.7900, bid: "$965 psf ppr", breakeven: "$1,750 psf" }
-        ];
-
-        launches.forEach(l => {
-            L.marker([l.lat, l.lng]).addTo(map)
-                .bindPopup(`<b>${l.name}</b><br>Land Bid: ${l.bid}<br>Breakeven: ${l.breakeven}`);
-        });
     </script>
 </body>
 </html>
