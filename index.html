@@ -40,7 +40,7 @@
                     <span>New Launch & Land Bids</span>
                 </button>
                 <button onclick="switchModule('decouple', this)" id="nav-decouple" class="w-full flex items-center space-x-3 px-3 py-3 rounded-xl text-xs font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition">
-                    <span class="text-base">⚖️️</span>
+                    <span class="text-base">⚖</span>
                     <span>Decoupling & ABSD Planner</span>
                 </button>
                 <button onclick="switchModule('script', this)" id="nav-script" class="w-full flex items-center space-x-3 px-3 py-3 rounded-xl text-xs font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition">
@@ -63,8 +63,8 @@
         <!-- MODULE 1: AFFORDABILITY & BUYERS CHECK -->
         <div id="mod-affordability" class="space-y-6 max-w-5xl mx-auto w-full">
             <div>
-                <h2 class="text-xl font-bold text-white tracking-tight">Multi-Buyer Affordability & Max Loan Engine</h2>
-                <p class="text-xs text-slate-400 mt-0.5">Evaluate individual capacity (Buyer 1 / Buyer 2) and combined purchasing power under MAS TDSR/MSR rules.</p>
+                <h2 class="text-xl font-bold text-white tracking-tight">Multi-Buyer Affordability & IWAA Tenure Engine</h2>
+                <p class="text-xs text-slate-400 mt-0.5">Calculates individual max loans, Income-Weighted Average Age (IWAA), and max tenure caps under MAS guidelines.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -75,6 +75,10 @@
                         <span class="text-[10px] bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded border border-blue-500/20 font-mono">Primary Applicant</span>
                     </div>
                     <div class="space-y-3">
+                        <div>
+                            <label class="text-[11px] font-semibold text-slate-400">Age (Years)</label>
+                            <input type="number" id="b1-age" value="35" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-blue-500 outline-none">
+                        </div>
                         <div>
                             <label class="text-[11px] font-semibold text-slate-400">Monthly Gross Income (SGD)</label>
                             <input type="number" id="b1-income" value="8000" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-blue-500 outline-none">
@@ -94,6 +98,10 @@
                     </div>
                     <div class="space-y-3">
                         <div>
+                            <label class="text-[11px] font-semibold text-slate-400">Age (Years)</label>
+                            <input type="number" id="b2-age" value="33" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-indigo-500 outline-none">
+                        </div>
+                        <div>
                             <label class="text-[11px] font-semibold text-slate-400">Monthly Gross Income (SGD)</label>
                             <input type="number" id="b2-income" value="6000" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-indigo-500 outline-none">
                         </div>
@@ -109,19 +117,32 @@
             <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4 shadow-xl">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="text-[11px] font-semibold text-slate-400">Loan Tenure (Years)</label>
-                        <input type="number" id="global-tenure" value="30" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-blue-500 outline-none">
+                        <label class="text-[11px] font-semibold text-slate-400">Property Type (Tenure Cap Rule)</label>
+                        <select id="prop-type-tenure" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-blue-500 outline-none">
+                            <option value="private">Private Property (Max 35 Years Tenure)</option>
+                            <option value="hdb">HDB Flat (Max 30 Years Tenure)</option>
+                        </select>
                     </div>
                     <div>
                         <label class="text-[11px] font-semibold text-slate-400">Stress Test Interest Rate (%)</label>
                         <input type="number" step="0.1" id="global-rate" value="4.0" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-blue-500 outline-none">
                     </div>
                 </div>
-                <button onclick="runAffordability()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3.5 rounded-xl text-xs transition shadow-lg shadow-blue-600/20">Compute Individual & Combined Affordability</button>
+                <button onclick="runAffordability()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3.5 rounded-xl text-xs transition shadow-lg shadow-blue-600/20">Compute IWAA, Max Tenure & Combined Affordability</button>
 
                 <!-- Results Matrix -->
                 <div id="res-afford-box" class="bg-slate-950 border border-slate-800 p-5 rounded-xl space-y-3 hidden font-mono text-xs">
-                    <div class="grid grid-cols-3 gap-4 border-b border-slate-800 pb-3 text-center">
+                    <div class="grid grid-cols-2 gap-4 border-b border-slate-800 pb-3 text-center">
+                        <div class="bg-slate-900 p-3 rounded-xl border border-slate-800">
+                            <div class="text-slate-400 text-[10px] uppercase">Income-Weighted Average Age (IWAA)</div>
+                            <div id="out-iwaa" class="text-emerald-400 font-bold text-base mt-1"></div>
+                        </div>
+                        <div class="bg-slate-900 p-3 rounded-xl border border-slate-800">
+                            <div class="text-slate-400 text-[10px] uppercase">Max Allowable Loan Tenure</div>
+                            <div id="out-max-tenure" class="text-blue-400 font-bold text-base mt-1"></div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 border-b border-slate-800 pb-3 text-center pt-2">
                         <div>
                             <div class="text-slate-400 text-[10px] uppercase">Buyer 1 Max Loan</div>
                             <div id="out-b1-loan" class="text-white font-bold text-sm mt-1"></div>
@@ -344,39 +365,61 @@
             btnElement.className = "w-full flex items-center space-x-3 px-3 py-3 rounded-xl text-xs font-semibold bg-blue-600 text-white transition shadow-lg shadow-blue-900/20";
         }
 
-        // Multi-Buyer Affordability Calculation Logic
+        // Multi-Buyer Affordability & IWAA Calculation Logic
         function runAffordability() {
+            const age1 = parseFloat(document.getElementById('b1-age').value) || 35;
             const inc1 = parseFloat(document.getElementById('b1-income').value) || 0;
             const debt1 = parseFloat(document.getElementById('b1-debt').value) || 0;
+
+            const age2 = parseFloat(document.getElementById('b2-age').value) || 33;
             const inc2 = parseFloat(document.getElementById('b2-income').value) || 0;
             const debt2 = parseFloat(document.getElementById('b2-debt').value) || 0;
             
-            const tenure = parseInt(document.getElementById('global-tenure').value) || 30;
+            const propType = document.getElementById('prop-type-tenure').value;
             const rate = (parseFloat(document.getElementById('global-rate').value) || 4.0) / 100;
 
-            const monthlyRate = rate / 12;
-            const months = tenure * 12;
-            const calcLoan = (pmt) => pmt * (Math.pow(1 + monthlyRate, months) - 1) / (monthlyRate * Math.pow(1 + monthlyRate, months));
-
-            // Individual 1 Max Loan (TDSR 55% cap)
-            const b1MaxPmt = Math.max(0, (inc1 * 0.55) - debt1);
-            const b1Loan = calcLoan(b1MaxPmt);
-
-            // Individual 2 Max Loan (TDSR 55% cap)
-            const b2MaxPmt = Math.max(0, (inc2 * 0.55) - debt2);
-            const b2Loan = calcLoan(b2MaxPmt);
-
-            // Combined Calculation
             const totalInc = inc1 + inc2;
+            let iwaa = 35; // default fallback
+            if (totalInc > 0) {
+                iwaa = ((age1 * inc1) + (age2 * inc2)) / totalInc;
+            } else {
+                iwaa = (age1 + age2) / 2;
+            }
+
+            // MAS rules: max age cap for full LTV is 65. Max tenure = 65 - IWAA, capped at 30 for HDB or 35 for Private.
+            const maxAllowedTenureByAge = Math.max(5, 65 - Math.floor(iwaa));
+            const absoluteMaxTenure = propType === 'hdb' ? 30 : 35;
+            const finalTenure = Math.min(maxAllowedTenureByAge, absoluteMaxTenure);
+
+            const monthlyRate = rate / 12;
+            const months = finalTenure * 12;
+            const calcLoan = (pmt, tenureMonths) => {
+                const mRate = rate / 12;
+                return pmt * (Math.pow(1 + mRate, tenureMonths) - 1) / (mRate * Math.pow(1 + mRate, tenureMonths));
+            };
+
+            // Individual 1 Max Loan (TDSR 55% cap based on individual income/debt, using individual tenure or combined tenure framework)
+            const b1MaxPmt = Math.max(0, (inc1 * 0.55) - debt1);
+            const b1Tenure = Math.min(finalTenure, Math.max(5, 65 - age1));
+            const b1Loan = calcLoan(b1MaxPmt, b1Tenure * 12);
+
+            // Individual 2 Max Loan
+            const b2MaxPmt = Math.max(0, (inc2 * 0.55) - debt2);
+            const b2Tenure = Math.min(finalTenure, Math.max(5, 65 - age2));
+            const b2Loan = calcLoan(b2MaxPmt, b2Tenure * 12);
+
+            // Combined Calculation using IWAA-derived tenure
             const totalDebt = debt1 + debt2;
             const combinedMaxDebt = totalInc * 0.55;
             const combinedAvailPmt = Math.max(0, combinedMaxDebt - totalDebt);
             const combinedMSR = totalInc * 0.30;
-            const combinedLoan = calcLoan(combinedAvailPmt);
+            const combinedLoan = calcLoan(combinedAvailPmt, finalTenure * 12);
             
             // Assume 75% LTV bank loan max purchase budget estimation
             const estMaxPurchase = combinedLoan / 0.75;
 
+            document.getElementById('out-iwaa').innerText = `${iwaa.toFixed(1)} Years Old`;
+            document.getElementById('out-max-tenure').innerText = `${finalTenure} Years`;
             document.getElementById('out-b1-loan').innerText = `$${Math.round(b1Loan).toLocaleString()}`;
             document.getElementById('out-b2-loan').innerText = `$${Math.round(b2Loan).toLocaleString()}`;
             document.getElementById('out-combined-loan').innerText = `$${Math.round(combinedLoan).toLocaleString()}`;
