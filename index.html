@@ -401,7 +401,7 @@
                         <div class="mt-2 flex items-center space-x-3 text-xs font-mono text-slate-800 bg-slate-100 p-2 rounded border border-slate-200">
                             <span>Add Days After Exercise:</span>
                             <input type="number" id="input-resale-days" value="${savedResaleDays}" min="1" max="90" oninput="handleResaleDaysChange(this)" class="w-16 bg-white border border-slate-300 px-2 py-1 rounded text-center font-bold">
-                            <span>Days $\rightarrow$ Submission Deadline:</span>
+                            <span>Days &rarr; Submission Deadline:</span>
                             <input type="date" id="input-resalesub-date" readonly class="bg-slate-200 text-slate-700 font-semibold px-2 py-1 rounded cursor-not-allowed">
                         </div>
                     `;
@@ -434,7 +434,6 @@
                 `;
             }).join('');
 
-            // Restore sidebar state inputs if cached
             if(savedState.price !== undefined) document.getElementById('s-price').value = savedState.price;
             if(savedState.loan !== undefined) document.getElementById('s-loan').value = savedState.loan;
             if(savedState.institution !== undefined) document.getElementById('s-loaninstitution').value = savedState.institution;
@@ -468,15 +467,15 @@
             const completionInput = document.getElementById('input-completion-date');
             const extensionInput = document.getElementById('input-extension-date');
 
-            // 1. Enforce chronological date boundaries (cant precede previous step)
+            // 1. Enforce chronological date boundaries across pickers
             const allDateInputs = document.querySelectorAll('#flow-container input[type="date"]');
             for(let i = 1; i < allDateInputs.length; i++) {
-                if(allDateInputs[i-1].value && !allDateInputs[i].readOnly) {
+                if(allDateInputs[i-1].value && !allDateInputs[i].readOnly && allDateInputs[i].id !== 'input-resalesub-date') {
                     allDateInputs[i].min = allDateInputs[i-1].value;
                 }
             }
 
-            // 2. Cooling period (+7 days)
+            // 2. Cooling period (+7 days from Intent to Sell)
             if(intentInput && coolingInput && otpInput) {
                 const intentDate = new Date(intentInput.value);
                 if(!isNaN(intentDate.getTime())) {
@@ -484,19 +483,22 @@
                     coolingDate.setDate(coolingDate.getDate() + 7);
                     coolingInput.value = coolingDate.toISOString().split('T')[0];
                     otpInput.min = coolingDate.toISOString().split('T')[0];
-
-                    const otpDate = new Date(otpInput.value);
-                    if(!isNaN(otpDate.getTime())) {
-                        let expiryDate = new Date(otpDate);
-                        expiryDate.setDate(expiryDate.getDate() + 21);
-                        const deadlineDisp = document.getElementById('otp-deadline-disp');
-                        if(deadlineDisp) deadlineDisp.innerText = formatDateDDMMYYYY(expiryDate);
-                    }
                     validateOtpDate();
                 }
             }
 
-            // 3. Resale Submission Deadline (+X days from Exercise date)
+            // 3. OTP Expiry Hard Deadline (+3 calendar weeks from OTP issuance)
+            if(otpInput) {
+                const otpDate = new Date(otpInput.value);
+                if(!isNaN(otpDate.getTime())) {
+                    let expiryDate = new Date(otpDate);
+                    expiryDate.setDate(expiryDate.getDate() + 21);
+                    const deadlineDisp = document.getElementById('otp-deadline-disp');
+                    if(deadlineDisp) deadlineDisp.innerText = formatDateDDMMYYYY(expiryDate);
+                }
+            }
+
+            // 4. Resale Application Submission Deadline (+X days from Exercise of OTP)
             if(exerciseInput && resaleDaysInput && resaleSubInput) {
                 const exerciseDate = new Date(exerciseInput.value);
                 const addDays = parseInt(resaleDaysInput.value) || 0;
@@ -508,16 +510,13 @@
                 }
             }
 
-            // 4. Completion date (+8 weeks) & Extension of Stay (+3 calendar months)
+            // 5. Completion date (+8 weeks) & Extension of Stay (+3 calendar months)
             if(acceptanceInput && completionInput && extensionInput) {
                 const accDate = new Date(acceptanceInput.value);
                 if(!isNaN(accDate.getTime())) {
                     let compDate = new Date(accDate);
                     compDate.setDate(compDate.getDate() + 56);
                     completionInput.value = compDate.toISOString().split('T')[0];
-                    if(extensionInput.previousElementSibling) {
-                        extensionInput.min = compDate.toISOString().split('T')[0];
-                    }
 
                     let extDate = new Date(compDate);
                     extDate.setMonth(extDate.getMonth() + 3);
