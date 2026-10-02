@@ -32,7 +32,7 @@
                     <span>Timelines</span>
                 </button>
                 <button onclick="switchTab('ra', this)" class="nav-btn w-full flex items-center space-x-3.5 px-4 py-3.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition">
-                    <span class="text-lg">🛡️</span>
+                    <span class="text-lg">🛡️️</span>
                     <span>CPF RA & FRS Checker</span>
                 </button>
                 <button onclick="switchTab('progressive', this)" class="nav-btn w-full flex items-center space-x-3.5 px-4 py-3.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition">
@@ -124,7 +124,6 @@
                             <div id="loan-institution-wrap">
                                 <label class="text-[12px] font-semibold text-slate-600">Loan Institution / Bank</label>
                                 <select id="s-loaninstitution" onchange="saveState()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
-                                    <option value="HDB">HDB Loan</option>
                                     <option value="DBS">DBS Bank</option>
                                     <option value="UOB">UOB Bank</option>
                                     <option value="OCBC">OCBC Bank</option>
@@ -202,7 +201,7 @@
                         </div>
                     </div>
 
-                    <a href="https://services2.hdb.gov.sg/web/bp28/TimeLine/my-flat-dashboard" target="_blank" class="w-full block text-center bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-md shadow-cyan-600/20">🔗 Launch HDB Flat Portal & HFE Check</a>
+                    <a id="portal-link-btn" href="https://services2.hdb.gov.sg/web/bp28/TimeLine/my-flat-dashboard" target="_blank" class="w-full block text-center bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-md shadow-cyan-600/20">🔗 Launch HDB Flat Portal & HFE Check</a>
                 </div>
             </div>
         </div>
@@ -356,10 +355,14 @@
             });
 
             const rulesBanner = document.getElementById('rules-banner');
+            const portalBtn = document.getElementById('portal-link-btn');
+
             if(type === 'pte') {
                 rulesBanner.classList.add('hidden');
+                if(clientType === 'seller') portalBtn.classList.add('hidden');
             } else {
                 rulesBanner.classList.remove('hidden');
+                if(clientType === 'seller') portalBtn.classList.remove('hidden');
             }
 
             renderTimelineFlow();
@@ -410,6 +413,14 @@
 
             updateDateConstraints();
             updateOtpExpiryDeadline();
+
+            // Handle portal button visibility based on property type
+            const portalBtn = document.getElementById('portal-link-btn');
+            if(currentMode === 'pte' && clientType === 'seller') {
+                portalBtn.classList.add('hidden');
+            } else if(clientType === 'seller') {
+                portalBtn.classList.remove('hidden');
+            }
         }
 
         function updateDateConstraints() {
