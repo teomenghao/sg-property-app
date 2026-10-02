@@ -15,38 +15,14 @@
 </head>
 <body class="h-screen flex overflow-hidden select-none">
 
-    <!-- LOGIN / AUTHENTICATION GATE MODAL -->
-    <div id="login-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-md w-full p-8 space-y-6">
-            <div class="text-center space-y-2">
-                <div class="w-12 h-12 bg-cyan-600 rounded-2xl mx-auto flex items-center justify-center text-white text-2xl shadow-md shadow-cyan-600/30">🏢</div>
-                <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Assoc. Command Center</h2>
-                <p class="text-sm text-slate-500">Sign in with your name and division passcode for isolated session storage.</p>
-            </div>
-            
-            <div class="space-y-4 text-sm">
-                <div>
-                    <label class="text-[12px] font-semibold text-slate-600">Associate Full Name</label>
-                    <input type="text" id="login-name" placeholder="e.g. Esmond Teo" class="w-full mt-1 bg-slate-50 border border-slate-300 p-3 rounded-xl text-slate-900 outline-none focus:border-cyan-600">
-                </div>
-                <div>
-                    <label class="text-[12px] font-semibold text-slate-600">Division Passcode</label>
-                    <input type="password" id="login-pass" placeholder="••••" class="w-full mt-1 bg-slate-50 border border-slate-300 p-3 rounded-xl text-slate-900 outline-none focus:border-cyan-600">
-                </div>
-                <div id="login-error" class="text-xs text-rose-600 font-semibold hidden">⚠️ Please enter your name and a valid passcode.</div>
-                <button onclick="handleLogin()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-3.5 rounded-xl transition shadow-md shadow-cyan-600/20">Launch Secure Workspace</button>
-            </div>
-        </div>
-    </div>
-
     <!-- SIDEBAR NAVIGATION -->
     <aside class="w-76 bg-white border-r border-slate-200 flex flex-col justify-between p-5 z-20 shadow-sm">
         <div class="space-y-6">
             <div class="flex items-center space-x-3.5 px-2 pt-2">
                 <div class="w-4 h-4 bg-cyan-600 rounded-full animate-pulse"></div>
                 <div>
-                    <h1 class="text-sm font-bold tracking-wide text-slate-900" id="session-brand">PROPNEX ESMOND DIV</h1>
-                    <p class="text-[13px] text-cyan-700 font-medium" id="session-user-badge">Logged in: Associate</p>
+                    <h1 class="text-sm font-bold tracking-wide text-slate-900">PROPNEX ESMOND DIV</h1>
+                    <p class="text-[13px] text-cyan-700 font-medium">Command Center Active</p>
                 </div>
             </div>
 
@@ -78,11 +54,8 @@
             </nav>
         </div>
 
-        <div class="space-y-3">
-            <button onclick="handleLogout()" class="w-full bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-rose-700 font-semibold py-2.5 rounded-xl text-xs transition border border-slate-200">🔒 Switch User / Logout</button>
-            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-[12px] text-slate-500 text-center">
-                Isolated Storage: <span class="text-emerald-700 font-semibold">Active</span>
-            </div>
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-[12px] text-slate-500 text-center">
+            Testing Mode: <span class="text-emerald-700 font-semibold">Active (No Login)</span>
         </div>
     </aside>
 
@@ -94,7 +67,7 @@
             <div class="flex justify-between items-center bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                 <div>
                     <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Timelines</h2>
-                    <p class="text-sm text-slate-600 mt-1">Tailor presentations for Seller or Buyer clients with live sandboxed calculations.</p>
+                    <p class="text-sm text-slate-600 mt-1">Tailor presentations for Seller or Buyer clients with live calculations.</p>
                 </div>
                 <!-- Seller vs Buyer Client Toggle -->
                 <div class="flex bg-slate-100 p-1.5 rounded-xl border border-slate-200">
@@ -103,18 +76,15 @@
                 </div>
             </div>
 
-            <!-- OPTIMIZED WIDE BANNER: KEY CONSULTATION RULES -->
-            <div class="bg-amber-50 border border-amber-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <!-- DYNAMIC WIDE BANNER: KEY CONSULTATION RULES (HDB RESALE ONLY) -->
+            <div id="rules-banner" class="bg-amber-50 border border-amber-200 p-5 rounded-2xl shadow-sm space-y-3">
                 <h3 class="text-base font-bold text-amber-900 flex items-center space-x-2">
                     <span>💡</span>
                     <span>Key Consultation Rules & Regulatory Checklist</span>
                 </h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-amber-950">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-amber-950">
                     <div class="p-3 bg-white/80 rounded-xl border border-amber-200/80">
                         <b>Ethnic Quota Check:</b> Must be verified at the start of every month on the HDB portal.
-                    </div>
-                    <div class="p-3 bg-white/80 rounded-xl border border-amber-200/80">
-                        <b>Private Owner Wait-Out:</b> Sellers below 55 selling private property must wait 15 months before buying resale HDB.
                     </div>
                     <div class="p-3 bg-white/80 rounded-xl border border-amber-200/80">
                         <b>Fee Regulation:</b> Option + Exercise fees combined cannot exceed $5,000 (HDB) or 5% (Private).
@@ -122,7 +92,7 @@
                 </div>
             </div>
 
-            <!-- DYNAMIC CONTENT AREA BASED ON SELLER / BUYER MODE -->
+            <!-- DYNAMIC CONTENT AREA BASED ON CLIENT / PROPERTY TYPE -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
                 <!-- LEFT/CENTER: TIMELINE FLOW -->
@@ -142,15 +112,15 @@
                         <div class="grid grid-cols-3 gap-3">
                             <div>
                                 <label class="text-[12px] font-semibold text-slate-600">Property Price (SGD)</label>
-                                <input type="number" id="t-price" value="1500000" oninput="saveAndCalculate()" class="w-full mt-1 bg-white border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
+                                <input type="number" id="t-price" value="800000" oninput="updateCalculations()" class="w-full mt-1 bg-white border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
                             </div>
                             <div id="fee-box-1">
                                 <label class="text-[12px] font-semibold text-slate-600" id="lbl-fee1">Option Fee ($1 - $1,000)</label>
-                                <input type="number" id="t-fee1" value="1000" min="1" max="1000" oninput="saveAndCalculate()" class="w-full mt-1 bg-white border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
+                                <input type="number" id="t-fee1" value="1000" min="1" max="1000" oninput="updateCalculations()" class="w-full mt-1 bg-white border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
                             </div>
                             <div id="fee-box-2">
                                 <label class="text-[12px] font-semibold text-slate-600" id="lbl-fee2">Exercise Fee (Min $1)</label>
-                                <input type="number" id="t-fee2" value="4000" min="1" max="4999" oninput="saveAndCalculate()" class="w-full mt-1 bg-white border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
+                                <input type="number" id="t-fee2" value="4000" min="1" max="4999" oninput="updateCalculations()" class="w-full mt-1 bg-white border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
                             </div>
                         </div>
                         <div id="fee-validation-msg" class="text-xs font-semibold text-emerald-700">✓ Fees comply with regulations.</div>
@@ -170,15 +140,15 @@
                         <div class="space-y-3.5 text-sm">
                             <div>
                                 <label class="text-[12px] font-semibold text-slate-600">Outstanding Loan (HDB/Bank)</label>
-                                <input type="number" id="s-loan" value="300000" oninput="saveAndCalculate()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                                <input type="number" id="s-loan" value="300000" oninput="updateCalculations()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
                             </div>
                             <div>
                                 <label class="text-[12px] font-semibold text-slate-600">Seller 1 CPF Refund (Prin + Accrued)</label>
-                                <input type="number" id="s-cpf1" value="150000" oninput="saveAndCalculate()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                                <input type="number" id="s-cpf1" value="150000" oninput="updateCalculations()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
                             </div>
                             <div>
                                 <label class="text-[12px] font-semibold text-slate-600">Seller 2 CPF Refund (Prin + Accrued)</label>
-                                <input type="number" id="s-cpf2" value="120000" oninput="saveAndCalculate()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                                <input type="number" id="s-cpf2" value="120000" oninput="updateCalculations()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
                             </div>
                             
                             <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2 font-mono text-xs">
@@ -198,14 +168,14 @@
                         <div class="space-y-3.5 text-sm">
                             <div>
                                 <label class="text-[12px] font-semibold text-slate-600">Loan Type</label>
-                                <select id="b-loantype" onchange="saveAndCalculate()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                                <select id="b-loantype" onchange="updateCalculations()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
                                     <option value="bank">Bank Loan (75% LTV)</option>
                                     <option value="hdb">HDB Loan (Concessionary)</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="text-[12px] font-semibold text-slate-600">Buyer Profile & Property Count (ABSD)</label>
-                                <select id="b-absd-profile" onchange="saveAndCalculate()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                                <select id="b-absd-profile" onchange="updateCalculations()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
                                     <option value="sc-1">Singapore Citizen (1st Property - 0%)</option>
                                     <option value="sc-2">Singapore Citizen (2nd Property - 20%)</option>
                                     <option value="sc-3">Singapore Citizen (3rd+ Property - 30%)</option>
@@ -235,13 +205,13 @@
             </div>
         </div>
 
-        <!-- OTHER TABS (Proceeds, RA, Progressive, Taxes, Portals) -->
+        <!-- TAB 2: PROCEEDS -->
         <div id="tab-proceeds" class="space-y-6 max-w-5xl mx-auto w-full hidden">
             <div>
                 <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Net Cash Proceeds & Negative Sales Calculator</h2>
                 <p class="text-sm text-slate-500 mt-1">Computes cash proceeds and prorates CPF refunds when sale remainder is insufficient.</p>
             </div>
-            <!-- Standard proceeds card content here -->
+            <!-- Proceed content -->
         </div>
 
         <!-- TAB 3: RA -->
@@ -274,84 +244,8 @@
 
     </main>
 
-    <!-- JAVASCRIPT LOGIC WITH MULTI-USER ISOLATION -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
-        let currentUser = localStorage.getItem('sg_agent_user') || null;
-
-        function handleLogin() {
-            const name = document.getElementById('login-name').value.trim();
-            const pass = document.getElementById('login-pass').value.trim();
-            if(!name || !pass) {
-                document.getElementById('login-error').classList.remove('hidden');
-                return;
-            }
-            currentUser = name.toLowerCase().replace(/\s+/g, '_');
-            localStorage.setItem('sg_agent_user', currentUser);
-            localStorage.setItem(`sg_agent_display_${currentUser}`, name);
-            document.getElementById('login-modal').classList.add('hidden');
-            initAppSession();
-        }
-
-        function handleLogout() {
-            localStorage.removeItem('sg_agent_user');
-            location.reload();
-        }
-
-        window.onload = function() {
-            if(!currentUser) {
-                document.getElementById('login-modal').classList.remove('hidden');
-            } else {
-                document.getElementById('login-modal').classList.add('hidden');
-                initAppSession();
-            }
-        };
-
-        function initAppSession() {
-            const displayName = localStorage.getItem(`sg_agent_display_${currentUser}`) || "Associate";
-            document.getElementById('session-user-badge').innerText = `Active: ${displayName}`;
-            loadUserStorage();
-        }
-
-        function saveAndCalculate() {
-            if(!currentUser) return;
-            const data = {
-                tPrice: document.getElementById('t-price').value,
-                tFee1: document.getElementById('t-fee1').value,
-                tFee2: document.getElementById('t-fee2').value,
-                sLoan: document.getElementById('s-loan').value,
-                sCpf1: document.getElementById('s-cpf1').value,
-                sCpf2: document.getElementById('s-cpf2').value,
-                bLoanType: document.getElementById('b-loantype').value,
-                bAbsdProfile: document.getElementById('b-absd-profile').value,
-                clientType: clientType,
-                currentMode: currentMode
-            };
-            localStorage.setItem(`sg_agent_data_${currentUser}`, JSON.stringify(data));
-            updateCalculations();
-        }
-
-        function loadUserStorage() {
-            if(!currentUser) return;
-            const raw = localStorage.getItem(`sg_agent_data_${currentUser}`);
-            if(raw) {
-                try {
-                    const d = JSON.parse(raw);
-                    if(d.tPrice) document.getElementById('t-price').value = d.tPrice;
-                    if(d.tFee1) document.getElementById('t-fee1').value = d.tFee1;
-                    if(d.tFee2) document.getElementById('t-fee2').value = d.tFee2;
-                    if(d.sLoan) document.getElementById('s-loan').value = d.sLoan;
-                    if(d.sCpf1) document.getElementById('s-cpf1').value = d.sCpf1;
-                    if(d.sCpf2) document.getElementById('s-cpf2').value = d.sCpf2;
-                    if(d.bLoanType) document.getElementById('b-loantype').value = d.bLoanType;
-                    if(d.bAbsdProfile) document.getElementById('b-absd-profile').value = d.bAbsdProfile;
-                    if(d.clientType) clientType = d.clientType;
-                    if(d.currentMode) currentMode = d.currentMode;
-                } catch(e) {}
-            }
-            switchClientType(clientType);
-            loadTemplate(currentMode);
-        }
-
         function switchTab(tabId, btn) {
             ['timelines', 'proceeds', 'ra', 'progressive', 'taxes', 'portals'].forEach(t => {
                 document.getElementById(`tab-${t}`).classList.add('hidden');
@@ -370,11 +264,15 @@
             seller: {
                 hdb: [
                     { title: "1. Listing Presentation & Initial Checks", defaultDate: "2026-10-02", desc: "Check ethnic quota at start of month; inspect flat details and verify HFE / MyHDB financial eligibility." },
-                    { title: "2. Register Intent to Sell & Issue OTP", defaultDate: "2026-10-09", desc: "Collect Option Fee (Min $1 up to Max $1,000 via Cash/PayNow). Form part of purchase/sale price." },
-                    { title: "3. Resale Submission & Valuation", defaultDate: "2026-10-16", desc: "Submit resale application on HDB Flat Portal. Request valuation ($120) if required." },
-                    { title: "4. HDB Approval & Loan Clearance", defaultDate: "2026-10-30", desc: "HDB approval. Ensure outstanding mortgage and CPF refund calculations align with net proceeds." },
-                    { title: "5. First Appointment & Document Endorsement", defaultDate: "2026-11-13", desc: "Pay Exercise Fee (Min $1, combined Option + Exercise fee must not exceed $5,000). Endorse resale documents." },
-                    { title: "6. Resale Completion & Handover", defaultDate: "2026-11-27", desc: "Cashier's order for outstanding payments. CPF refunded to OA within 10-14 working days." }
+                    { title: "2. Register Intent to Sell", defaultDate: "2026-10-09", desc: "Register Intent to Sell on the HDB Flat Portal to retrieve flat eligibility and financial plan." },
+                    { title: "3. 7-Day Cooling Period", defaultDate: "2026-10-16", desc: "Mandatory 7-day cooling period before an OTP can be officially issued to a prospective buyer." },
+                    { title: "4. Valuation Walkthrough (if any)", defaultDate: "2026-10-23", desc: "Conduct valuation assessment if requested by buyer. $0 cost incurred for sellers." },
+                    { title: "5. Issue OTP & Collect Option Fee", defaultDate: "2026-10-30", desc: "Issue OTP and collect Option Fee (Min $1 up to Max $1,000 via Cash/PayNow)." },
+                    { title: "6. Exercise of OTP by Buyers", defaultDate: "2026-11-13", desc: "Buyer exercises OTP and pays Exercise Fee (Min $1, combined fee ≤ $5,000)." },
+                    { title: "7. Resale Application Submission", defaultDate: "2026-11-20", desc: "Submit resale application on HDB Flat Portal with supporting documents." },
+                    { title: "8. Resale Application Acceptance", defaultDate: "2026-11-27", desc: "HDB formally accepts the resale application following administrative verification." },
+                    { title: "9. Endorsement & HDB Branch Inspection", defaultDate: "2026-12-04", desc: "Endorse resale documents and coordinate HDB Branch Office inspection if required." },
+                    { title: "10. Resale Completion & Handover", defaultDate: "2026-12-25", desc: "Resale completion takes place 8 weeks after resale application acceptance. Key handover." }
                 ],
                 pte: [
                     { title: "1. Listing & Tenancy Review", defaultDate: "2026-10-02", desc: "Inspect unit, determine vacant possession or sale with tenancy, and confirm commission structure." },
@@ -445,6 +343,14 @@
                 }
             });
 
+            // Toggle Rules Banner Visibility based on Property Type
+            const rulesBanner = document.getElementById('rules-banner');
+            if(type === 'pte') {
+                rulesBanner.classList.add('hidden');
+            } else {
+                rulesBanner.classList.remove('hidden');
+            }
+
             const feeInputs = document.getElementById('timeline-fee-inputs');
             if(type === 'transition') {
                 feeInputs.classList.add('hidden');
@@ -473,7 +379,7 @@
             const container = document.getElementById('flow-container');
             const data = (currentMode === 'transition' && clientType === 'seller') ? [
                 { title: "1. Financial & CPF Calculation", defaultDate: "2026-10-02", desc: "Review outstanding loans, CPF refunds (Seller 1 & 2), and select HDB vs Private conveyancing framework." },
-                { title: "2. Sale of Existing Property", defaultDate: "2026-11-27", desc: "Complete sale to unlock CPF funds and cash proceeds. Respect 15-month wait-out period if moving to resale HDB." },
+                { title: "2. Sale of Existing Property", defaultDate: "2026-11-27", desc: "Complete sale to unlock CPF funds and cash proceeds." },
                 { title: "3. Purchase of Next Property", defaultDate: "2026-12-15", desc: "If using private conveyancing, sale refunds can be utilised for purchase without pre-deduction at resale submission." }
             ] : timelineFlows[clientType][currentMode];
             
@@ -606,6 +512,9 @@
                 }
             }
         }
+
+        switchClientType('seller');
+        loadTemplate('hdb');
     </script>
 </body>
 </html>
