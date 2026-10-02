@@ -11,6 +11,8 @@
         ::-webkit-scrollbar { width: 10px; height: 10px; }
         ::-webkit-scrollbar-track { background: #e2e8f0; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 5px; }
+        .custom-date-wrap { position: relative; }
+        .custom-date-wrap input[type="date"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
     </style>
 </head>
 <body class="h-screen flex overflow-hidden select-none">
@@ -137,16 +139,29 @@
                     </div>
                 </div>
 
-                <!-- RIGHT COLUMN: SELLER FINANCIAL ENGINE OR BUYER FINANCIAL BREAKDOWN -->
+                <!-- RIGHT COLUMN: FINANCIAL CALCULATION SIDEBAR CARD -->
                 <div class="space-y-6">
                     
-                    <!-- SELLER FINANCIAL SIDEBAR CARD -->
                     <div id="sidebar-seller-card" class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-4">
-                        <h3 class="text-base font-bold text-cyan-800 border-b border-slate-100 pb-3">Seller Proceeds & Financial Link</h3>
+                        <h3 class="text-base font-bold text-cyan-800 border-b border-slate-100 pb-3">Financial Calculation</h3>
                         <div class="space-y-3.5 text-sm">
                             <div>
-                                <label class="text-[12px] font-semibold text-slate-600">Outstanding Loan (HDB/Bank)</label>
-                                <input type="number" id="s-loan" value="300000" oninput="updateCalculations()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                                <label class="text-[12px] font-semibold text-slate-600">Outstanding Loan (SGD)</label>
+                                <input type="number" id="s-loan" value="300000" oninput="toggleLoanInstitution(); updateCalculations();" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                            </div>
+                            <div id="loan-institution-wrap">
+                                <label class="text-[12px] font-semibold text-slate-600">Loan Institution / Bank</label>
+                                <select id="s-loaninstitution" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                                    <option value="HDB">HDB Loan</option>
+                                    <option value="DBS">DBS Bank</option>
+                                    <option value="UOB">UOB Bank</option>
+                                    <option value="OCBC">OCBC Bank</option>
+                                    <option value="HSBC">HSBC</option>
+                                    <option value="SCB">Standard Chartered</option>
+                                    <option value="CIMB">CIMB Bank</option>
+                                    <option value="Maybank">Maybank</option>
+                                    <option value="Other">Other Bank</option>
+                                </select>
                             </div>
                             <div>
                                 <label class="text-[12px] font-semibold text-slate-600">Seller 1 CPF Refund (Prin + Accrued)</label>
@@ -157,10 +172,13 @@
                                 <input type="number" id="s-cpf2" value="120000" oninput="updateCalculations()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
                             </div>
                             
+                            <!-- Ledger Table Breakdown -->
                             <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2 font-mono text-xs">
-                                <div class="flex justify-between text-slate-600"><span>Price Less Loan:</span> <span id="s-rem" class="font-bold text-slate-900"></span></div>
-                                <div class="flex justify-between text-slate-600"><span>Total CPF Refunds:</span> <span id="s-totcpf" class="font-bold text-rose-600"></span></div>
-                                <div class="flex justify-between border-t border-slate-200 pt-2 text-sm font-bold"><span>Net Cash Proceeds:</span> <span id="s-net" class="text-cyan-700"></span></div>
+                                <div class="flex justify-between text-slate-600"><span>Property Price:</span> <span id="calc-price" class="font-bold text-slate-900"></span></div>
+                                <div class="flex justify-between text-slate-600"><span>Less Outstanding Loan:</span> <span id="calc-loan" class="font-bold text-rose-600"></span></div>
+                                <div class="flex justify-between text-slate-600"><span>Less Seller 1 CPF Refund:</span> <span id="calc-cpf1" class="font-bold text-rose-600"></span></div>
+                                <div class="flex justify-between text-slate-600"><span>Less Seller 2 CPF Refund:</span> <span id="calc-cpf2" class="font-bold text-rose-600"></span></div>
+                                <div class="flex justify-between border-t border-slate-200 pt-2 text-sm font-bold"><span>Cash Proceeds:</span> <span id="calc-net" class="text-cyan-700"></span></div>
                             </div>
                             <div id="s-neg-alert" class="p-3 bg-rose-50 rounded-xl border border-rose-200 text-rose-800 text-xs hidden">
                                 ⚠️ Negative sales triggered! Sale remainder is insufficient to cover total CPF refunds.
@@ -212,24 +230,11 @@
         </div>
 
         <!-- OTHER TABS -->
-        <div id="tab-proceeds" class="space-y-6 max-w-5xl mx-auto w-full hidden">
-            <div>
-                <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Net Cash Proceeds & Negative Sales Calculator</h2>
-                <p class="text-sm text-slate-500 mt-1">Computes cash proceeds and prorates CPF refunds when sale remainder is insufficient.</p>
-            </div>
-        </div>
-        <div id="tab-ra" class="space-y-6 max-w-5xl mx-auto w-full hidden">
-            <div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">CPF Retirement Account (RA) & FRS Checker</h2></div>
-        </div>
-        <div id="tab-progressive" class="space-y-6 max-w-5xl mx-auto w-full hidden">
-            <div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">Private New Launch Progressive Payment Calculator</h2></div>
-        </div>
-        <div id="tab-taxes" class="space-y-6 max-w-5xl mx-auto w-full hidden">
-            <div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">Stamp Duty, ABSD & SSD Matrix</h2></div>
-        </div>
-        <div id="tab-portals" class="space-y-6 max-w-5xl mx-auto w-full hidden">
-            <div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">Official Working File Portals & Hyperlinks Hub</h2></div>
-        </div>
+        <div id="tab-proceeds" class="space-y-6 max-w-5xl mx-auto w-full hidden"><div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">Net Cash Proceeds & Negative Sales Calculator</h2></div></div>
+        <div id="tab-ra" class="space-y-6 max-w-5xl mx-auto w-full hidden"><div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">CPF Retirement Account (RA) & FRS Checker</h2></div></div>
+        <div id="tab-progressive" class="space-y-6 max-w-5xl mx-auto w-full hidden"><div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">Private New Launch Progressive Payment Calculator</h2></div></div>
+        <div id="tab-taxes" class="space-y-6 max-w-5xl mx-auto w-full hidden"><div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">Stamp Duty, ABSD & SSD Matrix</h2></div></div>
+        <div id="tab-portals" class="space-y-6 max-w-5xl mx-auto w-full hidden"><div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">Official Working File Portals & Hyperlinks Hub</h2></div></div>
 
     </main>
 
@@ -399,6 +404,7 @@
                 if(step.isExtension) extraAttrs = `id="input-extension-date" readonly`;
 
                 let readOnlyClass = (step.isCooling || step.isCompletion || step.isExtension) ? 'bg-slate-100 text-slate-500 cursor-not-allowed' : '';
+                let initialFormatted = formatDateDDMMMYYYY(new Date(step.defaultDate));
 
                 return `
                     <div class="relative flex items-start space-x-4 pl-2">
@@ -406,7 +412,11 @@
                         <div class="bg-slate-50 border border-slate-200 p-4.5 rounded-xl flex-1 shadow-sm space-y-2">
                             <div class="flex justify-between items-center">
                                 <span class="font-bold text-slate-900 text-sm">${step.title}</span>
-                                <input type="date" value="${step.defaultDate}" ${extraAttrs} class="bg-white border border-slate-300 text-cyan-800 font-mono text-xs font-semibold px-2.5 py-1 rounded-lg outline-none focus:border-cyan-600 ${readOnlyClass}">
+                                <div class="custom-date-wrap bg-white border border-slate-300 text-cyan-800 font-mono text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center space-x-2 shadow-sm ${readOnlyClass}">
+                                    <span id="disp-${idx}">${initialFormatted}</span>
+                                    <span>📅</span>
+                                    <input type="date" value="${step.defaultDate}" data-index="${idx}" ${extraAttrs} oninput="syncDateDisplay(this)">
+                                </div>
                             </div>
                             <p class="text-slate-700 text-sm leading-relaxed">${step.desc}</p>
                             ${extraHtml}
@@ -420,17 +430,21 @@
             }
         }
 
-        function handleIntentDateChange(el) {
-            updateDependentDates();
+        function syncDateDisplay(input) {
+            const dateObj = new Date(input.value);
+            const idx = input.getAttribute('data-index');
+            const dispSpan = document.getElementById(`disp-${idx}`);
+            if(dispSpan && !isNaN(dateObj.getTime())) {
+                dispSpan.innerText = formatDateDDMMMYYYY(dateObj);
+            }
+            if(input.id === 'input-intent-date') handleIntentDateChange(input);
+            if(input.id === 'input-otp-date') handleOtpDateChange(input);
+            if(input.id === 'input-acceptance-date') handleAcceptanceDateChange(input);
         }
 
-        function handleOtpDateChange(el) {
-            updateDependentDates();
-        }
-
-        function handleAcceptanceDateChange(el) {
-            updateDependentDates();
-        }
+        function handleIntentDateChange(el) { updateDependentDates(); }
+        function handleOtpDateChange(el) { validateOtpDate(); updateDependentDates(); }
+        function handleAcceptanceDateChange(el) { updateDependentDates(); }
 
         function updateDependentDates() {
             const intentInput = document.getElementById('input-intent-date');
@@ -440,19 +454,19 @@
             const completionInput = document.getElementById('input-completion-date');
             const extensionInput = document.getElementById('input-extension-date');
 
-            // 1. Cooling period (+7 days) & OTP expiry hard deadline (+3 calendar weeks)
             if(intentInput && coolingInput && otpInput) {
                 const intentDate = new Date(intentInput.value);
                 if(!isNaN(intentDate.getTime())) {
                     let coolingDate = new Date(intentDate);
                     coolingDate.setDate(coolingDate.getDate() + 7);
                     coolingInput.value = coolingDate.toISOString().split('T')[0];
+                    document.getElementById('disp-2').innerText = formatDateDDMMMYYYY(coolingDate);
                     otpInput.min = coolingDate.toISOString().split('T')[0];
 
                     const otpDate = new Date(otpInput.value);
                     if(!isNaN(otpDate.getTime())) {
                         let expiryDate = new Date(otpDate);
-                        expiryDate.setDate(expiryDate.getDate() + 21); // exactly 3 calendar weeks (21 days)
+                        expiryDate.setDate(expiryDate.getDate() + 21);
                         const deadlineDisp = document.getElementById('otp-deadline-disp');
                         if(deadlineDisp) deadlineDisp.innerText = formatDateDDMMMYYYY(expiryDate);
                     }
@@ -460,17 +474,18 @@
                 }
             }
 
-            // 2. Completion date (+8 weeks) & Extension of Stay (+3 calendar months)
             if(acceptanceInput && completionInput && extensionInput) {
                 const accDate = new Date(acceptanceInput.value);
                 if(!isNaN(accDate.getTime())) {
                     let compDate = new Date(accDate);
-                    compDate.setDate(compDate.getDate() + 56); // 8 weeks = 56 days
+                    compDate.setDate(compDate.getDate() + 56);
                     completionInput.value = compDate.toISOString().split('T')[0];
+                    document.getElementById('disp-9').innerText = formatDateDDMMMYYYY(compDate);
 
                     let extDate = new Date(compDate);
-                    extDate.setMonth(extDate.getMonth() + 3); // exactly 3 calendar months forward
+                    extDate.setMonth(extDate.getMonth() + 3);
                     extensionInput.value = extDate.toISOString().split('T')[0];
+                    document.getElementById('disp-10').innerText = formatDateDDMMMYYYY(extDate);
                 }
             }
         }
@@ -490,6 +505,16 @@
                 } else {
                     warningBox.classList.add('hidden');
                 }
+            }
+        }
+
+        function toggleLoanInstitution() {
+            const loanVal = parseFloat(document.getElementById('s-loan').value) || 0;
+            const wrap = document.getElementById('loan-institution-wrap');
+            if(loanVal === 0) {
+                wrap.classList.add('hidden');
+            } else {
+                wrap.classList.remove('hidden');
             }
         }
 
@@ -543,13 +568,14 @@
                 const loan = parseFloat(document.getElementById('s-loan').value) || 0;
                 const cpf1 = parseFloat(document.getElementById('s-cpf1').value) || 0;
                 const cpf2 = parseFloat(document.getElementById('s-cpf2').value) || 0;
-                const rem = price - loan;
                 const totCpf = cpf1 + cpf2;
-                const net = rem - totCpf;
+                const net = price - loan - totCpf;
 
-                document.getElementById('s-rem').innerText = `$${rem.toLocaleString()}`;
-                document.getElementById('s-totcpf').innerText = `-$${totCpf.toLocaleString()}`;
-                document.getElementById('s-net').innerText = `$${Math.round(net).toLocaleString()}`;
+                document.getElementById('calc-price').innerText = `$${price.toLocaleString()}`;
+                document.getElementById('calc-loan').innerText = `-$${loan.toLocaleString()}`;
+                document.getElementById('calc-cpf1').innerText = `-$${cpf1.toLocaleString()}`;
+                document.getElementById('calc-cpf2').innerText = `-$${cpf2.toLocaleString()}`;
+                document.getElementById('calc-net').innerText = `$${Math.round(net).toLocaleString()}`;
 
                 const alertBox = document.getElementById('s-neg-alert');
                 if (net < 0) alertBox.classList.remove('hidden');
@@ -609,6 +635,7 @@
 
         switchClientType('seller');
         loadTemplate('hdb');
+        toggleLoanInstitution();
     </script>
 </body>
 </html>
