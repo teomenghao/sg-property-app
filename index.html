@@ -29,7 +29,7 @@
             <nav class="space-y-1.5 text-xs">
                 <button onclick="switchTab('timelines', this)" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-semibold bg-cyan-600 text-white transition shadow-lg shadow-cyan-900/30">
                     <span class="text-base">📅</span>
-                    <span>Client Presentation Timelines</span>
+                    <span>Custom Client Timelines</span>
                 </button>
                 <button onclick="switchTab('proceeds', this)" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
                     <span class="text-base">💰</span>
@@ -47,7 +47,7 @@
                     <span class="text-base">🏷️</span>
                     <span>Stamp Duty & SSD Matrix</span>
                 </button>
-                <button onclick="switchTab('portals', this)" class="nav-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
+                <button onclick="switchTab('portals', this)" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
                     <span class="text-base">🔗</span>
                     <span>Official Portals & Links</span>
                 </button>
@@ -55,50 +55,57 @@
         </div>
 
         <div class="p-3 bg-slate-800/60 rounded-xl border border-slate-700/60 text-[11px] text-slate-400 space-y-1">
-            <div class="font-semibold text-slate-200">Hyperlink Hub</div>
-            <div>Status: <span class="text-cyan-400 font-mono">1-Tap Browser Direct</span></div>
+            <div class="font-semibold text-slate-200">Interactive Suite</div>
+            <div>Mode: <span class="text-cyan-400 font-mono">Live Client Adjustable</span></div>
         </div>
     </aside>
 
     <!-- MAIN APP CONTENT AREA -->
     <main class="flex-1 flex flex-col bg-slate-950 overflow-y-auto p-6 lg:p-8 space-y-6">
 
-        <!-- TAB 1: CLIENT PRESENTATION TIMELINES -->
-        <div id="tab-timelines" class="space-y-6 max-w-5xl mx-auto w-full">
-            <div>
-                <h2 class="text-xl font-bold text-white tracking-tight">Client Presentation Timelines & Advisory Workflows</h2>
-                <p class="text-xs text-slate-400 mt-1">High-impact interactive timelines designed for face-to-face seller/buyer consultations[cite: 1].</p>
+        <!-- TAB 1: CUSTOM CLIENT TIMELINES & WORKFLOWS -->
+        <div id="tab-timelines" class="space-y-6 max-w-6xl mx-auto w-full">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-xl font-bold text-white tracking-tight">Comprehensive Client Presentation Timelines</h2>
+                    <p class="text-xs text-slate-400 mt-1">Select a framework below or fully customize milestone steps to fit your client's exact transaction needs[cite: 1].</p>
+                </div>
+                <div class="flex space-x-2">
+                    <button onclick="loadTemplate('hdb')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-cyan-600 text-white transition">HDB Resale Template</button>
+                    <button onclick="loadTemplate('pte')" class="px-3.5 py-2 rounded-xl text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Private Resale Template</button>
+                    <button onclick="loadTemplate('transition')" class="px-3.5 py-2 rounded-xl text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Sell & Buy Transition</button>
+                </div>
             </div>
 
-            <div class="flex space-x-2 bg-slate-900 p-1.5 rounded-2xl border border-slate-800 max-w-md">
-                <button onclick="switchTimelineMode('hdb', this)" id="btn-tl-hdb" class="flex-1 py-2.5 rounded-xl text-xs font-semibold bg-cyan-600 text-white transition">HDB Resale & Upgrader</button>
-                <button onclick="switchTimelineMode('pte', this)" id="btn-tl-pte" class="flex-1 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white transition">Private Resale Workflow</button>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Timeline Steps -->
-                <div class="md:col-span-2 bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl space-y-4">
-                    <h3 id="tl-title" class="text-sm font-bold text-cyan-400 border-b border-slate-800 pb-3">HDB Resale Step-by-Step Milestones</h3>
-                    <div id="tl-content" class="space-y-3 text-xs font-mono">
-                        <!-- Injected -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Editable Timeline Builder -->
+                <div class="lg:col-span-2 bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                        <h3 class="text-sm font-bold text-cyan-400">Milestone Sequence (Tap to Edit / Add Step)</h3>
+                        <button onclick="addMilestoneStep()" class="text-xs bg-slate-800 hover:bg-slate-700 text-cyan-400 px-3 py-1.5 rounded-xl font-semibold transition">+ Add Step</button>
+                    </div>
+                    <div id="timeline-editor-container" class="space-y-3 font-mono text-xs">
+                        <!-- Injected via JS -->
                     </div>
                 </div>
 
-                <!-- Advisory Talking Points & Rules -->
-                <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl space-y-4">
-                    <h3 class="text-sm font-bold text-amber-400 border-b border-slate-800 pb-3">Key Advisory Rules[cite: 1]</h3>
-                    <div class="space-y-3 text-xs text-slate-300 leading-relaxed">
-                        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
-                            📌 <b>Ethnic Quota:</b> Always check ethnic integration policy (EIP) quota at the start of every month[cite: 1].
-                        </div>
-                        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
-                            ⏳ <b>Private Property Wait-Out:</b> Sellers below 55 selling private property must wait 15 months before buying resale HDB (exempted for 4-room or smaller if aged 55+)[cite: 1].
-                        </div>
-                        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
-                            🏠 <b>Extension of Stay:</b> Only allowed by HDB if seller has secured a completed next residential address[cite: 1].
+                <!-- Comprehensive Working File Notes & Advisory Rules -->
+                <div class="space-y-4">
+                    <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-xl space-y-3">
+                        <h3 class="text-sm font-bold text-amber-400 border-b border-slate-800 pb-3">Working File Reference Rules[cite: 1]</h3>
+                        <div class="space-y-2.5 text-xs text-slate-300 leading-relaxed">
+                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                                <b>Option & Exercise Fees:</b> Not more than $\$5,000$ total, forming part of the purchase/sale price[cite: 1].
+                            </div>
+                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                                <b>Loan Prerequisites:</b> HDB loan requires valid HFE before optioning; Bank loan requires Letter of Offer before exercising[cite: 1].
+                            </div>
+                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                                <b>Conveyancing Difference:</b> HDB conveyancing requires funds ready in OA by resale submission; Private lawyer allows sale proceeds utilization[cite: 1].
+                            </div>
                         </div>
                     </div>
-                    <a href="https://services2.hdb.gov.in/webapp/AA29A/AA29ASecurity.jsp" target="_blank" class="w-full block text-center bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2.5 rounded-xl text-xs transition">🔗 Open HDB Portal</a>
+                    <a href="https://services2.hdb.gov.in/webapp/AA29A/AA29ASecurity.jsp" target="_blank" class="w-full block text-center bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-3 rounded-xl text-xs transition shadow-lg shadow-cyan-900/30">🔗 Launch HDB Flat Portal & HFE Check</a>
                 </div>
             </div>
         </div>
@@ -329,31 +336,66 @@
             btn.className = "nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-semibold bg-cyan-600 text-white transition shadow-lg shadow-cyan-900/30";
         }
 
-        // Timeline switcher
-        function switchTimelineMode(mode, btn) {
-            document.getElementById('btn-tl-hdb').className = mode === 'hdb' ? "flex-1 py-2.5 rounded-xl text-xs font-semibold bg-cyan-600 text-white transition" : "flex-1 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white transition";
-            document.getElementById('btn-tl-pte').className = mode === 'pte' ? "flex-1 py-2.5 rounded-xl text-xs font-semibold bg-cyan-600 text-white transition" : "flex-1 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white transition";
-            
-            const content = document.getElementById('tl-content');
-            if(mode === 'hdb') {
-                content.innerHTML = `
-                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex justify-between items-center"><span>1. Register Intent to Sell & Issue OTP (Max $1,000 fee)</span><span class="text-cyan-400">Day 1[cite: 1]</span></div>
-                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex justify-between items-center"><span>2. Submit Resale Application on HDB Flat Portal</span><span class="text-cyan-400">Within 7 Days[cite: 1]</span></div>
-                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex justify-between items-center"><span>3. HDB Valuer Inspection & Approval</span><span class="text-cyan-400">~2 Weeks[cite: 1]</span></div>
-                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex justify-between items-center"><span>4. First Appointment & Document Endorsement</span><span class="text-cyan-400">~4 Weeks[cite: 1]</span></div>
-                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex justify-between items-center"><span>5. Resale Completion & Key Handover</span><span class="text-cyan-400">8 Weeks Total[cite: 1]</span></div>
-                `;
-            } else {
-                content.innerHTML = `
-                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex justify-between items-center"><span>1. Issue OTP & Collect 1% Option Fee</span><span class="text-cyan-400">Day 1[cite: 1]</span></div>
-                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex justify-between items-center"><span>2. Buyer Exercise OTP & Top up 4% Exercise Fee</span><span class="text-cyan-400">14 Days[cite: 1]</span></div>
-                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex justify-between items-center"><span>3. Law Firm Processing & Requisitions</span><span class="text-cyan-400">Weeks 3–6[cite: 1]</span></div>
-                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex justify-between items-center"><span>4. CPF Board & Bank Loan Dispersals</span><span class="text-cyan-400">Weeks 8–10[cite: 1]</span></div>
-                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex justify-between items-center"><span>5. Completion & Vacant Possession Handover</span><span class="text-cyan-400">10–12 Weeks[cite: 1]</span></div>
-                `;
-            }
+        // Comprehensive Interactive Timeline Builder
+        let currentTimeline = [];
+
+        const templates = {
+            hdb: [
+                { step: "1. Listing Presentation & Initial Checks", detail: "Check ethnic quota at start of month[cite: 1]; verify HFE / MyHDB flat financial info[cite: 1]." },
+                { step: "2. Register Intent to Sell & Issue OTP", detail: "Collect option fee (max $1,000 cash/PayNow)[cite: 1]. Agree on price, extension of stay, contra." },
+                { step: "3. Submit Resale Application", detail: "Submit on HDB Flat Portal within 7 days[cite: 1]. Request valuation ($120) if required[cite: 1]." },
+                { step: "4. HDB Valuer Inspection & Approval", detail: "~2 weeks processing[cite: 1]. HDB loan requires valid HFE; Bank loan requires Letter of Offer[cite: 1]." },
+                { step: "5. First Appointment & Endorsement", detail: "~4 weeks[cite: 1]. Pay exercise fee ($1-$4,999)[cite: 1]. Endorse resale documents." },
+                { step: "6. Resale Completion & Handover", detail: "8 weeks total[cite: 1]. Cashier's order for outstanding amounts; CPF refunded to OA in 10-14 working days[cite: 1]." }
+            ],
+            pte: [
+                { step: "1. Listing Presentation & Pricing", detail: "Review tenancy or vacant possession status[cite: 1]. Establish commission and timeline." },
+                { step: "2. Issue OTP & Collect 1% Fee", detail: "Deliver OTP to buyer's appointed law firm[cite: 1]. Option period typically 14/21 days[cite: 1]." },
+                { step: "3. Buyer Exercise OTP", detail: "Buyer exercises with 4% exercise fee payable to seller's law firm CVY account[cite: 1]." },
+                { step: "4. Law Firm Processing & Requisitions", detail: "Weeks 3–6[cite: 1]. Title searches, requisitions, and loan processing by legal counsel." },
+                { step: "5. CPF & Bank Loan Dispersals", detail: "Weeks 8–10[cite: 1]. Law firm prepares cashier's orders and stamp duty settlements." },
+                { step: "6. Completion & Vacant Possession", detail: "10–12 Weeks[cite: 1]. Handover keys; CPF refunded to OA within 10-14 working days[cite: 1]." }
+            ],
+            transition: [
+                { step: "1. Financial & CPF Calculation", detail: "Check existing loan, CPF refunds (Seller 1 & 2), and decide HDB vs Private conveyancing[cite: 1]." },
+                { step: "2. Sale of Existing Property", detail: "Complete sale to unlock CPF funds and cash proceeds[cite: 1]. Respect 15-month wait-out if applicable[cite: 1]." },
+                { step: "3. Purchase of Next Property", detail: "If using private conveyancing, refund can be utilised without pre-deduction at resale submission[cite: 1]." }
+            ]
+        };
+
+        function loadTemplate(type) {
+            currentTimeline = JSON.parse(JSON.stringify(templates[type]));
+            renderTimeline();
         }
-        switchTimelineMode('hdb', document.getElementById('btn-tl-hdb'));
+
+        function renderTimeline() {
+            const container = document.getElementById('timeline-editor-container');
+            container.innerHTML = currentTimeline.map((item, idx) => `
+                <div class="p-3.5 bg-slate-950 rounded-xl border border-slate-800 space-y-2">
+                    <div class="flex justify-between items-center">
+                        <input type="text" value="${item.step}" onchange="updateStep(${idx}, 'step', this.value)" class="bg-transparent font-bold text-white text-xs w-3/4 outline-none border-b border-transparent focus:border-cyan-500">
+                        <button onclick="removeStep(${idx})" class="text-rose-400 text-[10px] hover:underline">Remove</button>
+                    </div>
+                    <input type="text" value="${item.detail}" onchange="updateStep(${idx}, 'detail', this.value)" class="bg-slate-900 p-2 rounded-lg text-slate-300 text-[11px] w-full outline-none border border-slate-800 focus:border-cyan-500">
+                </div>
+            `).join('');
+        }
+
+        function updateStep(idx, field, val) {
+            currentTimeline[idx][field] = val;
+        }
+
+        function removeStep(idx) {
+            currentTimeline.splice(idx, 1);
+            renderTimeline();
+        }
+
+        function addMilestoneStep() {
+            currentTimeline.push({ step: "New Milestone", detail: "Enter details here..." });
+            renderTimeline();
+        }
+
+        loadTemplate('hdb');
 
         // Proceeds & Negative Sales
         function calculateProceeds() {
