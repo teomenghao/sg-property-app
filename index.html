@@ -92,6 +92,12 @@
                 </div>
             </div>
 
+            <!-- COMPLIANCE WARNING BANNER FOR COOLING PERIOD -->
+            <div id="cooling-warning" class="bg-rose-50 border border-rose-200 p-4 rounded-xl text-rose-800 text-xs font-semibold hidden flex items-center space-x-2">
+                <span>⚠️</span>
+                <span><b>Compliance Error:</b> The OTP issuance date is set within the mandatory 7-day cooling period following the Intent to Sell registration!</span>
+            </div>
+
             <!-- DYNAMIC CONTENT AREA BASED ON CLIENT / PROPERTY TYPE -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
@@ -205,41 +211,24 @@
             </div>
         </div>
 
-        <!-- TAB 2: PROCEEDS -->
+        <!-- OTHER TABS -->
         <div id="tab-proceeds" class="space-y-6 max-w-5xl mx-auto w-full hidden">
             <div>
                 <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Net Cash Proceeds & Negative Sales Calculator</h2>
                 <p class="text-sm text-slate-500 mt-1">Computes cash proceeds and prorates CPF refunds when sale remainder is insufficient.</p>
             </div>
-            <!-- Proceed content -->
         </div>
-
-        <!-- TAB 3: RA -->
         <div id="tab-ra" class="space-y-6 max-w-5xl mx-auto w-full hidden">
-            <div>
-                <h2 class="text-2xl font-bold text-slate-900 tracking-tight">CPF Retirement Account (RA) & Full Retirement Sum Checker</h2>
-            </div>
+            <div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">CPF Retirement Account (RA) & FRS Checker</h2></div>
         </div>
-
-        <!-- TAB 4: PROGRESSIVE -->
         <div id="tab-progressive" class="space-y-6 max-w-5xl mx-auto w-full hidden">
-            <div>
-                <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Private New Launch Progressive Payment Calculator</h2>
-            </div>
+            <div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">Private New Launch Progressive Payment Calculator</h2></div>
         </div>
-
-        <!-- TAB 5: TAXES -->
         <div id="tab-taxes" class="space-y-6 max-w-5xl mx-auto w-full hidden">
-            <div>
-                <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Stamp Duty, ABSD & SSD Matrix</h2>
-            </div>
+            <div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">Stamp Duty, ABSD & SSD Matrix</h2></div>
         </div>
-
-        <!-- TAB 6: PORTALS -->
         <div id="tab-portals" class="space-y-6 max-w-5xl mx-auto w-full hidden">
-            <div>
-                <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Official Working File Portals & Hyperlinks Hub</h2>
-            </div>
+            <div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">Official Working File Portals & Hyperlinks Hub</h2></div>
         </div>
 
     </main>
@@ -264,15 +253,16 @@
             seller: {
                 hdb: [
                     { title: "1. Listing Presentation & Initial Checks", defaultDate: "2026-10-02", desc: "Check ethnic quota at start of month; inspect flat details and verify HFE / MyHDB financial eligibility." },
-                    { title: "2. Register Intent to Sell", defaultDate: "2026-10-09", desc: "Register Intent to Sell on the HDB Flat Portal to retrieve flat eligibility and financial plan." },
-                    { title: "3. 7-Day Cooling Period", defaultDate: "2026-10-16", desc: "Mandatory 7-day cooling period before an OTP can be officially issued to a prospective buyer." },
-                    { title: "4. Valuation Walkthrough (if any)", defaultDate: "2026-10-23", desc: "Conduct valuation assessment if requested by buyer. $0 cost incurred for sellers." },
-                    { title: "5. Issue OTP & Collect Option Fee", defaultDate: "2026-10-30", desc: "Issue OTP and collect Option Fee (Min $1 up to Max $1,000 via Cash/PayNow)." },
-                    { title: "6. Exercise of OTP by Buyers", defaultDate: "2026-11-13", desc: "Buyer exercises OTP and pays Exercise Fee (Min $1, combined fee ≤ $5,000)." },
-                    { title: "7. Resale Application Submission", defaultDate: "2026-11-20", desc: "Submit resale application on HDB Flat Portal with supporting documents." },
-                    { title: "8. Resale Application Acceptance", defaultDate: "2026-11-27", desc: "HDB formally accepts the resale application following administrative verification." },
-                    { title: "9. Endorsement & HDB Branch Inspection", defaultDate: "2026-12-04", desc: "Endorse resale documents and coordinate HDB Branch Office inspection if required." },
-                    { title: "10. Resale Completion & Handover", defaultDate: "2026-12-25", desc: "Resale completion takes place 8 weeks after resale application acceptance. Key handover." }
+                    { title: "2. Register Intent to Sell", defaultDate: "2026-10-09", desc: "Register Intent to Sell on the HDB Flat Portal to retrieve flat eligibility and financial plan.", isIntent: true },
+                    { title: "3. 7-Day Cooling Period", defaultDate: "2026-10-16", desc: "Mandatory 7-day cooling period before an OTP can be officially issued (Calculated automatically).", isCooling: true },
+                    { title: "4. Issue OTP & Collect Option Fee", defaultDate: "2026-10-17", desc: "Issue OTP and collect Option Fee (Min $1 up to Max $1,000 via Cash/PayNow).", isOtp: true },
+                    { title: "5. Valuation Walkthrough (if any)", defaultDate: "2026-10-24", desc: "Conduct valuation assessment if requested by buyer. $0 cost incurred for sellers." },
+                    { title: "6. Exercise of OTP by Buyers", defaultDate: "2026-10-31", desc: "Buyer exercises OTP and pays Exercise Fee (Min $1, combined fee ≤ $5,000)." },
+                    { title: "7. Resale Application Submission", defaultDate: "2026-11-07", desc: "Submit resale application on HDB Flat Portal with supporting documents." },
+                    { title: "8. Resale Application Acceptance", defaultDate: "2026-11-14", desc: "HDB formally accepts the resale application following administrative verification." },
+                    { title: "9. Endorsement & HDB Branch Inspection", defaultDate: "2026-11-21", desc: "Endorse resale documents and coordinate HDB Branch Office inspection if required." },
+                    { title: "10. Resale Completion & Handover", defaultDate: "2026-12-19", desc: "Resale completion takes place 8 weeks after resale application acceptance. Key handover." },
+                    { title: "11. Extension of Stay (if any)", defaultDate: "2026-12-19", desc: "Optional extension of stay in the flat after completion, up to a maximum duration of 3 months." }
                 ],
                 pte: [
                     { title: "1. Listing & Tenancy Review", defaultDate: "2026-10-02", desc: "Inspect unit, determine vacant possession or sale with tenancy, and confirm commission structure." },
@@ -343,7 +333,6 @@
                 }
             });
 
-            // Toggle Rules Banner Visibility based on Property Type
             const rulesBanner = document.getElementById('rules-banner');
             if(type === 'pte') {
                 rulesBanner.classList.add('hidden');
@@ -378,25 +367,75 @@
         function renderTimelineFlow() {
             const container = document.getElementById('flow-container');
             const data = (currentMode === 'transition' && clientType === 'seller') ? [
-                { title: "1. Financial & CPF Calculation", defaultDate: "2026-10-02", desc: "Review outstanding loans, CPF refunds (Seller 1 & 2), and select HDB vs Private conveyancing framework." },
+                { title: "1. Financial & CPF Calculation", defaultDate: "2026-10-02", desc: "Review outstanding loans, CPF refunds (Seller 1 & 2)." },
                 { title: "2. Sale of Existing Property", defaultDate: "2026-11-27", desc: "Complete sale to unlock CPF funds and cash proceeds." },
-                { title: "3. Purchase of Next Property", defaultDate: "2026-12-15", desc: "If using private conveyancing, sale refunds can be utilised for purchase without pre-deduction at resale submission." }
+                { title: "3. Purchase of Next Property", defaultDate: "2026-12-15", desc: "Purchase next property utilising unlocked proceeds." }
             ] : timelineFlows[clientType][currentMode];
             
             document.getElementById('flow-title').innerText = `${clientType.toUpperCase()} Mode: ${currentMode === 'hdb' ? "HDB Resale Flow" : (currentMode === 'pte' ? "Private Resale Flow" : "Sell & Buy Transition")}`;
 
-            container.innerHTML = data.map((step, idx) => `
-                <div class="relative flex items-start space-x-4 pl-2">
-                    <div class="w-8 h-8 rounded-full bg-cyan-600 text-white flex items-center justify-center font-bold text-sm z-10 shadow-sm shrink-0">${idx + 1}</div>
-                    <div class="bg-slate-50 border border-slate-200 p-4.5 rounded-xl flex-1 shadow-sm space-y-2">
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-slate-900 text-sm">${step.title}</span>
-                            <input type="date" value="${step.defaultDate}" class="bg-white border border-slate-300 text-cyan-800 font-mono text-xs font-semibold px-2.5 py-1 rounded-lg outline-none focus:border-cyan-600">
+            container.innerHTML = data.map((step, idx) => {
+                let extraAttrs = "";
+                if(step.isIntent) extraAttrs = `id="input-intent-date" onchange="handleIntentDateChange(this)"`;
+                if(step.isCooling) extraAttrs = `id="input-cooling-date" readonly`;
+                if(step.isOtp) extraAttrs = `id="input-otp-date" onchange="handleOtpDateChange(this)"`;
+
+                return `
+                    <div class="relative flex items-start space-x-4 pl-2">
+                        <div class="w-8 h-8 rounded-full bg-cyan-600 text-white flex items-center justify-center font-bold text-sm z-10 shadow-sm shrink-0">${idx + 1}</div>
+                        <div class="bg-slate-50 border border-slate-200 p-4.5 rounded-xl flex-1 shadow-sm space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-slate-900 text-sm">${step.title}</span>
+                                <input type="date" value="${step.defaultDate}" ${extraAttrs} class="bg-white border border-slate-300 text-cyan-800 font-mono text-xs font-semibold px-2.5 py-1 rounded-lg outline-none focus:border-cyan-600 ${step.isCooling ? 'bg-slate-100 text-slate-500 cursor-not-allowed' : ''}">
+                            </div>
+                            <p class="text-slate-700 text-sm leading-relaxed">${step.desc}</p>
                         </div>
-                        <p class="text-slate-700 text-sm leading-relaxed">${step.desc}</p>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
+
+            if(clientType === 'seller' && currentMode === 'hdb') {
+                updateCoolingPeriodDates();
+            }
+        }
+
+        function handleIntentDateChange(el) {
+            updateCoolingPeriodDates();
+        }
+
+        function updateCoolingPeriodDates() {
+            const intentInput = document.getElementById('input-intent-date');
+            const coolingInput = document.getElementById('input-cooling-date');
+            if(!intentInput || !coolingInput) return;
+
+            const intentDate = new Date(intentInput.value);
+            if(!isNaN(intentDate.getTime())) {
+                intentDate.setDate(intentDate.getDate() + 7);
+                coolingInput.value = intentDate.toISOString().split('T')[0];
+                validateOtpDate();
+            }
+        }
+
+        function handleOtpDateChange(el) {
+            validateOtpDate();
+        }
+
+        function validateOtpDate() {
+            const coolingInput = document.getElementById('input-cooling-date');
+            const otpInput = document.getElementById('input-otp-date');
+            const warningBox = document.getElementById('cooling-warning');
+            if(!coolingInput || !otpInput || !warningBox) return;
+
+            const coolingDate = new Date(coolingInput.value);
+            const otpDate = new Date(otpInput.value);
+
+            if(!isNaN(coolingDate.getTime()) && !isNaN(otpDate.getTime())) {
+                if(otpDate < coolingDate) {
+                    warningBox.classList.remove('hidden');
+                } else {
+                    warningBox.classList.add('hidden');
+                }
+            }
         }
 
         function calculateBSD(price) {
