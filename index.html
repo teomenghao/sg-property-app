@@ -158,7 +158,7 @@
                     <!-- SEPARATE NEGATIVE SALES EXPLANATION CARD -->
                     <div id="s-neg-alert" class="p-4 bg-rose-50 rounded-2xl border border-rose-200 text-rose-800 text-xs hidden space-y-1">
                         <div class="font-bold flex items-center space-x-1.5 text-sm">
-                            <span>⚠️</span>
+                            <span>⚠️️</span>
                             <span>Negative Sales Triggered</span>
                         </div>
                         <p class="leading-relaxed">The sale remainder is insufficient to cover total CPF refunds. Additional cash top-up or waiver approval may be required.</p>
@@ -288,6 +288,7 @@
                 state.dates[idx] = inp.value;
             });
             localStorage.setItem('propnex_command_center_state', JSON.stringify(state));
+            updateDateConstraints();
         }
 
         function loadState() {
@@ -378,7 +379,7 @@
                         <div class="bg-slate-50 border border-slate-200 p-4.5 rounded-xl flex-1 shadow-sm space-y-2">
                             <div class="flex justify-between items-center">
                                 <span class="font-bold text-slate-900 text-sm">${step.title}</span>
-                                <input type="date" value="${dateVal}" data-index="${idx}" oninput="saveState()" class="bg-white border border-slate-300 text-cyan-800 font-mono text-xs font-semibold px-2.5 py-1 rounded-lg outline-none focus:border-cyan-600 shadow-sm cursor-pointer">
+                                <input type="date" id="date-input-${idx}" value="${dateVal}" data-index="${idx}" oninput="saveState()" class="bg-white border border-slate-300 text-cyan-800 font-mono text-xs font-semibold px-2.5 py-1 rounded-lg outline-none focus:border-cyan-600 shadow-sm cursor-pointer">
                             </div>
                             <p class="text-slate-700 text-sm leading-relaxed">${step.desc}</p>
                         </div>
@@ -391,6 +392,21 @@
             if(savedState.institution !== undefined) document.getElementById('s-loaninstitution').value = savedState.institution;
             if(savedState.cpf1 !== undefined) document.getElementById('s-cpf1').value = savedState.cpf1;
             if(savedState.cpf2 !== undefined) document.getElementById('s-cpf2').value = savedState.cpf2;
+
+            updateDateConstraints();
+        }
+
+        function updateDateConstraints() {
+            const inputs = document.querySelectorAll('#flow-container input[type="date"]');
+            for(let i = 1; i < inputs.length; i++) {
+                const prevDate = inputs[i-1].value;
+                if(prevDate) {
+                    inputs[i].min = prevDate;
+                    if(inputs[i].value && inputs[i].value < prevDate) {
+                        inputs[i].value = prevDate;
+                    }
+                }
+            }
         }
 
         function toggleLoanInstitution() {
