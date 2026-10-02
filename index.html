@@ -158,7 +158,7 @@
                     <!-- SEPARATE NEGATIVE SALES EXPLANATION CARD -->
                     <div id="s-neg-alert" class="p-4 bg-rose-50 rounded-2xl border border-rose-200 text-rose-800 text-xs hidden space-y-1">
                         <div class="font-bold flex items-center space-x-1.5 text-sm">
-                            <span>⚠️️</span>
+                            <span>⚠</span>
                             <span>Negative Sales Triggered</span>
                         </div>
                         <p class="leading-relaxed">The sale remainder is insufficient to cover total CPF refunds. Additional cash top-up or waiver approval may be required.</p>
@@ -228,6 +228,14 @@
             btn.className = "nav-btn w-full flex items-center space-x-3.5 px-4 py-3.5 rounded-xl font-semibold bg-cyan-600 text-white transition shadow-md shadow-cyan-600/20";
         }
 
+        function formatDateDDMMYYYY(dateObj) {
+            if (isNaN(dateObj.getTime())) return "";
+            const day = String(dateObj.getDate()).padStart(2, '0');
+            const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const year = dateObj.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+
         let currentMode = 'hdb';
         let clientType = 'seller';
 
@@ -239,7 +247,7 @@
                     { title: "3. 7-Day Cooling Period", defaultDate: "2026-10-16", desc: "Mandatory 7-day cooling period before an OTP can be officially issued." },
                     { title: "4. Issue OTP & Collect Option Fee", defaultDate: "2026-10-17", desc: "Issue OTP and collect Option Fee (Min $1 up to Max $1,000 via Cash/PayNow)." },
                     { title: "5. Valuation Walkthrough (if any)", defaultDate: "2026-10-24", desc: "Conduct valuation assessment if requested by buyer. $0 cost incurred for sellers." },
-                    { title: "6. Exercise of OTP by Buyers", defaultDate: "2026-11-07", desc: "Buyer exercises OTP and pays Exercise Fee (Min $1, combined fee ≤ $5,000)." },
+                    { title: "6. Exercise of OTP by Buyers", defaultDate: "2026-11-07", desc: "Buyer exercises OTP and pays Exercise Fee (Min $1, combined fee ≤ $5,000).", isExercise: true },
                     { title: "7. Resale Application Submission", defaultDate: "2026-11-14", desc: "Submit resale application on HDB Flat Portal with supporting documents." },
                     { title: "8. Resale Application Acceptance", defaultDate: "2026-11-21", desc: "HDB formally accepts the resale application following administrative verification." },
                     { title: "9. Endorsement & HDB Branch Inspection", defaultDate: "2026-11-28", desc: "Endorse resale documents and coordinate HDB Branch Office inspection if required." },
@@ -289,6 +297,7 @@
             });
             localStorage.setItem('propnex_command_center_state', JSON.stringify(state));
             updateDateConstraints();
+            updateOtpExpiryDeadline();
         }
 
         function loadState() {
@@ -372,6 +381,11 @@
 
             container.innerHTML = data.map((step, idx) => {
                 let dateVal = savedDates[idx] || step.defaultDate;
+                let extraHtml = "";
+
+                if(step.isExercise && clientType === 'seller' && currentMode === 'hdb') {
+                    extraHtml = `<div class="mt-2 text-xs font-mono text-cyan-800 bg-cyan-50 p-2.5 rounded-lg border border-cyan-200 flex justify-between items-center"><span>⏳ OTP Expiry Hard Deadline (+3 Weeks from Step 4):</span> <span id="otp-expiry-disp" class="font-bold">--</span></div>`;
+                }
 
                 return `
                     <div class="relative flex items-start space-x-4 pl-2">
@@ -382,6 +396,7 @@
                                 <input type="date" id="date-input-${idx}" value="${dateVal}" data-index="${idx}" oninput="saveState()" class="bg-white border border-slate-300 text-cyan-800 font-mono text-xs font-semibold px-2.5 py-1 rounded-lg outline-none focus:border-cyan-600 shadow-sm cursor-pointer">
                             </div>
                             <p class="text-slate-700 text-sm leading-relaxed">${step.desc}</p>
+                            ${extraHtml}
                         </div>
                     </div>
                 `;
@@ -394,6 +409,7 @@
             if(savedState.cpf2 !== undefined) document.getElementById('s-cpf2').value = savedState.cpf2;
 
             updateDateConstraints();
+            updateOtpExpiryDeadline();
         }
 
         function updateDateConstraints() {
@@ -404,6 +420,23 @@
                     inputs[i].min = prevDate;
                     if(inputs[i].value && inputs[i].value < prevDate) {
                         inputs[i].value = prevDate;
+                    }
+                }
+            }
+        }
+
+        function updateOtpExpiryDeadline() {
+            if(clientType === 'seller' && currentMode === 'hdb') {
+                const otpInput = document.getElementById('date-input-3'); // Step 4 (Index 3)
+                const expiryDisp = document.getElementById('otp-expiry-disp');
+                if(otpInput && expiryDisp) {
+                    const otpDate = new Date(otpInput.value);
+                    if(!isNaN(otpDate.getTime())) {
+                        let expiryDate = new Date(otpDate);
+                        expiryDate.setDate(expiryDate.getDate() + 21);
+                        expiryDisp.innerText = formatDateDDMMYYYY(expiryDate);
+                    } else {
+                        expiryDisp.innerText = "--";
                     }
                 }
             }
