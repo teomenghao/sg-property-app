@@ -32,7 +32,7 @@
                     <span>Timelines</span>
                 </button>
                 <button onclick="switchTab('ra', this)" class="nav-btn w-full flex items-center space-x-3.5 px-4 py-3.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition">
-                    <span class="text-lg">🛡️️</span>
+                    <span class="text-lg">🛡️</span>
                     <span>CPF RA & FRS Checker</span>
                 </button>
                 <button onclick="switchTab('progressive', this)" class="nav-btn w-full flex items-center space-x-3.5 px-4 py-3.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition">
@@ -107,23 +107,25 @@
                     </div>
                 </div>
 
-                <!-- RIGHT COLUMN: FINANCIAL CALCULATION SIDEBAR CARD -->
+                <!-- RIGHT COLUMN: FINANCIAL CALCULATION SIDEBAR CARDS -->
                 <div class="space-y-6">
                     
-                    <div id="sidebar-seller-card" class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-4">
-                        <h3 class="text-base font-bold text-cyan-800 border-b border-slate-100 pb-3">Financial Calculation</h3>
+                    <!-- HDB RESALE SELLER FINANCIAL CARD (Includes HDB Loan option) -->
+                    <div id="sidebar-seller-hdb-card" class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-4">
+                        <h3 class="text-base font-bold text-cyan-800 border-b border-slate-100 pb-3">Financial Calculation (HDB Resale)</h3>
                         <div class="space-y-3.5 text-sm">
                             <div>
                                 <label class="text-[12px] font-semibold text-slate-600">Property Price (SGD)</label>
-                                <input type="number" id="s-price" value="800000" oninput="saveState(); updateCalculations();" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                                <input type="number" id="s-price-hdb" value="800000" oninput="syncPrices('hdb'); saveState(); updateCalculations();" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
                             </div>
                             <div>
                                 <label class="text-[12px] font-semibold text-slate-600">Outstanding Loan (SGD)</label>
-                                <input type="number" id="s-loan" value="300000" oninput="toggleLoanInstitution(); saveState(); updateCalculations();" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                                <input type="number" id="s-loan-hdb" value="300000" oninput="syncLoans('hdb'); toggleLoanInstitution('hdb'); saveState(); updateCalculations();" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
                             </div>
-                            <div id="loan-institution-wrap">
+                            <div id="loan-institution-wrap-hdb">
                                 <label class="text-[12px] font-semibold text-slate-600">Loan Institution / Bank</label>
-                                <select id="s-loaninstitution" onchange="saveState()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                                <select id="s-loaninstitution-hdb" onchange="syncInstitutions('hdb'); saveState()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                                    <option value="HDB">HDB Loan</option>
                                     <option value="DBS">DBS Bank</option>
                                     <option value="UOB">UOB Bank</option>
                                     <option value="OCBC">OCBC Bank</option>
@@ -136,11 +138,11 @@
                             </div>
                             <div>
                                 <label class="text-[12px] font-semibold text-slate-600">Seller 1 CPF Refund (Prin + Accrued)</label>
-                                <input type="number" id="s-cpf1" value="150000" oninput="saveState(); updateCalculations();" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                                <input type="number" id="s-cpf1-hdb" value="150000" oninput="syncCpf1('hdb'); saveState(); updateCalculations();" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
                             </div>
                             <div>
                                 <label class="text-[12px] font-semibold text-slate-600">Seller 2 CPF Refund (Prin + Accrued)</label>
-                                <input type="number" id="s-cpf2" value="120000" oninput="saveState(); updateCalculations();" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                                <input type="number" id="s-cpf2-hdb" value="120000" oninput="syncCpf2('hdb'); saveState(); updateCalculations();" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
                             </div>
                             
                             <!-- Ledger Table Breakdown -->
@@ -154,10 +156,55 @@
                         </div>
                     </div>
 
+                    <!-- PRIVATE RESALE SELLER FINANCIAL CARD (Excludes HDB references and loan options) -->
+                    <div id="sidebar-seller-pte-card" class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-4 hidden">
+                        <h3 class="text-base font-bold text-cyan-800 border-b border-slate-100 pb-3">Financial Calculation (Private Resale)</h3>
+                        <div class="space-y-3.5 text-sm">
+                            <div>
+                                <label class="text-[12px] font-semibold text-slate-600">Property Price (SGD)</label>
+                                <input type="number" id="s-price-pte" value="800000" oninput="syncPrices('pte'); saveState(); updateCalculations();" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[12px] font-semibold text-slate-600">Outstanding Loan (SGD)</label>
+                                <input type="number" id="s-loan-pte" value="300000" oninput="syncLoans('pte'); toggleLoanInstitution('pte'); saveState(); updateCalculations();" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                            </div>
+                            <div id="loan-institution-wrap-pte">
+                                <label class="text-[12px] font-semibold text-slate-600">Loan Institution / Bank</label>
+                                <select id="s-loaninstitution-pte" onchange="syncInstitutions('pte'); saveState()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                                    <option value="DBS">DBS Bank</option>
+                                    <option value="UOB">UOB Bank</option>
+                                    <option value="OCBC">OCBC Bank</option>
+                                    <option value="HSBC">HSBC</option>
+                                    <option value="SCB">Standard Chartered</option>
+                                    <option value="CIMB">CIMB Bank</option>
+                                    <option value="Maybank">Maybank</option>
+                                    <option value="Other">Other Bank</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[12px] font-semibold text-slate-600">Seller 1 CPF Refund (Prin + Accrued)</label>
+                                <input type="number" id="s-cpf1-pte" value="150000" oninput="syncCpf1('pte'); saveState(); updateCalculations();" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[12px] font-semibold text-slate-600">Seller 2 CPF Refund (Prin + Accrued)</label>
+                                <input type="number" id="s-cpf2-pte" value="120000" oninput="syncCpf2('pte'); saveState(); updateCalculations();" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                            </div>
+                            
+                            <!-- Ledger Table Breakdown -->
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2 font-mono text-xs">
+                                <div class="flex justify-between text-slate-600"><span>Property Price:</span> <span id="calc-price-pte" class="font-bold text-slate-900"></span></div>
+                                <div class="flex justify-between text-slate-600"><span>Less Outstanding Loan:</span> <span id="calc-loan-pte" class="font-bold text-rose-600"></span></div>
+                                <div class="flex justify-between text-slate-600"><span>Less Seller 1 CPF Refund:</span> <span id="calc-cpf1-pte" class="font-bold text-rose-600"></span></div>
+                                <div class="flex justify-between text-slate-600"><span>Less Seller 2 CPF Refund:</span> <span id="calc-cpf2-pte" class="font-bold text-rose-600"></span></div>
+                                <div class="flex justify-between border-t border-slate-200 pt-2 text-sm font-bold"><span>Cash Proceeds:</span> <span id="calc-net-pte" class="text-cyan-700"></span></div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- SEPARATE NEGATIVE SALES EXPLANATION CARD -->
                     <div id="s-neg-alert" class="p-4 bg-rose-50 rounded-2xl border border-rose-200 text-rose-800 text-xs hidden space-y-1">
                         <div class="font-bold flex items-center space-x-1.5 text-sm">
-                            <span>⚠</span>
+                            <span>⚠️️</span>
                             <span>Negative Sales Triggered</span>
                         </div>
                         <p class="leading-relaxed">The sale remainder is insufficient to cover total CPF refunds. Additional cash top-up or waiver approval may be required.</p>
@@ -282,13 +329,39 @@
             }
         };
 
+        function syncPrices(source) {
+            const val = document.getElementById(`s-price-${source}`).value;
+            document.getElementById('s-price-hdb').value = val;
+            document.getElementById('s-price-pte').value = val;
+        }
+        function syncLoans(source) {
+            const val = document.getElementById(`s-loan-${source}`).value;
+            document.getElementById('s-loan-hdb').value = val;
+            document.getElementById('s-loan-pte').value = val;
+        }
+        function syncInstitutions(source) {
+            const val = document.getElementById(`s-loaninstitution-${source}`).value;
+            if(document.getElementById('s-loaninstitution-hdb')) document.getElementById('s-loaninstitution-hdb').value = val;
+            if(document.getElementById('s-loaninstitution-pte') && val !== 'HDB') document.getElementById('s-loaninstitution-pte').value = val;
+        }
+        function syncCpf1(source) {
+            const val = document.getElementById(`s-cpf1-${source}`).value;
+            document.getElementById('s-cpf1-hdb').value = val;
+            document.getElementById('s-cpf1-pte').value = val;
+        }
+        function syncCpf2(source) {
+            const val = document.getElementById(`s-cpf2-${source}`).value;
+            document.getElementById('s-cpf2-hdb').value = val;
+            document.getElementById('s-cpf2-pte').value = val;
+        }
+
         function saveState() {
             const state = {
-                price: document.getElementById('s-price')?.value,
-                loan: document.getElementById('s-loan')?.value,
-                institution: document.getElementById('s-loaninstitution')?.value,
-                cpf1: document.getElementById('s-cpf1')?.value,
-                cpf2: document.getElementById('s-cpf2')?.value,
+                price: document.getElementById('s-price-hdb')?.value,
+                loan: document.getElementById('s-loan-hdb')?.value,
+                institution: document.getElementById('s-loaninstitution-hdb')?.value,
+                cpf1: document.getElementById('s-cpf1-hdb')?.value,
+                cpf2: document.getElementById('s-cpf2-hdb')?.value,
                 dates: {}
             };
             document.querySelectorAll('#flow-container input[type="date"]').forEach((inp, idx) => {
@@ -314,27 +387,25 @@
             document.getElementById('btn-client-seller').className = type === 'seller' ? "px-5 py-2.5 rounded-lg text-sm font-semibold bg-cyan-600 text-white transition" : "px-5 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:text-slate-900 transition";
             document.getElementById('btn-client-buyer').className = type === 'buyer' ? "px-5 py-2.5 rounded-lg text-sm font-semibold bg-cyan-600 text-white transition" : "px-5 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:text-slate-900 transition";
 
-            const sellerCard = document.getElementById('sidebar-seller-card');
             const buyerCard = document.getElementById('sidebar-buyer-card');
             const negAlert = document.getElementById('s-neg-alert');
             const propToggleWrap = document.getElementById('property-type-toggle-wrap');
             const transBtn = document.getElementById('btn-tmpl-trans');
 
             if(type === 'seller') {
-                sellerCard.classList.remove('hidden');
-                if(document.getElementById('calc-net') && parseFloat(document.getElementById('calc-net').innerText.replace(/[^0-9.-]+/g,"")) < 0) {
-                    negAlert.classList.remove('hidden');
-                }
                 buyerCard.classList.add('hidden');
                 propToggleWrap.style.display = "flex";
                 if(transBtn) transBtn.style.display = "inline-block";
+                loadTemplate(currentMode);
             } else {
-                sellerCard.classList.add('hidden');
+                document.getElementById('sidebar-seller-hdb-card').classList.add('hidden');
+                document.getElementById('sidebar-seller-pte-card').classList.add('hidden');
                 negAlert.classList.add('hidden');
                 buyerCard.classList.remove('hidden');
                 propToggleWrap.style.display = "flex";
                 if(transBtn) transBtn.style.display = "none";
                 if(currentMode === 'transition') currentMode = 'hdb';
+                document.getElementById('portal-link-btn').classList.add('hidden');
             }
 
             renderTimelineFlow();
@@ -356,13 +427,23 @@
 
             const rulesBanner = document.getElementById('rules-banner');
             const portalBtn = document.getElementById('portal-link-btn');
+            const hdbCard = document.getElementById('sidebar-seller-hdb-card');
+            const pteCard = document.getElementById('sidebar-seller-pte-card');
 
             if(type === 'pte') {
                 rulesBanner.classList.add('hidden');
-                if(clientType === 'seller') portalBtn.classList.add('hidden');
+                if(clientType === 'seller') {
+                    portalBtn.classList.add('hidden');
+                    hdbCard.classList.add('hidden');
+                    pteCard.classList.remove('hidden');
+                }
             } else {
                 rulesBanner.classList.remove('hidden');
-                if(clientType === 'seller') portalBtn.classList.remove('hidden');
+                if(clientType === 'seller') {
+                    portalBtn.classList.remove('hidden');
+                    pteCard.classList.add('hidden');
+                    hdbCard.classList.remove('hidden');
+                }
             }
 
             renderTimelineFlow();
@@ -405,16 +486,30 @@
                 `;
             }).join('');
 
-            if(savedState.price !== undefined) document.getElementById('s-price').value = savedState.price;
-            if(savedState.loan !== undefined) document.getElementById('s-loan').value = savedState.loan;
-            if(savedState.institution !== undefined) document.getElementById('s-loaninstitution').value = savedState.institution;
-            if(savedState.cpf1 !== undefined) document.getElementById('s-cpf1').value = savedState.cpf1;
-            if(savedState.cpf2 !== undefined) document.getElementById('s-cpf2').value = savedState.cpf2;
+            if(savedState.price !== undefined) {
+                document.getElementById('s-price-hdb').value = savedState.price;
+                document.getElementById('s-price-pte').value = savedState.price;
+            }
+            if(savedState.loan !== undefined) {
+                document.getElementById('s-loan-hdb').value = savedState.loan;
+                document.getElementById('s-loan-pte').value = savedState.loan;
+            }
+            if(savedState.institution !== undefined) {
+                if(document.getElementById('s-loaninstitution-hdb')) document.getElementById('s-loaninstitution-hdb').value = savedState.institution;
+                if(document.getElementById('s-loaninstitution-pte') && savedState.institution !== 'HDB') document.getElementById('s-loaninstitution-pte').value = savedState.institution;
+            }
+            if(savedState.cpf1 !== undefined) {
+                document.getElementById('s-cpf1-hdb').value = savedState.cpf1;
+                document.getElementById('s-cpf1-pte').value = savedState.cpf1;
+            }
+            if(savedState.cpf2 !== undefined) {
+                document.getElementById('s-cpf2-hdb').value = savedState.cpf2;
+                document.getElementById('s-cpf2-pte').value = savedState.cpf2;
+            }
 
             updateDateConstraints();
             updateOtpExpiryDeadline();
 
-            // Handle portal button visibility based on property type
             const portalBtn = document.getElementById('portal-link-btn');
             if(currentMode === 'pte' && clientType === 'seller') {
                 portalBtn.classList.add('hidden');
@@ -453,9 +548,9 @@
             }
         }
 
-        function toggleLoanInstitution() {
-            const loanVal = parseFloat(document.getElementById('s-loan').value) || 0;
-            const wrap = document.getElementById('loan-institution-wrap');
+        function toggleLoanInstitution(source) {
+            const loanVal = parseFloat(document.getElementById(`s-loan-${source}`).value) || 0;
+            const wrap = document.getElementById(`loan-institution-wrap-${source}`);
             if(loanVal === 0) {
                 wrap.classList.add('hidden');
             } else {
@@ -475,26 +570,34 @@
         }
 
         function updateCalculations() {
-            const price = parseFloat(document.getElementById('s-price').value) || 0;
-
             if (clientType === 'seller') {
-                const loan = parseFloat(document.getElementById('s-loan').value) || 0;
-                const cpf1 = parseFloat(document.getElementById('s-cpf1').value) || 0;
-                const cpf2 = parseFloat(document.getElementById('s-cpf2').value) || 0;
+                const price = parseFloat(document.getElementById('s-price-hdb').value) || 0;
+                const loan = parseFloat(document.getElementById('s-loan-hdb').value) || 0;
+                const cpf1 = parseFloat(document.getElementById('s-cpf1-hdb').value) || 0;
+                const cpf2 = parseFloat(document.getElementById('s-cpf2-hdb').value) || 0;
                 const totCpf = cpf1 + cpf2;
                 const net = price - loan - totCpf;
 
+                // HDB Card Display
                 document.getElementById('calc-price').innerText = `$${price.toLocaleString()}`;
                 document.getElementById('calc-loan').innerText = `-$${loan.toLocaleString()}`;
                 document.getElementById('calc-cpf1').innerText = `-$${cpf1.toLocaleString()}`;
                 document.getElementById('calc-cpf2').innerText = `-$${cpf2.toLocaleString()}`;
                 document.getElementById('calc-net').innerText = `$${Math.round(net).toLocaleString()}`;
 
+                // PTE Card Display
+                document.getElementById('calc-price-pte').innerText = `$${price.toLocaleString()}`;
+                document.getElementById('calc-loan-pte').innerText = `-$${loan.toLocaleString()}`;
+                document.getElementById('calc-cpf1-pte').innerText = `-$${cpf1.toLocaleString()}`;
+                document.getElementById('calc-cpf2-pte').innerText = `-$${cpf2.toLocaleString()}`;
+                document.getElementById('calc-net-pte').innerText = `$${Math.round(net).toLocaleString()}`;
+
                 const alertBox = document.getElementById('s-neg-alert');
                 if (net < 0) alertBox.classList.remove('hidden');
                 else alertBox.classList.add('hidden');
 
             } else {
+                const price = parseFloat(document.getElementById('s-price-hdb').value) || 0;
                 const loanType = document.getElementById('b-loantype').value;
                 const absdProfile = document.getElementById('b-absd-profile').value;
                 const paidFees = 5000;
@@ -536,7 +639,8 @@
         // Initialize App State
         switchClientType('seller');
         loadTemplate('hdb');
-        toggleLoanInstitution();
+        toggleLoanInstitution('hdb');
+        toggleLoanInstitution('pte');
         updateCalculations();
     </script>
 </body>
