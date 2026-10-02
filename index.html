@@ -103,10 +103,10 @@
                 <div class="lg:col-span-2 bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-5">
                     <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                         <h3 id="flow-title" class="text-base font-bold text-cyan-700">Milestone Process Flow</h3>
-                        <div class="flex space-x-2">
+                        <div class="flex space-x-2" id="property-type-toggle-wrap">
                             <button onclick="loadTemplate('hdb')" id="btn-tmpl-hdb" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-cyan-600 text-white transition">HDB Resale</button>
                             <button onclick="loadTemplate('pte')" id="btn-tmpl-pte" class="px-3.5 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Private Resale</button>
-                            <button onclick="loadTemplate('transition')" id="btn-tmpl-trans" class="px-3.5 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition" id="trans-btn-wrap">Sell & Buy</button>
+                            <button onclick="loadTemplate('transition')" id="btn-tmpl-trans" class="px-3.5 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Sell & Buy</button>
                         </div>
                     </div>
                     
@@ -116,7 +116,7 @@
                         <div class="grid grid-cols-3 gap-3">
                             <div>
                                 <label class="text-[12px] font-semibold text-slate-600">Property Price (SGD)</label>
-                                <input type="number" id="t-price" value="800000" oninput="updateCalculations()" class="w-full mt-1 bg-white border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
+                                <input type="number" id="t-price" value="1500000" oninput="updateCalculations()" class="w-full mt-1 bg-white border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
                             </div>
                             <div id="fee-box-1">
                                 <label class="text-[12px] font-semibold text-slate-600" id="lbl-fee1">Option Fee ($1 - $1,000)</label>
@@ -173,23 +173,33 @@
                             <div>
                                 <label class="text-[12px] font-semibold text-slate-600">Loan Type</label>
                                 <select id="b-loantype" onchange="updateCalculations()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
-                                    <option value="hdb">HDB Loan (HFE Required)</option>
                                     <option value="bank">Bank Loan (75% LTV)</option>
+                                    <option value="hdb">HDB Loan (Concessionary)</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="text-[12px] font-semibold text-slate-600">Buyer Profile (Stamp Duty)</label>
-                                <select id="b-profile" onchange="updateCalculations()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
-                                    <option value="sc">Singapore Citizen (0% ABSD)</option>
-                                    <option value="pr">Permanent Resident (5% ABSD)</option>
+                                <label class="text-[12px] font-semibold text-slate-600">Buyer Profile & Property Count (ABSD)</label>
+                                <select id="b-absd-profile" onchange="updateCalculations()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                                    <option value="sc-1">Singapore Citizen (1st Property - 0%)</option>
+                                    <option value="sc-2">Singapore Citizen (2nd Property - 20%)</option>
+                                    <option value="sc-3">Singapore Citizen (3rd+ Property - 30%)</option>
+                                    <option value="pr-1">Permanent Resident (1st Property - 5%)</option>
+                                    <option value="pr-2">Permanent Resident (2nd Property - 30%)</option>
+                                    <option value="pr-3">Permanent Resident (3rd+ Property - 35%)</option>
+                                    <option value="foreigner">Foreigner (Any Property - 60%)</option>
                                 </select>
                             </div>
 
-                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2 font-mono text-xs">
+                            <!-- Full Financial Breakdown per User Request -->
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5 font-mono text-xs">
+                                <div class="flex justify-between text-slate-600"><span>Purchase Price:</span> <span id="b-price-disp" class="font-bold text-slate-900"></span></div>
+                                <div class="flex justify-between text-slate-600"><span>5% Booking/Option:</span> <span id="b-5pct" class="font-bold text-slate-900"></span></div>
+                                <div class="flex justify-between text-slate-600"><span>20% Downpayment:</span> <span id="b-20pct" class="font-bold text-slate-900"></span></div>
+                                <div class="flex justify-between text-slate-600"><span>75% Bank Loan:</span> <span id="b-75pct" class="font-bold text-emerald-700"></span></div>
+                                <div class="border-t border-slate-200 pt-1.5"></div>
                                 <div class="flex justify-between text-slate-600"><span>Buyer's Stamp Duty (BSD):</span> <span id="b-bsd" class="font-bold text-slate-900"></span></div>
                                 <div class="flex justify-between text-slate-600"><span>Additional BSD (ABSD):</span> <span id="b-absd" class="font-bold text-rose-600"></span></div>
-                                <div class="flex justify-between text-slate-600"><span>Total Stamp Duty:</span> <span id="b-totduty" class="font-bold text-slate-900"></span></div>
-                                <div class="flex justify-between border-t border-slate-200 pt-2 text-sm font-bold" id="b-bal-row"><span>Balance Due at Completion:</span> <span id="b-balance" class="text-cyan-700"></span></div>
+                                <div class="flex justify-between border-t border-slate-200 pt-2 text-sm font-bold"><span>Balance Due at Completion:</span> <span id="b-balance" class="text-cyan-700"></span></div>
                             </div>
                         </div>
                     </div>
@@ -457,7 +467,7 @@
                     { title: "6. Completion & Key Collection", defaultDate: "2026-11-27", desc: "Attend final HDB appointment. Settle balance purchase price via CPF OA and/or cash/loan." }
                 ],
                 pte: [
-                    { title: "1. IPA & Property Search", defaultDate: "2026-10-02", desc: "Secure Approval-in-Principle (IPA) from bank. Verify ABSD status (0% SC vs 5% PR)." },
+                    { title: "1. IPA & Property Search", defaultDate: "2026-10-02", desc: "Secure Approval-in-Principle (IPA) from bank. Verify ABSD status based on nationality and property count." },
                     { title: "2. Issue OTP & Pay Option Fee", defaultDate: "2026-10-09", desc: "Pay Option Fee (1% to 4%) directly to seller upon issuing OTP." },
                     { title: "3. Legal Counsel & Stamp Duty", defaultDate: "2026-10-16", desc: "Appoint law firm. Pay Buyer's Stamp Duty (BSD) and ABSD within 14 days of signing/exercising." },
                     { title: "4. Exercise OTP & Balance 5%", defaultDate: "2026-10-23", desc: "Exercise OTP by topping up Exercise Fee (Auto-balanced to total 5%)." },
@@ -474,11 +484,13 @@
 
             const sellerCard = document.getElementById('sidebar-seller-card');
             const buyerCard = document.getElementById('sidebar-buyer-card');
+            const propToggleWrap = document.getElementById('property-type-toggle-wrap');
             const transBtn = document.getElementById('btn-tmpl-trans');
 
             if(type === 'seller') {
                 sellerCard.classList.remove('hidden');
                 buyerCard.classList.add('hidden');
+                propToggleWrap.style.display = "flex";
                 transBtn.style.display = "inline-block";
             } else {
                 sellerCard.classList.add('hidden');
@@ -495,10 +507,12 @@
             currentMode = type;
             ['hdb', 'pte', 'trans'].forEach(t => {
                 const btn = document.getElementById(`btn-tmpl-${t}`);
-                if(t === type || (t === 'trans' && type === 'transition')) {
-                    btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-cyan-600 text-white transition";
-                } else {
-                    btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition";
+                if(btn) {
+                    if(t === type || (t === 'trans' && type === 'transition')) {
+                        btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-cyan-600 text-white transition";
+                    } else {
+                        btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition";
+                    }
                 }
             });
 
@@ -614,9 +628,9 @@
                 else alertBox.classList.add('hidden');
 
             } else {
-                // Buyer calculations
+                // Buyer calculations with full breakdown requested
                 const loanType = document.getElementById('b-loantype').value;
-                const profile = document.getElementById('b-profile').value;
+                const absdProfile = document.getElementById('b-absd-profile').value;
                 const f1 = parseFloat(document.getElementById('t-fee1').value) || 0;
                 const f2 = parseFloat(document.getElementById('t-fee2').value) || 0;
 
@@ -632,22 +646,39 @@
                 }
                 const paidFees = optAmt + exAmt;
 
+                // Breakdown figures requested by user
+                const amt5pct = price * 0.05;
+                const amt20pct = price * 0.20;
+                const amt75pct = price * 0.75;
+
+                document.getElementById('b-price-disp').innerText = `$${Math.round(price).toLocaleString()}`;
+                document.getElementById('b-5pct').innerText = `$${Math.round(amt5pct).toLocaleString()} (5%)`;
+                document.getElementById('b-20pct').innerText = `$${Math.round(amt20pct).toLocaleString()} (20%)`;
+                document.getElementById('b-75pct').innerText = `$${Math.round(amt75pct).toLocaleString()} (75% LTV)`;
+
                 const bsd = calculateBSD(price);
-                const absdRate = profile === 'pr' ? 0.05 : 0;
+                
+                // ABSD Rates per 2026 matrix
+                let absdRate = 0;
+                if (absdProfile === 'sc-2') absdRate = 0.20;
+                else if (absdProfile === 'sc-3') absdRate = 0.30;
+                else if (absdProfile === 'pr-1') absdRate = 0.05;
+                else if (absdProfile === 'pr-2') absdRate = 0.30;
+                else if (absdProfile === 'pr-3') absdRate = 0.35;
+                else if (absdProfile === 'foreigner') absdRate = 0.60;
+
                 const absd = price * absdRate;
                 const totalDuty = bsd + absd;
 
                 document.getElementById('b-bsd').innerText = `$${Math.round(bsd).toLocaleString()}`;
                 document.getElementById('b-absd').innerText = `$${Math.round(absd).toLocaleString()} (${absdRate * 100}%)`;
-                document.getElementById('b-totduty').innerText = `$${Math.round(totalDuty).toLocaleString()}`;
 
                 if (loanType === 'bank') {
-                    // Bank loan 75% LTV -> 25% downpayment required (5% cash booking + 20% CPF/cash)
-                    const downpayment = price * 0.25;
+                    const downpayment = price * 0.25; // 5% cash + 20% CPF/cash
                     const balanceDue = downpayment - paidFees;
-                    document.getElementById('b-balance').innerText = `$${Math.round(balanceDue).toLocaleString()} (25% downpayment less paid fees)`;
+                    document.getElementById('b-balance').innerText = `$${Math.round(balanceDue).toLocaleString()} (+ Stamp Duty $${Math.round(totalDuty).toLocaleString()})`;
                 } else {
-                    document.getElementById('b-balance').innerText = `HDB Concessionary Loan (HSR / HFE Rules)`;
+                    document.getElementById('b-balance').innerText = `HDB Loan Concessionary (HSR Rules) + Stamp Duty $${Math.round(totalDuty).toLocaleString()}`;
                 }
             }
         }
