@@ -55,7 +55,7 @@
         </div>
 
         <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-[12px] text-slate-500 text-center">
-            Date Format: <span class="text-cyan-700 font-semibold">DD/MM/YYYY</span>
+            State Cache: <span class="text-emerald-700 font-semibold">LocalStorage Active</span>
         </div>
     </aside>
 
@@ -108,7 +108,7 @@
 
                     <!-- IN-FLOW COMPLIANCE WARNING BANNER -->
                     <div id="cooling-warning" class="bg-rose-50 border border-rose-200 p-3.5 rounded-xl text-rose-800 text-xs font-semibold hidden flex items-center space-x-2">
-                        <span>⚠️️</span>
+                        <span>⚠️</span>
                         <span><b>Compliance Error:</b> OTP cannot be issued within the 7-day cooling period following Intent to Sell.</span>
                     </div>
 
@@ -125,15 +125,15 @@
                         <div class="space-y-3.5 text-sm">
                             <div>
                                 <label class="text-[12px] font-semibold text-slate-600">Property Price (SGD)</label>
-                                <input type="number" id="s-price" value="800000" oninput="updateCalculations()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                                <input type="number" id="s-price" value="800000" oninput="saveState(); updateCalculations();" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
                             </div>
                             <div>
                                 <label class="text-[12px] font-semibold text-slate-600">Outstanding Loan (SGD)</label>
-                                <input type="number" id="s-loan" value="300000" oninput="toggleLoanInstitution(); updateCalculations();" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                                <input type="number" id="s-loan" value="300000" oninput="toggleLoanInstitution(); saveState(); updateCalculations();" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
                             </div>
                             <div id="loan-institution-wrap">
                                 <label class="text-[12px] font-semibold text-slate-600">Loan Institution / Bank</label>
-                                <select id="s-loaninstitution" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                                <select id="s-loaninstitution" onchange="saveState()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
                                     <option value="HDB">HDB Loan</option>
                                     <option value="DBS">DBS Bank</option>
                                     <option value="UOB">UOB Bank</option>
@@ -147,11 +147,11 @@
                             </div>
                             <div>
                                 <label class="text-[12px] font-semibold text-slate-600">Seller 1 CPF Refund (Prin + Accrued)</label>
-                                <input type="number" id="s-cpf1" value="150000" oninput="updateCalculations()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                                <input type="number" id="s-cpf1" value="150000" oninput="saveState(); updateCalculations();" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
                             </div>
                             <div>
                                 <label class="text-[12px] font-semibold text-slate-600">Seller 2 CPF Refund (Prin + Accrued)</label>
-                                <input type="number" id="s-cpf2" value="120000" oninput="updateCalculations()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                                <input type="number" id="s-cpf2" value="120000" oninput="saveState(); updateCalculations();" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
                             </div>
                             
                             <!-- Ledger Table Breakdown -->
@@ -168,7 +168,7 @@
                     <!-- SEPARATE NEGATIVE SALES EXPLANATION CARD -->
                     <div id="s-neg-alert" class="p-4 bg-rose-50 rounded-2xl border border-rose-200 text-rose-800 text-xs hidden space-y-1">
                         <div class="font-bold flex items-center space-x-1.5 text-sm">
-                            <span>⚠️️</span>
+                            <span>⚠️</span>
                             <span>Negative Sales Triggered</span>
                         </div>
                         <p class="leading-relaxed">The sale remainder is insufficient to cover total CPF refunds. Additional cash top-up or waiver approval may be required.</p>
@@ -221,7 +221,7 @@
         <div id="tab-proceeds" class="space-y-6 max-w-5xl mx-auto w-full hidden"><div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">Net Cash Proceeds & Negative Sales Calculator</h2></div></div>
         <div id="tab-ra" class="space-y-6 max-w-5xl mx-auto w-full hidden"><div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">CPF Retirement Account (RA) & FRS Checker</h2></div></div>
         <div id="tab-progressive" class="space-y-6 max-w-5xl mx-auto w-full hidden"><div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">Private New Launch Progressive Payment Calculator</h2></div></div>
-        <div id="tab-taxes" class="space-y-6 max-w-5xl mx-auto w-full hidden"><div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">Stamp Duty, SSD Matrix</h2></div></div>
+        <div id="tab-taxes" class="space-y-6 max-w-5xl mx-auto w-full hidden"><div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">Stamp Duty & SSD Matrix</h2></div></div>
         <div id="tab-portals" class="space-y-6 max-w-5xl mx-auto w-full hidden"><div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">Official Working File Portals & Hyperlinks Hub</h2></div></div>
 
     </main>
@@ -294,6 +294,37 @@
             }
         };
 
+        function saveState() {
+            const state = {
+                price: document.getElementById('s-price')?.value,
+                loan: document.getElementById('s-loan')?.value,
+                institution: document.getElementById('s-loaninstitution')?.value,
+                cpf1: document.getElementById('s-cpf1')?.value,
+                cpf2: document.getElementById('s-cpf2')?.value,
+                dates: {}
+            };
+            document.querySelectorAll('#flow-container input[type="date"]').forEach((inp, idx) => {
+                state.dates[idx] = inp.value;
+            });
+            localStorage.setItem('propnex_command_center_state', JSON.stringify(state));
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('propnex_command_center_state');
+            if(!saved) return false;
+            try {
+                const state = JSON.parse(saved);
+                if(state.price !== undefined) document.getElementById('s-price').value = state.price;
+                if(state.loan !== undefined) document.getElementById('s-loan').value = state.loan;
+                if(state.institution !== undefined) document.getElementById('s-loaninstitution').value = state.institution;
+                if(state.cpf1 !== undefined) document.getElementById('s-cpf1').value = state.cpf1;
+                if(state.cpf2 !== undefined) document.getElementById('s-cpf2').value = state.cpf2;
+                return state.dates || {};
+            } catch(e) {
+                return false;
+            }
+        }
+
         function switchClientType(type) {
             clientType = type;
             document.getElementById('btn-client-seller').className = type === 'seller' ? "px-5 py-2.5 rounded-lg text-sm font-semibold bg-cyan-600 text-white transition" : "px-5 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:text-slate-900 transition";
@@ -360,6 +391,8 @@
             
             document.getElementById('flow-title').innerText = `${clientType.toUpperCase()} Mode: ${currentMode === 'hdb' ? "HDB Resale Flow" : (currentMode === 'pte' ? "Private Resale Flow" : "Sell & Buy Transition")}`;
 
+            const savedDates = loadState() || {};
+
             container.innerHTML = data.map((step, idx) => {
                 let extraAttrs = "";
                 let extraHtml = "";
@@ -376,11 +409,12 @@
                 if(step.isExtension) extraAttrs = `id="input-extension-date" readonly`;
 
                 let isLocked = (step.isCooling || step.isCompletion || step.isExtension);
+                let dateVal = savedDates[idx] || step.defaultDate;
 
                 let dateWidgetHtml = isLocked ? `
-                    <input type="date" id="${step.isCooling ? 'input-cooling-date' : (step.isCompletion ? 'input-completion-date' : 'input-extension-date')}" value="${step.defaultDate}" readonly class="bg-slate-100 text-slate-500 font-mono text-xs font-semibold px-2.5 py-1 rounded-lg outline-none cursor-not-allowed">
+                    <input type="date" id="${step.isCooling ? 'input-cooling-date' : (step.isCompletion ? 'input-completion-date' : 'input-extension-date')}" value="${dateVal}" readonly class="bg-slate-100 text-slate-500 font-mono text-xs font-semibold px-2.5 py-1 rounded-lg outline-none cursor-not-allowed">
                 ` : `
-                    <input type="date" value="${step.defaultDate}" ${extraAttrs} oninput="syncDateChanges(this)" class="bg-white border border-slate-300 text-cyan-800 font-mono text-xs font-semibold px-2.5 py-1 rounded-lg outline-none focus:border-cyan-600 shadow-sm">
+                    <input type="date" value="${dateVal}" data-index="${idx}" ${extraAttrs} oninput="syncDateChanges(this)" class="bg-white border border-slate-300 text-cyan-800 font-mono text-xs font-semibold px-2.5 py-1 rounded-lg outline-none focus:border-cyan-600 shadow-sm">
                 `;
 
                 return `
@@ -404,6 +438,7 @@
         }
 
         function syncDateChanges(input) {
+            saveState();
             if(input.id === 'input-intent-date') handleIntentDateChange(input);
             if(input.id === 'input-otp-date') handleOtpDateChange(input);
             if(input.id === 'input-acceptance-date') handleAcceptanceDateChange(input);
@@ -452,6 +487,7 @@
                     extensionInput.value = extDate.toISOString().split('T')[0];
                 }
             }
+            saveState();
         }
 
         function validateOtpDate() {
@@ -552,9 +588,12 @@
             }
         }
 
+        // Initialize App State
+        loadState();
         switchClientType('seller');
         loadTemplate('hdb');
         toggleLoanInstitution();
+        updateCalculations();
     </script>
 </body>
 </html>
