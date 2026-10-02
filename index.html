@@ -102,12 +102,6 @@
                         </div>
                     </div>
 
-                    <!-- IN-FLOW COMPLIANCE WARNING BANNER -->
-                    <div id="cooling-warning" class="bg-rose-50 border border-rose-200 p-3.5 rounded-xl text-rose-800 text-xs font-semibold hidden flex items-center space-x-2">
-                        <span>⚠️</span>
-                        <span><b>Compliance Error:</b> OTP cannot be issued within the 7-day cooling period following Intent to Sell.</span>
-                    </div>
-
                     <div id="flow-container" class="space-y-4 relative before:absolute before:inset-0 before:left-5 before:w-0.5 before:bg-slate-200">
                         <!-- Injected via JS -->
                     </div>
@@ -234,14 +228,6 @@
             btn.className = "nav-btn w-full flex items-center space-x-3.5 px-4 py-3.5 rounded-xl font-semibold bg-cyan-600 text-white transition shadow-md shadow-cyan-600/20";
         }
 
-        function formatDateDDMMYYYY(dateObj) {
-            if (isNaN(dateObj.getTime())) return "";
-            const day = String(dateObj.getDate()).padStart(2, '0');
-            const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-            const year = dateObj.getFullYear();
-            return `${day}/${month}/${year}`;
-        }
-
         let currentMode = 'hdb';
         let clientType = 'seller';
 
@@ -249,16 +235,16 @@
             seller: {
                 hdb: [
                     { title: "1. Listing Presentation & Initial Checks", defaultDate: "2026-10-02", desc: "Check ethnic quota at start of month; inspect flat details and verify HFE / MyHDB financial eligibility." },
-                    { title: "2. Register Intent to Sell", defaultDate: "2026-10-09", desc: "Register Intent to Sell on the HDB Flat Portal to retrieve flat eligibility and financial plan.", isIntent: true },
-                    { title: "3. 7-Day Cooling Period", defaultDate: "2026-10-16", desc: "Mandatory 7-day cooling period before an OTP can be officially issued.", isCooling: true },
-                    { title: "4. Issue OTP & Collect Option Fee", defaultDate: "2026-10-17", desc: "Issue OTP and collect Option Fee (Min $1 up to Max $1,000 via Cash/PayNow).", isOtp: true },
+                    { title: "2. Register Intent to Sell", defaultDate: "2026-10-09", desc: "Register Intent to Sell on the HDB Flat Portal to retrieve flat eligibility and financial plan." },
+                    { title: "3. 7-Day Cooling Period", defaultDate: "2026-10-16", desc: "Mandatory 7-day cooling period before an OTP can be officially issued." },
+                    { title: "4. Issue OTP & Collect Option Fee", defaultDate: "2026-10-17", desc: "Issue OTP and collect Option Fee (Min $1 up to Max $1,000 via Cash/PayNow)." },
                     { title: "5. Valuation Walkthrough (if any)", defaultDate: "2026-10-24", desc: "Conduct valuation assessment if requested by buyer. $0 cost incurred for sellers." },
-                    { title: "6. Exercise of OTP by Buyers", defaultDate: "2026-11-07", desc: "Buyer exercises OTP and pays Exercise Fee (Min $1, combined fee ≤ $5,000).", isExercise: true },
-                    { title: "7. Resale Application Submission", defaultDate: "2026-11-14", desc: "Submit resale application on HDB Flat Portal within specified days after OTP exercise.", isResaleSub: true },
-                    { title: "8. Resale Application Acceptance", defaultDate: "2026-11-21", desc: "HDB formally accepts the resale application following administrative verification.", isAcceptance: true },
+                    { title: "6. Exercise of OTP by Buyers", defaultDate: "2026-11-07", desc: "Buyer exercises OTP and pays Exercise Fee (Min $1, combined fee ≤ $5,000)." },
+                    { title: "7. Resale Application Submission", defaultDate: "2026-11-14", desc: "Submit resale application on HDB Flat Portal with supporting documents." },
+                    { title: "8. Resale Application Acceptance", defaultDate: "2026-11-21", desc: "HDB formally accepts the resale application following administrative verification." },
                     { title: "9. Endorsement & HDB Branch Inspection", defaultDate: "2026-11-28", desc: "Endorse resale documents and coordinate HDB Branch Office inspection if required." },
-                    { title: "10. Resale Completion & Handover", defaultDate: "2026-01-16", desc: "Resale completion takes place 8 weeks after resale application acceptance. Key handover.", isCompletion: true },
-                    { title: "11. Extension of Stay (if any)", defaultDate: "2026-04-16", desc: "Optional extension of stay in the flat after completion, up to a maximum duration of 3 months.", isExtension: true }
+                    { title: "10. Resale Completion & Handover", defaultDate: "2026-01-16", desc: "Resale completion takes place 8 weeks after resale application acceptance. Key handover." },
+                    { title: "11. Extension of Stay (if any)", defaultDate: "2026-04-16", desc: "Optional extension of stay in the flat after completion, up to a maximum duration of 3 months." }
                 ],
                 pte: [
                     { title: "1. Listing & Tenancy Review", defaultDate: "2026-10-02", desc: "Inspect unit, determine vacant possession or sale with tenancy, and confirm commission structure." },
@@ -296,7 +282,6 @@
                 institution: document.getElementById('s-loaninstitution')?.value,
                 cpf1: document.getElementById('s-cpf1')?.value,
                 cpf2: document.getElementById('s-cpf2')?.value,
-                resaleDays: document.getElementById('input-resale-days')?.value || 7,
                 dates: {}
             };
             document.querySelectorAll('#flow-container input[type="date"]').forEach((inp, idx) => {
@@ -379,45 +364,13 @@
                 { title: "3. Purchase of Next Property", defaultDate: "2026-12-15", desc: "Purchase next property utilising unlocked proceeds." }
             ] : timelineFlows[clientType][currentMode];
             
-            document.getElementById('flow-title').innerText = `${clientType.toUpperCase()} Mode:${currentMode === 'hdb' ? "HDB Resale Flow" : (currentMode === 'pte' ? "Private Resale Flow" : "Sell & Buy Transition")}`;
+            document.getElementById('flow-title').innerText = `${clientType.toUpperCase()} Mode: ${currentMode === 'hdb' ? "HDB Resale Flow" : (currentMode === 'pte' ? "Private Resale Flow" : "Sell & Buy Transition")}`;
 
             const savedState = loadState() || {};
             const savedDates = savedState.dates || {};
-            const savedResaleDays = savedState.resaleDays || 7;
 
             container.innerHTML = data.map((step, idx) => {
-                let extraAttrs = "";
-                let extraHtml = "";
-
-                if(step.isIntent) extraAttrs = `id="input-intent-date" onchange="handleIntentDateChange(this)"`;
-                if(step.isCooling) extraAttrs = `id="input-cooling-date" readonly`;
-                if(step.isOtp) extraAttrs = `id="input-otp-date" onchange="handleOtpDateChange(this)"`;
-                if(step.isExercise) {
-                    extraAttrs = `id="input-exercise-date" onchange="handleExerciseDateChange(this)"`;
-                    extraHtml = `<div class="mt-2 text-xs font-mono text-cyan-800 bg-cyan-50 p-2 rounded border border-cyan-200 flex justify-between items-center"><span>⏳ Hard OTP Expiry Deadline (+3 Calendar Weeks):</span> <span id="otp-deadline-disp" class="font-bold">--</span></div>`;
-                }
-                if(step.isResaleSub) {
-                    extraHtml = `
-                        <div class="mt-2 flex items-center space-x-3 text-xs font-mono text-slate-800 bg-slate-100 p-2 rounded border border-slate-200">
-                            <span>Add Days After Exercise:</span>
-                            <input type="number" id="input-resale-days" value="${savedResaleDays}" min="1" max="90" oninput="handleResaleDaysChange(this)" class="w-16 bg-white border border-slate-300 px-2 py-1 rounded text-center font-bold">
-                            <span>Days &rarr; Submission Deadline:</span>
-                            <input type="date" id="input-resalesub-date" readonly class="bg-slate-200 text-slate-700 font-semibold px-2 py-1 rounded cursor-not-allowed">
-                        </div>
-                    `;
-                }
-                if(step.isAcceptance) extraAttrs = `id="input-acceptance-date" onchange="handleAcceptanceDateChange(this)"`;
-                if(step.isCompletion) extraAttrs = `id="input-completion-date" readonly`;
-                if(step.isExtension) extraAttrs = `id="input-extension-date" readonly`;
-
-                let isLocked = (step.isCooling || step.isCompletion || step.isExtension || (step.isResaleSub && clientType === 'seller' && currentMode === 'hdb'));
                 let dateVal = savedDates[idx] || step.defaultDate;
-
-                let dateWidgetHtml = isLocked && !step.isResaleSub ? `
-                    <input type="date" id="${step.isCooling ? 'input-cooling-date' : (step.isCompletion ? 'input-completion-date' : 'input-extension-date')}" value="${dateVal}" readonly class="bg-slate-100 text-slate-500 font-mono text-xs font-semibold px-2.5 py-1 rounded-lg outline-none cursor-not-allowed">
-                ` : (!step.isResaleSub ? `
-                    <input type="date" id="step-date-${idx}" value="${dateVal}" data-index="${idx}" ${extraAttrs} oninput="syncDateChanges(this)" class="bg-white border border-slate-300 text-cyan-800 font-mono text-xs font-semibold px-2.5 py-1 rounded-lg outline-none focus:border-cyan-600 shadow-sm">
-                ` : ``);
 
                 return `
                     <div class="relative flex items-start space-x-4 pl-2">
@@ -425,10 +378,9 @@
                         <div class="bg-slate-50 border border-slate-200 p-4.5 rounded-xl flex-1 shadow-sm space-y-2">
                             <div class="flex justify-between items-center">
                                 <span class="font-bold text-slate-900 text-sm">${step.title}</span>
-                                ${dateWidgetHtml}
+                                <input type="date" value="${dateVal}" data-index="${idx}" oninput="saveState()" class="bg-white border border-slate-300 text-cyan-800 font-mono text-xs font-semibold px-2.5 py-1 rounded-lg outline-none focus:border-cyan-600 shadow-sm cursor-pointer">
                             </div>
                             <p class="text-slate-700 text-sm leading-relaxed">${step.desc}</p>
-                            ${extraHtml}
                         </div>
                     </div>
                 `;
@@ -439,111 +391,6 @@
             if(savedState.institution !== undefined) document.getElementById('s-loaninstitution').value = savedState.institution;
             if(savedState.cpf1 !== undefined) document.getElementById('s-cpf1').value = savedState.cpf1;
             if(savedState.cpf2 !== undefined) document.getElementById('s-cpf2').value = savedState.cpf2;
-
-            if(clientType === 'seller' && currentMode === 'hdb') {
-                updateDependentDates();
-            }
-        }
-
-        function syncDateChanges(input) {
-            saveState();
-            updateDependentDates();
-        }
-
-        function handleIntentDateChange(el) { updateDependentDates(); }
-        function handleOtpDateChange(el) { validateOtpDate(); updateDependentDates(); }
-        function handleExerciseDateChange(el) { updateDependentDates(); }
-        function handleResaleDaysChange(el) { saveState(); updateDependentDates(); }
-        function handleAcceptanceDateChange(el) { updateDependentDates(); }
-
-        function updateDependentDates() {
-            const intentInput = document.getElementById('input-intent-date');
-            const coolingInput = document.getElementById('input-cooling-date');
-            const otpInput = document.getElementById('input-otp-date');
-            const exerciseInput = document.getElementById('input-exercise-date');
-            const resaleDaysInput = document.getElementById('input-resale-days');
-            const resaleSubInput = document.getElementById('input-resalesub-date');
-            const acceptanceInput = document.getElementById('input-acceptance-date');
-            const completionInput = document.getElementById('input-completion-date');
-            const extensionInput = document.getElementById('input-extension-date');
-
-            // 1. Automatically push forward preceding/locked dates based on step 1 & 2 inputs
-            if(intentInput && coolingInput) {
-                const intentDate = new Date(intentInput.value);
-                if(!isNaN(intentDate.getTime())) {
-                    let coolingDate = new Date(intentDate);
-                    coolingDate.setDate(coolingDate.getDate() + 7);
-                    coolingInput.value = coolingDate.toISOString().split('T')[0];
-                    if(otpInput) otpInput.min = coolingDate.toISOString().split('T')[0];
-                    validateOtpDate();
-                }
-            }
-
-            // 2. OTP Expiry Hard Deadline (+3 calendar weeks from OTP issuance)
-            if(otpInput) {
-                const otpDate = new Date(otpInput.value);
-                if(!isNaN(otpDate.getTime())) {
-                    let expiryDate = new Date(otpDate);
-                    expiryDate.setDate(expiryDate.getDate() + 21);
-                    const deadlineDisp = document.getElementById('otp-deadline-disp');
-                    if(deadlineDisp) deadlineDisp.innerText = formatDateDDMMYYYY(expiryDate);
-                    if(exerciseInput) exerciseInput.min = otpInput.value;
-                }
-            }
-
-            // 3. Resale Application Submission Deadline (+X days from Exercise of OTP)
-            if(exerciseInput && resaleDaysInput && resaleSubInput) {
-                const exerciseDate = new Date(exerciseInput.value);
-                const addDays = parseInt(resaleDaysInput.value) || 0;
-                if(!isNaN(exerciseDate.getTime())) {
-                    let subDate = new Date(exerciseDate);
-                    subDate.setDate(subDate.getDate() + addDays);
-                    resaleSubInput.value = subDate.toISOString().split('T')[0];
-                    if(acceptanceInput) acceptanceInput.min = subDate.toISOString().split('T')[0];
-                }
-            }
-
-            // 4. Completion date (+8 weeks from Acceptance) & Extension of Stay (+3 calendar months)
-            if(acceptanceInput && completionInput && extensionInput) {
-                const accDate = new Date(acceptanceInput.value);
-                if(!isNaN(accDate.getTime())) {
-                    let compDate = new Date(accDate);
-                    compDate.setDate(compDate.getDate() + 56);
-                    completionInput.value = compDate.toISOString().split('T')[0];
-
-                    let extDate = new Date(compDate);
-                    extDate.setMonth(extDate.getMonth() + 3);
-                    extensionInput.value = extDate.toISOString().split('T')[0];
-                }
-            }
-
-            // 5. Enforce chronological date boundaries across pickers
-            const allDateInputs = document.querySelectorAll('#flow-container input[type="date"]');
-            for(let i = 1; i < allDateInputs.length; i++) {
-                if(allDateInputs[i-1].value && !allDateInputs[i].readOnly && allDateInputs[i].id !== 'input-resalesub-date') {
-                    allDateInputs[i].min = allDateInputs[i-1].value;
-                }
-            }
-
-            saveState();
-        }
-
-        function validateOtpDate() {
-            const coolingInput = document.getElementById('input-cooling-date');
-            const otpInput = document.getElementById('input-otp-date');
-            const warningBox = document.getElementById('cooling-warning');
-            if(!coolingInput || !otpInput || !warningBox) return;
-
-            const coolingDate = new Date(coolingInput.value);
-            const otpDate = new Date(otpInput.value);
-
-            if(!isNaN(coolingDate.getTime()) && !isNaN(otpDate.getTime())) {
-                if(otpDate < coolingDate) {
-                    warningBox.classList.remove('hidden');
-                } else {
-                    warningBox.classList.add('hidden');
-                }
-            }
         }
 
         function toggleLoanInstitution() {
