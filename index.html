@@ -55,7 +55,7 @@
         </div>
 
         <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-[12px] text-slate-500 text-center">
-            Testing Mode: <span class="text-emerald-700 font-semibold">Active (No Login)</span>
+            Format: <span class="text-cyan-700 font-semibold">DD MMM YYYY</span>
         </div>
     </aside>
 
@@ -244,6 +244,15 @@
             });
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
             btn.className = "nav-btn w-full flex items-center space-x-3.5 px-4 py-3.5 rounded-xl font-semibold bg-cyan-600 text-white transition shadow-md shadow-cyan-600/20";
+        }
+
+        function formatDateDDMMMYYYY(dateObj) {
+            if (isNaN(dateObj.getTime())) return "";
+            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            const day = String(dateObj.getDate()).padStart(2, '0');
+            const month = months[dateObj.getMonth()];
+            const year = dateObj.getFullYear();
+            return `${day} ${month} ${year}`;
         }
 
         let currentMode = 'hdb';
@@ -445,7 +454,7 @@
                         let expiryDate = new Date(otpDate);
                         expiryDate.setDate(expiryDate.getDate() + 21); // exactly 3 calendar weeks (21 days)
                         const deadlineDisp = document.getElementById('otp-deadline-disp');
-                        if(deadlineDisp) deadlineDisp.innerText = expiryDate.toISOString().split('T')[0];
+                        if(deadlineDisp) deadlineDisp.innerText = formatDateDDMMMYYYY(expiryDate);
                     }
                     validateOtpDate();
                 }
@@ -509,7 +518,7 @@
                         const total = f1 + f2;
                         if (f1 < 1 || f1 > 1000) {
                             msg.className = "text-xs font-semibold text-rose-600";
-                            msg.innerText = "⚠️️ Option fee must be between $1 and $1,000.";
+                            msg.innerText = "⚠️ Option fee must be between $1 and $1,000.";
                         } else if (f2 < 1) {
                             msg.className = "text-xs font-semibold text-rose-600";
                             msg.innerText = "⚠️ Exercise fee must be at least $1.";
