@@ -64,16 +64,16 @@
     <main class="flex-1 flex flex-col bg-slate-50 overflow-y-auto p-8 space-y-6">
 
         <!-- TAB 1: TIMELINES -->
-        <div id="tab-timelines" class="space-y-6 max-w-6xl mx-auto w-full">
+        <div id="tab-timelines" class="space-y-6 max-w-7xl mx-auto w-full">
             <div class="flex justify-between items-center bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                 <div>
                     <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Timelines</h2>
-                    <p class="text-sm text-slate-600 mt-1">Walk your clients through visual step-by-step process flows with custom dates and fee controls.</p>
+                    <p class="text-sm text-slate-600 mt-1">Tailor presentations for Seller or Buyer clients with live financial and stamp duty calculations.</p>
                 </div>
-                <div class="flex space-x-3">
-                    <button onclick="loadTemplate('hdb')" id="btn-tmpl-hdb" class="px-5 py-3 rounded-xl text-sm font-semibold bg-cyan-600 text-white transition shadow-sm">HDB Resale Flow</button>
-                    <button onclick="loadTemplate('pte')" id="btn-tmpl-pte" class="px-5 py-3 rounded-xl text-sm font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Private Resale Flow</button>
-                    <button onclick="loadTemplate('transition')" id="btn-tmpl-trans" class="px-5 py-3 rounded-xl text-sm font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Sell & Buy Transition</button>
+                <!-- Seller vs Buyer Client Toggle -->
+                <div class="flex bg-slate-100 p-1.5 rounded-xl border border-slate-200">
+                    <button onclick="switchClientType('seller')" id="btn-client-seller" class="px-5 py-2.5 rounded-lg text-sm font-semibold bg-cyan-600 text-white transition">Seller Presentation</button>
+                    <button onclick="switchClientType('buyer')" id="btn-client-buyer" class="px-5 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:text-slate-900 transition">Buyer Presentation</button>
                 </div>
             </div>
 
@@ -96,26 +96,35 @@
                 </div>
             </div>
 
+            <!-- DYNAMIC CONTENT AREA BASED ON SELLER / BUYER MODE -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Visual Flow Process Container -->
+                
+                <!-- LEFT/CENTER: TIMELINE FLOW -->
                 <div class="lg:col-span-2 bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-5">
-                    <h3 id="flow-title" class="text-base font-bold text-cyan-700 border-b border-slate-100 pb-3">HDB Resale Step-by-Step Milestone Flow</h3>
+                    <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                        <h3 id="flow-title" class="text-base font-bold text-cyan-700">Milestone Process Flow</h3>
+                        <div class="flex space-x-2">
+                            <button onclick="loadTemplate('hdb')" id="btn-tmpl-hdb" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-cyan-600 text-white transition">HDB Resale</button>
+                            <button onclick="loadTemplate('pte')" id="btn-tmpl-pte" class="px-3.5 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Private Resale</button>
+                            <button onclick="loadTemplate('transition')" id="btn-tmpl-trans" class="px-3.5 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition" id="trans-btn-wrap">Sell & Buy</button>
+                        </div>
+                    </div>
                     
-                    <!-- Dynamic Fee Input Bar -->
+                    <!-- Fee Inputs Bar -->
                     <div id="timeline-fee-inputs" class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
                         <div class="text-xs font-bold text-slate-800 uppercase tracking-wider">Transaction Price & Fee Parameters</div>
                         <div class="grid grid-cols-3 gap-3">
                             <div>
                                 <label class="text-[12px] font-semibold text-slate-600">Property Price (SGD)</label>
-                                <input type="number" id="t-price" value="800000" oninput="updateFeeCalculations()" class="w-full mt-1 bg-white border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
+                                <input type="number" id="t-price" value="800000" oninput="updateCalculations()" class="w-full mt-1 bg-white border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
                             </div>
                             <div id="fee-box-1">
                                 <label class="text-[12px] font-semibold text-slate-600" id="lbl-fee1">Option Fee ($1 - $1,000)</label>
-                                <input type="number" id="t-fee1" value="1000" min="1" max="1000" oninput="updateFeeCalculations()" class="w-full mt-1 bg-white border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
+                                <input type="number" id="t-fee1" value="1000" min="1" max="1000" oninput="updateCalculations()" class="w-full mt-1 bg-white border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
                             </div>
                             <div id="fee-box-2">
                                 <label class="text-[12px] font-semibold text-slate-600" id="lbl-fee2">Exercise Fee (Min $1)</label>
-                                <input type="number" id="t-fee2" value="4000" min="1" max="4999" oninput="updateFeeCalculations()" class="w-full mt-1 bg-white border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
+                                <input type="number" id="t-fee2" value="4000" min="1" max="4999" oninput="updateCalculations()" class="w-full mt-1 bg-white border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
                             </div>
                         </div>
                         <div id="fee-validation-msg" class="text-xs font-semibold text-emerald-700">✓ Fees comply with regulations.</div>
@@ -126,21 +135,65 @@
                     </div>
                 </div>
 
-                <!-- HDB Loan vs Bank Loan Financial Breakdown Box -->
+                <!-- RIGHT COLUMN: SELLER FINANCIAL ENGINE OR BUYER FINANCIAL BREAKDOWN -->
                 <div class="space-y-6">
-                    <div id="loan-breakdown-card" class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-4">
-                        <h3 class="text-base font-bold text-cyan-800 border-b border-slate-100 pb-3">Loan Route Comparison (HDB vs Bank)</h3>
-                        <div class="space-y-3.5 text-sm text-slate-700">
-                            <div class="p-3 bg-cyan-50/60 rounded-xl border border-cyan-100 space-y-1">
-                                <div class="font-bold text-cyan-900">🏛️ HDB Loan Route</div>
-                                <p class="text-xs text-slate-600 leading-relaxed">Requires valid <b>HFE Letter</b> *before* issuing or accepting the OTP. Financing is pegged to HSR.</p>
+                    
+                    <!-- SELLER FINANCIAL SIDEBAR CARD -->
+                    <div id="sidebar-seller-card" class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-4">
+                        <h3 class="text-base font-bold text-cyan-800 border-b border-slate-100 pb-3">Seller Proceeds & Financial Link</h3>
+                        <div class="space-y-3.5 text-sm">
+                            <div>
+                                <label class="text-[12px] font-semibold text-slate-600">Outstanding Loan (HDB/Bank)</label>
+                                <input type="number" id="s-loan" value="300000" oninput="updateCalculations()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
                             </div>
-                            <div class="p-3 bg-blue-50/60 rounded-xl border border-blue-100 space-y-1">
-                                <div class="font-bold text-blue-900">🏦 Bank Loan Route</div>
-                                <p class="text-xs text-slate-600 leading-relaxed">Requires a valid <b>Letter of Offer</b> from the financial institution *before* exercising the OTP.</p>
+                            <div>
+                                <label class="text-[12px] font-semibold text-slate-600">Seller 1 CPF Refund (Prin + Accrued)</label>
+                                <input type="number" id="s-cpf1" value="150000" oninput="updateCalculations()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[12px] font-semibold text-slate-600">Seller 2 CPF Refund (Prin + Accrued)</label>
+                                <input type="number" id="s-cpf2" value="120000" oninput="updateCalculations()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                            </div>
+                            
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2 font-mono text-xs">
+                                <div class="flex justify-between text-slate-600"><span>Price Less Loan:</span> <span id="s-rem" class="font-bold text-slate-900"></span></div>
+                                <div class="flex justify-between text-slate-600"><span>Total CPF Refunds:</span> <span id="s-totcpf" class="font-bold text-rose-600"></span></div>
+                                <div class="flex justify-between border-t border-slate-200 pt-2 text-sm font-bold"><span>Net Cash Proceeds:</span> <span id="s-net" class="text-cyan-700"></span></div>
+                            </div>
+                            <div id="s-neg-alert" class="p-3 bg-rose-50 rounded-xl border border-rose-200 text-rose-800 text-xs hidden">
+                                ⚠️ Negative sales triggered! Sale remainder is insufficient to cover total CPF refunds.
                             </div>
                         </div>
                     </div>
+
+                    <!-- BUYER FINANCIAL SIDEBAR CARD -->
+                    <div id="sidebar-buyer-card" class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-4 hidden">
+                        <h3 class="text-base font-bold text-cyan-800 border-b border-slate-100 pb-3">Buyer Financing & Stamp Duty Breakdown</h3>
+                        <div class="space-y-3.5 text-sm">
+                            <div>
+                                <label class="text-[12px] font-semibold text-slate-600">Loan Type</label>
+                                <select id="b-loantype" onchange="updateCalculations()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                                    <option value="hdb">HDB Loan (HFE Required)</option>
+                                    <option value="bank">Bank Loan (75% LTV)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[12px] font-semibold text-slate-600">Buyer Profile (Stamp Duty)</label>
+                                <select id="b-profile" onchange="updateCalculations()" class="w-full mt-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 outline-none">
+                                    <option value="sc">Singapore Citizen (0% ABSD)</option>
+                                    <option value="pr">Permanent Resident (5% ABSD)</option>
+                                </select>
+                            </div>
+
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2 font-mono text-xs">
+                                <div class="flex justify-between text-slate-600"><span>Buyer's Stamp Duty (BSD):</span> <span id="b-bsd" class="font-bold text-slate-900"></span></div>
+                                <div class="flex justify-between text-slate-600"><span>Additional BSD (ABSD):</span> <span id="b-absd" class="font-bold text-rose-600"></span></div>
+                                <div class="flex justify-between text-slate-600"><span>Total Stamp Duty:</span> <span id="b-totduty" class="font-bold text-slate-900"></span></div>
+                                <div class="flex justify-between border-t border-slate-200 pt-2 text-sm font-bold" id="b-bal-row"><span>Balance Due at Completion:</span> <span id="b-balance" class="text-cyan-700"></span></div>
+                            </div>
+                        </div>
+                    </div>
+
                     <a href="https://services2.hdb.gov.in/webapp/AA29A/AA29ASecurity.jsp" target="_blank" class="w-full block text-center bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-md shadow-cyan-600/20">🔗 Launch HDB Flat Portal & HFE Check</a>
                 </div>
             </div>
@@ -373,77 +426,115 @@
         }
 
         let currentMode = 'hdb';
+        let clientType = 'seller'; // 'seller' or 'buyer'
 
         const timelineFlows = {
-            hdb: [
-                { title: "1. Listing Presentation & Initial Checks", defaultDate: "2026-10-02", desc: "Check ethnic quota at start of month; inspect flat details and verify HFE / MyHDB financial eligibility." },
-                { title: "2. Register Intent to Sell & Issue OTP", defaultDate: "2026-10-09", desc: "Collect Option Fee (Min $1 up to Max $1,000 via Cash/PayNow). Form part of purchase/sale price." },
-                { title: "3. Resale Submission & Valuation", defaultDate: "2026-10-16", desc: "Submit resale application on HDB Flat Portal. Request valuation ($120) if required." },
-                { title: "4. HDB Approval & Loan Letter", defaultDate: "2026-10-30", desc: "HDB approval. Note: HDB loan requires valid HFE before optioning; Bank loan requires Letter of Offer before exercising." },
-                { title: "5. First Appointment & Document Endorsement", defaultDate: "2026-11-13", desc: "Pay Exercise Fee (Min $1, combined Option + Exercise fee must not exceed $5,000). Endorse resale documents." },
-                { title: "6. Resale Completion & Handover", defaultDate: "2026-11-27", desc: "Cashier's order for outstanding payments. CPF refunded to OA within 10-14 working days." }
-            ],
-            pte: [
-                { title: "1. Listing & Tenancy Review", defaultDate: "2026-10-02", desc: "Inspect unit, determine vacant possession or sale with tenancy, and confirm commission structure." },
-                { title: "2. Issue OTP & Collect Option Fee", defaultDate: "2026-10-09", desc: "Issue OTP to buyer and collect Option Fee percentage payable directly to seller." },
-                { title: "3. Buyer Exercise OTP", defaultDate: "2026-10-23", desc: "Buyer exercises OTP and tops up Exercise Fee (Auto-balanced to total 5% max)." },
-                { title: "4. Law Firm Processing & Requisitions", defaultDate: "2026-11-13", desc: "Conveyancing law firms conduct title searches, requisitions, and preliminary checks." },
-                { title: "5. Loan & CPF Dispersals", defaultDate: "2026-11-27", desc: "Bank loan and CPF board prepare fund disbursals for legal completion." },
-                { title: "6. Completion & Vacant Possession", defaultDate: "2026-12-11", desc: "Key handover. CPF refunded back to OA within 10-14 working days." }
-            ],
-            transition: [
-                { title: "1. Financial & CPF Calculation", defaultDate: "2026-10-02", desc: "Review outstanding loans, CPF refunds (Seller 1 & 2), and select HDB vs Private conveyancing framework." },
-                { title: "2. Sale of Existing Property", defaultDate: "2026-11-27", desc: "Complete sale to unlock CPF funds and cash proceeds. Respect 15-month wait-out period if moving to resale HDB." },
-                { title: "3. Purchase of Next Property", defaultDate: "2026-12-15", desc: "If using private conveyancing, sale refunds can be utilised for purchase without pre-deduction at resale submission." }
-            ]
+            seller: {
+                hdb: [
+                    { title: "1. Listing Presentation & Initial Checks", defaultDate: "2026-10-02", desc: "Check ethnic quota at start of month; inspect flat details and verify HFE / MyHDB financial eligibility." },
+                    { title: "2. Register Intent to Sell & Issue OTP", defaultDate: "2026-10-09", desc: "Collect Option Fee (Min $1 up to Max $1,000 via Cash/PayNow). Form part of purchase/sale price." },
+                    { title: "3. Resale Submission & Valuation", defaultDate: "2026-10-16", desc: "Submit resale application on HDB Flat Portal. Request valuation ($120) if required." },
+                    { title: "4. HDB Approval & Loan Clearance", defaultDate: "2026-10-30", desc: "HDB approval. Ensure outstanding mortgage and CPF refund calculations align with net proceeds." },
+                    { title: "5. First Appointment & Document Endorsement", defaultDate: "2026-11-13", desc: "Pay Exercise Fee (Min $1, combined Option + Exercise fee must not exceed $5,000). Endorse resale documents." },
+                    { title: "6. Resale Completion & Handover", defaultDate: "2026-11-27", desc: "Cashier's order for outstanding payments. CPF refunded to OA within 10-14 working days." }
+                ],
+                pte: [
+                    { title: "1. Listing & Tenancy Review", defaultDate: "2026-10-02", desc: "Inspect unit, determine vacant possession or sale with tenancy, and confirm commission structure." },
+                    { title: "2. Issue OTP & Collect Option Fee", defaultDate: "2026-10-09", desc: "Issue OTP to buyer and collect Option Fee percentage payable directly to seller." },
+                    { title: "3. Buyer Exercise OTP", defaultDate: "2026-10-23", desc: "Buyer exercises OTP and tops up Exercise Fee (Auto-balanced to total 5% max)." },
+                    { title: "4. Law Firm Processing & Requisitions", defaultDate: "2026-11-13", desc: "Conveyancing law firms conduct title searches, requisitions, and preliminary checks." },
+                    { title: "5. Loan & CPF Dispersals", defaultDate: "2026-11-27", desc: "Bank loan and CPF board prepare fund disbursals for legal completion." },
+                    { title: "6. Completion & Vacant Possession", defaultDate: "2026-12-11", desc: "Key handover. CPF refunded back to OA within 10-14 working days." }
+                ]
+            },
+            buyer: {
+                hdb: [
+                    { title: "1. HFE Application & IPA Approval", defaultDate: "2026-10-02", desc: "Submit HFE application on HDB Flat Portal. Determine eligible housing grants and loan quantum before viewing." },
+                    { title: "2. Option to Purchase (OTP) & Fee", defaultDate: "2026-10-09", desc: "Negotiate purchase price and pay Option Fee (Min $1 up to Max $1,000 cash/PayNow)." },
+                    { title: "3. Resale Submission & HDB Valuation", defaultDate: "2026-10-16", desc: "Submit resale application within 7 days. Request valuation ($120) if cash-over-valuation (COV) is expected." },
+                    { title: "4. HDB / Bank Loan Finalization", defaultDate: "2026-10-30", desc: "For HDB loan: ensure HFE is valid. For Bank loan: secure Letter of Offer prior to exercising." },
+                    { title: "5. Exercise OTP & Pay Exercise Fee", defaultDate: "2026-11-13", desc: "Pay Exercise Fee (Min $1, combined total ≤ $5,000). Pay Buyer's Stamp Duty (BSD) within 14 days." },
+                    { title: "6. Completion & Key Collection", defaultDate: "2026-11-27", desc: "Attend final HDB appointment. Settle balance purchase price via CPF OA and/or cash/loan." }
+                ],
+                pte: [
+                    { title: "1. IPA & Property Search", defaultDate: "2026-10-02", desc: "Secure Approval-in-Principle (IPA) from bank. Verify ABSD status (0% SC vs 5% PR)." },
+                    { title: "2. Issue OTP & Pay Option Fee", defaultDate: "2026-10-09", desc: "Pay Option Fee (1% to 4%) directly to seller upon issuing OTP." },
+                    { title: "3. Legal Counsel & Stamp Duty", defaultDate: "2026-10-16", desc: "Appoint law firm. Pay Buyer's Stamp Duty (BSD) and ABSD within 14 days of signing/exercising." },
+                    { title: "4. Exercise OTP & Balance 5%", defaultDate: "2026-10-23", desc: "Exercise OTP by topping up Exercise Fee (Auto-balanced to total 5%)." },
+                    { title: "5. Conveyancing & Requisitions", defaultDate: "2026-11-13", desc: "Law firm processes title searches, requisitions, and loan documentation." },
+                    { title: "6. Legal Completion & Handover", defaultDate: "2026-12-11", desc: "Bank and CPF funds disbursed. Balance completion funds settled; collection of keys." }
+                ]
+            }
         };
+
+        function switchClientType(type) {
+            clientType = type;
+            document.getElementById('btn-client-seller').className = type === 'seller' ? "px-5 py-2.5 rounded-lg text-sm font-semibold bg-cyan-600 text-white transition" : "px-5 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:text-slate-900 transition";
+            document.getElementById('btn-client-buyer').className = type === 'buyer' ? "px-5 py-2.5 rounded-lg text-sm font-semibold bg-cyan-600 text-white transition" : "px-5 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:text-slate-900 transition";
+
+            const sellerCard = document.getElementById('sidebar-seller-card');
+            const buyerCard = document.getElementById('sidebar-buyer-card');
+            const transBtn = document.getElementById('btn-tmpl-trans');
+
+            if(type === 'seller') {
+                sellerCard.classList.remove('hidden');
+                buyerCard.classList.add('hidden');
+                transBtn.style.display = "inline-block";
+            } else {
+                sellerCard.classList.add('hidden');
+                buyerCard.classList.remove('hidden');
+                transBtn.style.display = "none";
+                if(currentMode === 'transition') loadTemplate('hdb');
+            }
+
+            renderTimelineFlow();
+            updateCalculations();
+        }
 
         function loadTemplate(type) {
             currentMode = type;
             ['hdb', 'pte', 'trans'].forEach(t => {
                 const btn = document.getElementById(`btn-tmpl-${t}`);
                 if(t === type || (t === 'trans' && type === 'transition')) {
-                    btn.className = "px-5 py-3 rounded-xl text-sm font-semibold bg-cyan-600 text-white transition shadow-sm";
+                    btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-cyan-600 text-white transition";
                 } else {
-                    btn.className = "px-5 py-3 rounded-xl text-sm font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition";
+                    btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition";
                 }
             });
 
             const feeInputs = document.getElementById('timeline-fee-inputs');
-            const loanCard = document.getElementById('loan-breakdown-card');
-
             if(type === 'transition') {
                 feeInputs.classList.add('hidden');
-                loanCard.classList.add('hidden');
-            } else if(type === 'hdb') {
-                feeInputs.classList.remove('hidden');
-                loanCard.classList.remove('hidden');
-                const f1 = document.getElementById('t-fee1');
-                const f2 = document.getElementById('t-fee2');
-                document.getElementById('lbl-fee1').innerText = "Option Fee ($1 - $1,000)";
-                document.getElementById('lbl-fee2').innerText = "Exercise Fee (Min $1)";
-                f1.value = 1000; f1.disabled = false;
-                f2.value = 4000; f2.disabled = false;
             } else {
                 feeInputs.classList.remove('hidden');
-                loanCard.classList.add('hidden');
                 const f1 = document.getElementById('t-fee1');
                 const f2 = document.getElementById('t-fee2');
-                document.getElementById('lbl-fee1').innerText = "Option Fee % (1% - 4%)";
-                document.getElementById('lbl-fee2').innerText = "Exercise Fee % (Auto-balanced)";
-                f1.value = 1; f1.disabled = false;
-                f2.value = 4; f2.disabled = true;
+                if(type === 'hdb') {
+                    document.getElementById('lbl-fee1').innerText = "Option Fee ($1 - $1,000)";
+                    document.getElementById('lbl-fee2').innerText = "Exercise Fee (Min $1)";
+                    f1.value = 1000; f1.disabled = false;
+                    f2.value = 4000; f2.disabled = false;
+                } else {
+                    document.getElementById('lbl-fee1').innerText = "Option Fee % (1% - 4%)";
+                    document.getElementById('lbl-fee2').innerText = "Exercise Fee % (Auto-balanced)";
+                    f1.value = 1; f1.disabled = false;
+                    f2.value = 4; f2.disabled = true;
+                }
             }
 
             renderTimelineFlow();
-            updateFeeCalculations();
+            updateCalculations();
         }
 
         function renderTimelineFlow() {
             const container = document.getElementById('flow-container');
-            const data = timelineFlows[currentMode];
+            const data = (currentMode === 'transition' && clientType === 'seller') ? [
+                { title: "1. Financial & CPF Calculation", defaultDate: "2026-10-02", desc: "Review outstanding loans, CPF refunds (Seller 1 & 2), and select HDB vs Private conveyancing framework." },
+                { title: "2. Sale of Existing Property", defaultDate: "2026-11-27", desc: "Complete sale to unlock CPF funds and cash proceeds. Respect 15-month wait-out period if moving to resale HDB." },
+                { title: "3. Purchase of Next Property", defaultDate: "2026-12-15", desc: "If using private conveyancing, sale refunds can be utilised for purchase without pre-deduction at resale submission." }
+            ] : timelineFlows[clientType][currentMode];
             
-            document.getElementById('flow-title').innerText = currentMode === 'hdb' ? "HDB Resale Step-by-Step Milestone Flow" : (currentMode === 'pte' ? "Private Resale Step-by-Step Milestone Flow" : "Sell & Buy Transition Flow");
+            document.getElementById('flow-title').innerText = `${clientType.toUpperCase()} Mode: ${currentMode === 'hdb' ? "HDB Resale Flow" : (currentMode === 'pte' ? "Private Resale Flow" : "Sell & Buy Transition")}`;
 
             container.innerHTML = data.map((step, idx) => `
                 <div class="relative flex items-start space-x-4 pl-2">
@@ -459,49 +550,112 @@
             `).join('');
         }
 
-        function updateFeeCalculations() {
-            if(currentMode === 'transition') return;
+        function calculateBSD(price) {
+            let bsd = 0;
+            if (price <= 180000) bsd = price * 0.01;
+            else if (price <= 360000) bsd = 1800 + (price - 180000) * 0.02;
+            else if (price <= 1000000) bsd = 5400 + (price - 360000) * 0.03;
+            else if (price <= 1500000) bsd = 24600 + (price - 1000000) * 0.04;
+            else if (price <= 3000000) bsd = 44600 + (price - 1500000) * 0.05;
+            else bsd = 119600 + (price - 3000000) * 0.06;
+            return bsd;
+        }
 
+        function updateCalculations() {
             const price = parseFloat(document.getElementById('t-price').value) || 0;
-            const f1 = parseFloat(document.getElementById('t-fee1').value) || 0;
-            let f2Input = document.getElementById('t-fee2');
-            const msg = document.getElementById('fee-validation-msg');
 
-            if(currentMode === 'hdb') {
-                let f2 = parseFloat(f2Input.value) || 0;
-                const total = f1 + f2;
-                if(f1 < 1 || f1 > 1000) {
-                    msg.className = "text-xs font-semibold text-rose-600";
-                    msg.innerText = "⚠️ Option fee must be between $1 and $1,000.";
-                } else if(f2 < 1) {
-                    msg.className = "text-xs font-semibold text-rose-600";
-                    msg.innerText = "⚠️ Exercise fee must be at least $1 (cannot be $0).";
-                } else if(total > 5000) {
-                    msg.className = "text-xs font-semibold text-rose-600";
-                    msg.innerText = `⚠️ Total fees ($${total.toLocaleString()}) exceed the $5,000 maximum cap!`;
-                } else {
-                    msg.className = "text-xs font-semibold text-emerald-700";
-                    msg.innerText = `✓ Valid HDB Fees: Option ($${f1.toLocaleString()}) + Exercise ($${f2.toLocaleString()}) = $${total.toLocaleString()} total (Within $5k cap).`;
+            if (clientType === 'seller') {
+                if (currentMode !== 'transition') {
+                    const f1 = parseFloat(document.getElementById('t-fee1').value) || 0;
+                    let f2Input = document.getElementById('t-fee2');
+                    const msg = document.getElementById('fee-validation-msg');
+
+                    if (currentMode === 'hdb') {
+                        let f2 = parseFloat(f2Input.value) || 0;
+                        const total = f1 + f2;
+                        if (f1 < 1 || f1 > 1000) {
+                            msg.className = "text-xs font-semibold text-rose-600";
+                            msg.innerText = "⚠️ Option fee must be between $1 and $1,000.";
+                        } else if (f2 < 1) {
+                            msg.className = "text-xs font-semibold text-rose-600";
+                            msg.innerText = "⚠️ Exercise fee must be at least $1.";
+                        } else if (total > 5000) {
+                            msg.className = "text-xs font-semibold text-rose-600";
+                            msg.innerText = `⚠️ Total fees ($${total.toLocaleString()}) exceed $5,000 cap!`;
+                        } else {
+                            msg.className = "text-xs font-semibold text-emerald-700";
+                            msg.innerText = `✓ Valid HDB Fees: Option ($${f1.toLocaleString()}) + Exercise ($${f2.toLocaleString()}) = $${total.toLocaleString()}`;
+                        }
+                    } else {
+                        let optPct = f1;
+                        if (optPct < 1) optPct = 1;
+                        if (optPct > 4) optPct = 4;
+                        const exPct = 5 - optPct;
+                        f2Input.value = exPct;
+                        msg.className = "text-xs font-semibold text-emerald-700";
+                        msg.innerText = `✓ Private Resale Fee Split (Total 5%): Option ${optPct}% + Exercise ${exPct}%`;
+                    }
                 }
+
+                // Seller Proceeds calculation
+                const loan = parseFloat(document.getElementById('s-loan').value) || 0;
+                const cpf1 = parseFloat(document.getElementById('s-cpf1').value) || 0;
+                const cpf2 = parseFloat(document.getElementById('s-cpf2').value) || 0;
+                const rem = price - loan;
+                const totCpf = cpf1 + cpf2;
+                const net = rem - totCpf;
+
+                document.getElementById('s-rem').innerText = `$${rem.toLocaleString()}`;
+                document.getElementById('s-totcpf').innerText = `-$${totCpf.toLocaleString()}`;
+                document.getElementById('s-net').innerText = `$${Math.round(net).toLocaleString()}`;
+
+                const alertBox = document.getElementById('s-neg-alert');
+                if (net < 0) alertBox.classList.remove('hidden');
+                else alertBox.classList.add('hidden');
+
             } else {
-                let optPct = f1;
-                if(optPct < 1) optPct = 1;
-                if(optPct > 4) optPct = 4;
-                const exPct = 5 - optPct;
-                f2Input.value = exPct;
+                // Buyer calculations
+                const loanType = document.getElementById('b-loantype').value;
+                const profile = document.getElementById('b-profile').value;
+                const f1 = parseFloat(document.getElementById('t-fee1').value) || 0;
+                const f2 = parseFloat(document.getElementById('t-fee2').value) || 0;
 
-                const optAmt = price * (optPct / 100);
-                const exAmt = price * (exPct / 100);
-                const totalAmt = optAmt + exAmt;
+                let optAmt = 0, exAmt = 0;
+                if (currentMode === 'hdb') {
+                    optAmt = f1;
+                    exAmt = f2;
+                } else {
+                    let optPct = Math.min(4, Math.max(1, f1));
+                    document.getElementById('t-fee2').value = 5 - optPct;
+                    optAmt = price * (optPct / 100);
+                    exAmt = price * ((5 - optPct) / 100);
+                }
+                const paidFees = optAmt + exAmt;
 
-                msg.className = "text-xs font-semibold text-emerald-700";
-                msg.innerText = `✓ Private Resale Fee Split (Total 5%): Option ${optPct}% ($${Math.round(optAmt).toLocaleString()}) + Exercise ${exPct}% ($${Math.round(exAmt).toLocaleString()}) = $${Math.round(totalAmt).toLocaleString()} total.`;
+                const bsd = calculateBSD(price);
+                const absdRate = profile === 'pr' ? 0.05 : 0;
+                const absd = price * absdRate;
+                const totalDuty = bsd + absd;
+
+                document.getElementById('b-bsd').innerText = `$${Math.round(bsd).toLocaleString()}`;
+                document.getElementById('b-absd').innerText = `$${Math.round(absd).toLocaleString()} (${absdRate * 100}%)`;
+                document.getElementById('b-totduty').innerText = `$${Math.round(totalDuty).toLocaleString()}`;
+
+                if (loanType === 'bank') {
+                    // Bank loan 75% LTV -> 25% downpayment required (5% cash booking + 20% CPF/cash)
+                    const downpayment = price * 0.25;
+                    const balanceDue = downpayment - paidFees;
+                    document.getElementById('b-balance').innerText = `$${Math.round(balanceDue).toLocaleString()} (25% downpayment less paid fees)`;
+                } else {
+                    document.getElementById('b-balance').innerText = `HDB Concessionary Loan (HSR / HFE Rules)`;
+                }
             }
         }
 
+        switchClientType('seller');
         loadTemplate('hdb');
 
-        // Proceeds & Negative Sales
+        // Proceeds & Negative Sales Tab
         function calculateProceeds() {
             const price = parseFloat(document.getElementById('p-price').value) || 0;
             const loan = parseFloat(document.getElementById('p-loan').value) || 0;
@@ -584,7 +738,7 @@
                     ["Partition Walls", "3-6 Mths", "5% CPF/Cash", price * 0.05],
                     ["Roofing/Ceiling", "3-6 Mths", "5% CPF/Cash", price * 0.05],
                     ["Windows/Doors", "3-6 Mths", "5% CPF/Cash", price * 0.05],
-                    ["Car Park", "3-6 Mths", "5% CPF/Cash", price * 0.05],
+                    ["Car Park", "3-6 Mths", "5% Loan", price * 0.05],
                     ["TOP", "Upon TOP", "5% CPF + 20% Loan", price * 0.25],
                     ["CSC", "Upon CSC", "15% Loan", price * 0.15]
                 ];
@@ -606,14 +760,7 @@
             const price = parseFloat(document.getElementById('tax-price').value) || 1500000;
             const profile = document.getElementById('tax-profile').value;
 
-            let bsd = 0;
-            if (price <= 180000) bsd = price * 0.01;
-            else if (price <= 360000) bsd = 1800 + (price - 180000) * 0.02;
-            else if (price <= 1000000) bsd = 5400 + (price - 360000) * 0.03;
-            else if (price <= 1500000) bsd = 24600 + (price - 1000000) * 0.04;
-            else if (price <= 3000000) bsd = 44600 + (price - 1500000) * 0.05;
-            else bsd = 119600 + (price - 3000000) * 0.06;
-
+            let bsd = calculateBSD(price);
             let absdRate = 0;
             if (profile === 'sc-2') absdRate = 0.20;
             if (profile === 'sc-3' || profile === 'pr-2') absdRate = 0.30;
