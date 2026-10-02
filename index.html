@@ -60,7 +60,7 @@
         </div>
     </aside>
 
-    <!-- MAIN APP CONTENT AREA (Light Theme & Larger Text) -->
+    <!-- MAIN APP CONTENT AREA -->
     <main class="flex-1 flex flex-col bg-slate-50 overflow-y-auto p-8 space-y-6">
 
         <!-- TAB 1: TIMELINES -->
@@ -68,7 +68,7 @@
             <div class="flex justify-between items-center bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                 <div>
                     <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Timelines</h2>
-                    <p class="text-sm text-slate-600 mt-1">Walk your clients through visual step-by-step process flows with customizable pricing and deposit rules.</p>
+                    <p class="text-sm text-slate-600 mt-1">Walk your clients through visual step-by-step process flows with dynamic fee validation.</p>
                 </div>
                 <div class="flex space-x-3">
                     <button onclick="loadTemplate('hdb')" id="btn-tmpl-hdb" class="px-5 py-3 rounded-xl text-sm font-semibold bg-cyan-600 text-white transition shadow-sm">HDB Resale Flow</button>
@@ -95,11 +95,11 @@
                                 <input type="number" id="t-fee1" value="1000" min="1" max="1000" oninput="updateFeeCalculations()" class="w-full mt-1 bg-white border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
                             </div>
                             <div id="fee-box-2">
-                                <label class="text-[12px] font-semibold text-slate-600" id="lbl-fee2">Exercise Fee (Max $5k total)</label>
+                                <label class="text-[12px] font-semibold text-slate-600" id="lbl-fee2">Exercise Fee (Min $1)</label>
                                 <input type="number" id="t-fee2" value="4000" min="1" max="4999" oninput="updateFeeCalculations()" class="w-full mt-1 bg-white border border-slate-300 p-2.5 rounded-lg text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
                             </div>
                         </div>
-                        <div id="fee-validation-msg" class="text-xs font-semibold text-emerald-700">✓ Fees comply with regulations (Total Option + Exercise ≤ $5,000 or ≤ 5%).</div>
+                        <div id="fee-validation-msg" class="text-xs font-semibold text-emerald-700">✓ Fees comply with regulations.</div>
                     </div>
 
                     <div id="flow-container" class="space-y-4 relative before:absolute before:inset-0 before:left-5 before:w-0.5 before:bg-slate-200">
@@ -354,7 +354,6 @@
             btn.className = "nav-btn w-full flex items-center space-x-3.5 px-4 py-3.5 rounded-xl font-semibold bg-cyan-600 text-white transition shadow-md shadow-cyan-600/20";
         }
 
-        // Timeline Flow Engine with Dynamic Fee Rules
         let currentMode = 'hdb';
 
         const timelineFlows = {
@@ -368,8 +367,8 @@
             ],
             pte: [
                 { title: "1. Listing & Tenancy Review", timeline: "Day 1", desc: "Inspect unit, determine vacant possession or sale with tenancy, and confirm commission structure." },
-                { title: "2. Issue OTP & Collect Option Fee", timeline: "Day 1", desc: "Issue OTP to buyer and collect Option Fee (Selectable 1% to 4%) payable directly to seller." },
-                { title: "3. Buyer Exercise OTP", timeline: "14 Days", desc: "Buyer exercises OTP and tops up Exercise Fee. Combined Option + Exercise fee percentage must not exceed 5%." },
+                { title: "2. Issue OTP & Collect Option Fee", timeline: "Day 1", desc: "Issue OTP to buyer and collect Option Fee percentage payable directly to seller." },
+                { title: "3. Buyer Exercise OTP", timeline: "14 Days", desc: "Buyer exercises OTP and tops up Exercise Fee (Auto-balanced to total 5% max)." },
                 { title: "4. Law Firm Processing & Requisitions", timeline: "Weeks 3–6", desc: "Conveyancing law firms conduct title searches, requisitions, and preliminary checks." },
                 { title: "5. Loan & CPF Dispersals", timeline: "Weeks 8–10", desc: "Bank loan and CPF board prepare fund disbursals for legal completion." },
                 { title: "6. Completion & Vacant Possession", timeline: "10–12 Weeks", desc: "Key handover. CPF refunded back to OA within 10-14 working days." }
@@ -404,22 +403,24 @@
 
                 if(type === 'hdb') {
                     l1.innerText = "Option Fee ($1 - $1,000)";
-                    l2.innerText = "Exercise Fee (Max $5k total)";
+                    l2.innerText = "Exercise Fee (Min $1)";
                     f1.value = 1000;
                     f1.min = 1;
                     f1.max = 1000;
+                    f1.disabled = false;
                     f2.value = 4000;
                     f2.min = 1;
                     f2.max = 4999;
+                    f2.disabled = false;
                 } else {
                     l1.innerText = "Option Fee % (1% - 4%)";
-                    l2.innerText = "Exercise Fee % (Max 5% total)";
+                    l2.innerText = "Exercise Fee % (Auto-balanced)";
                     f1.value = 1;
                     f1.min = 1;
                     f1.max = 4;
-                    f2.value = 4;
-                    f2.min = 1;
-                    f2.max = 4;
+                    f1.disabled = false;
+                    f2.value = 4; // 5% - 1%
+                    f2.disabled = true; // Non-adjustable for private
                 }
             }
 
@@ -452,14 +453,18 @@
 
             const price = parseFloat(document.getElementById('t-price').value) || 0;
             const f1 = parseFloat(document.getElementById('t-fee1').value) || 0;
-            const f2 = parseFloat(document.getElementById('t-fee2').value) || 0;
+            let f2Input = document.getElementById('t-fee2');
             const msg = document.getElementById('fee-validation-msg');
 
             if(currentMode === 'hdb') {
+                let f2 = parseFloat(f2Input.value) || 0;
                 const total = f1 + f2;
                 if(f1 < 1 || f1 > 1000) {
                     msg.className = "text-xs font-semibold text-rose-600";
                     msg.innerText = "⚠️ Option fee must be between $1 and $1,000.";
+                } else if(f2 < 1) {
+                    msg.className = "text-xs font-semibold text-rose-600";
+                    msg.innerText = "⚠️️ Exercise fee must be at least $1 (cannot be $0).";
                 } else if(total > 5000) {
                     msg.className = "text-xs font-semibold text-rose-600";
                     msg.innerText = `⚠️ Total fees ($${total.toLocaleString()}) exceed the $5,000 maximum cap!`;
@@ -468,21 +473,19 @@
                     msg.innerText = `✓ Valid HDB Fees: Option ($${f1.toLocaleString()}) + Exercise ($${f2.toLocaleString()}) = $${total.toLocaleString()} total (Within $5k cap).`;
                 }
             } else {
-                const totalPct = f1 + f2;
-                const amt1 = price * (f1 / 100);
-                const amt2 = price * (f2 / 100);
-                const totalAmt = amt1 + amt2;
+                // Private Resale: Option % (1-4%), Exercise % = 5 - Option %
+                if(f1 < 1) f1 = 1;
+                if(f1 > 4) f1 = 4;
+                const optPct = f1;
+                const exPct = 5 - optPct;
+                f2Input.value = exPct;
 
-                if(f1 < 1 || f1 > 4) {
-                    msg.className = "text-xs font-semibold text-rose-600";
-                    msg.innerText = "⚠️ Option fee must be between 1% and 4%.";
-                } else if(totalPct > 5) {
-                    msg.className = "text-xs font-semibold text-rose-600";
-                    msg.innerText = `⚠️ Total fee percentage (${totalPct}%) exceeds the 5% maximum cap!`;
-                } else {
-                    msg.className = "text-xs font-semibold text-emerald-700";
-                    msg.innerText = `✓ Valid Private Fees: ${f1}% ($${Math.round(amt1).toLocaleString()}) + ${f2}% ($${Math.round(amt2).toLocaleString()}) = ${totalPct}% ($${Math.round(totalAmt).toLocaleString()}).`;
-                }
+                const optAmt = price * (optPct / 100);
+                const exAmt = price * (exPct / 100);
+                const totalAmt = optAmt + exAmt;
+
+                msg.className = "text-xs font-semibold text-emerald-700";
+                msg.innerText = `✓ Private Resale Fee Split (Total 5%): Option ${optPct}% ($${Math.round(optAmt).toLocaleString()}) + Exercise ${exPct}% ($${Math.round(exAmt).toLocaleString()}) = $${Math.round(totalAmt).toLocaleString()} total.`;
             }
         }
 
