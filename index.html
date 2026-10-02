@@ -55,7 +55,7 @@
         </div>
 
         <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-[12px] text-slate-500 text-center">
-            Date Format: <span class="text-cyan-700 font-semibold">DD/MM/YY</span>
+            Date Format: <span class="text-cyan-700 font-semibold">DD/MM/YYYY</span>
         </div>
     </aside>
 
@@ -168,7 +168,7 @@
                     <!-- SEPARATE NEGATIVE SALES EXPLANATION CARD -->
                     <div id="s-neg-alert" class="p-4 bg-rose-50 rounded-2xl border border-rose-200 text-rose-800 text-xs hidden space-y-1">
                         <div class="font-bold flex items-center space-x-1.5 text-sm">
-                            <span>⚠️</span>
+                            <span>⚠️️</span>
                             <span>Negative Sales Triggered</span>
                         </div>
                         <p class="leading-relaxed">The sale remainder is insufficient to cover total CPF refunds. Additional cash top-up or waiver approval may be required.</p>
@@ -221,7 +221,7 @@
         <div id="tab-proceeds" class="space-y-6 max-w-5xl mx-auto w-full hidden"><div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">Net Cash Proceeds & Negative Sales Calculator</h2></div></div>
         <div id="tab-ra" class="space-y-6 max-w-5xl mx-auto w-full hidden"><div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">CPF Retirement Account (RA) & FRS Checker</h2></div></div>
         <div id="tab-progressive" class="space-y-6 max-w-5xl mx-auto w-full hidden"><div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">Private New Launch Progressive Payment Calculator</h2></div></div>
-        <div id="tab-taxes" class="space-y-6 max-w-5xl mx-auto w-full hidden"><div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">Stamp Duty, ABSD & SSD Matrix</h2></div></div>
+        <div id="tab-taxes" class="space-y-6 max-w-5xl mx-auto w-full hidden"><div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">Stamp Duty, SSD Matrix</h2></div></div>
         <div id="tab-portals" class="space-y-6 max-w-5xl mx-auto w-full hidden"><div><h2 class="text-2xl font-bold text-slate-900 tracking-tight">Official Working File Portals & Hyperlinks Hub</h2></div></div>
 
     </main>
@@ -237,6 +237,14 @@
             });
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
             btn.className = "nav-btn w-full flex items-center space-x-3.5 px-4 py-3.5 rounded-xl font-semibold bg-cyan-600 text-white transition shadow-md shadow-cyan-600/20";
+        }
+
+        function formatDateDDMMYYYY(dateObj) {
+            if (isNaN(dateObj.getTime())) return "";
+            const day = String(dateObj.getDate()).padStart(2, '0');
+            const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const year = dateObj.getFullYear();
+            return `${day}/${month}/${year}`;
         }
 
         let currentMode = 'hdb';
@@ -426,7 +434,7 @@
                         let expiryDate = new Date(otpDate);
                         expiryDate.setDate(expiryDate.getDate() + 21);
                         const deadlineDisp = document.getElementById('otp-deadline-disp');
-                        if(deadlineDisp) deadlineDisp.innerText = expiryDate.toISOString().split('T')[0];
+                        if(deadlineDisp) deadlineDisp.innerText = formatDateDDMMYYYY(expiryDate);
                     }
                     validateOtpDate();
                 }
