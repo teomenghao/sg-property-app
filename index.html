@@ -7,105 +7,103 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; background-color: #090d16; color: #f1f5f9; font-size: 14px; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; background-color: #f8fafc; color: #1e293b; font-size: 15px; }
         ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #1e293b; }
-        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        ::-webkit-scrollbar-track { background: #e2e8f0; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     </style>
 </head>
 <body class="h-screen flex overflow-hidden select-none">
 
-    <!-- SIDEBAR NAVIGATION -->
-    <aside class="w-72 bg-slate-900 border-r border-slate-800 flex flex-col justify-between p-4 z-20">
+    <!-- SIDEBAR NAVIGATION (Light Theme) -->
+    <aside class="w-72 bg-white border-r border-slate-200 flex flex-col justify-between p-4 z-20 shadow-sm">
         <div class="space-y-6">
             <div class="flex items-center space-x-3 px-2 pt-2">
-                <div class="w-3.5 h-3.5 bg-cyan-500 rounded-full animate-pulse"></div>
+                <div class="w-3.5 h-3.5 bg-cyan-600 rounded-full animate-pulse"></div>
                 <div>
-                    <h1 class="text-xs font-bold tracking-wider text-white">PROPNEX ESMOND DIV</h1>
-                    <p class="text-[11px] text-slate-400">The Key Elements (Sep 2025)</p>
+                    <h1 class="text-xs font-bold tracking-wider text-slate-900">PROPNEX ESMOND DIV</h1>
+                    <p class="text-[12px] text-slate-500">The Key Elements (Sep 2025)</p>
                 </div>
             </div>
 
             <nav class="space-y-1.5 text-xs">
-                <button onclick="switchTab('timelines', this)" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-semibold bg-cyan-600 text-white transition shadow-lg shadow-cyan-900/30">
+                <button onclick="switchTab('timelines', this)" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-semibold bg-cyan-600 text-white transition shadow-md shadow-cyan-600/20">
                     <span class="text-base">📅</span>
-                    <span>Custom Client Timelines</span>
+                    <span>Client Flow Timelines</span>
                 </button>
-                <button onclick="switchTab('proceeds', this)" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
+                <button onclick="switchTab('proceeds', this)" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
                     <span class="text-base">💰</span>
                     <span>Proceeds & Negative Sales</span>
                 </button>
-                <button onclick="switchTab('ra', this)" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
+                <button onclick="switchTab('ra', this)" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
                     <span class="text-base">🛡️</span>
                     <span>CPF RA & FRS Checker</span>
                 </button>
-                <button onclick="switchTab('progressive', this)" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
+                <button onclick="switchTab('progressive', this)" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
                     <span class="text-base">📈</span>
                     <span>Progressive Payment Engine</span>
                 </button>
-                <button onclick="switchTab('taxes', this)" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
+                <button onclick="switchTab('taxes', this)" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
                     <span class="text-base">🏷️</span>
                     <span>Stamp Duty & SSD Matrix</span>
                 </button>
-                <button onclick="switchTab('portals', this)" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
+                <button onclick="switchTab('portals', this)" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
                     <span class="text-base">🔗</span>
                     <span>Official Portals & Links</span>
                 </button>
             </nav>
         </div>
 
-        <div class="p-3 bg-slate-800/60 rounded-xl border border-slate-700/60 text-[11px] text-slate-400 space-y-1">
-            <div class="font-semibold text-slate-200">Interactive Suite</div>
-            <div>Mode: <span class="text-cyan-400 font-mono">Live Client Adjustable</span></div>
+        <div class="p-3 bg-slate-100 rounded-xl border border-slate-200 text-[12px] text-slate-600 space-y-1">
+            <div class="font-semibold text-slate-800">Display Profile</div>
+            <div>Theme: <span class="text-cyan-600 font-mono">Client-Ready Light</span></div>
+            <div>Font Scale: <span class="text-emerald-600 font-mono">&gt;= 12px Enforced</span></div>
         </div>
     </aside>
 
-    <!-- MAIN APP CONTENT AREA -->
-    <main class="flex-1 flex flex-col bg-slate-950 overflow-y-auto p-6 lg:p-8 space-y-6">
+    <!-- MAIN APP CONTENT AREA (Light Theme) -->
+    <main class="flex-1 flex flex-col bg-slate-50 overflow-y-auto p-6 lg:p-8 space-y-6">
 
-        <!-- TAB 1: CUSTOM CLIENT TIMELINES & WORKFLOWS -->
+        <!-- TAB 1: VISUAL CLIENT FLOW TIMELINES -->
         <div id="tab-timelines" class="space-y-6 max-w-6xl mx-auto w-full">
-            <div class="flex justify-between items-center">
+            <div class="flex justify-between items-center bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
                 <div>
-                    <h2 class="text-xl font-bold text-white tracking-tight">Comprehensive Client Presentation Timelines</h2>
-                    <p class="text-xs text-slate-400 mt-1">Select a framework below or fully customize milestone steps to fit your client's exact transaction needs[cite: 1].</p>
+                    <h2 class="text-xl font-bold text-slate-900 tracking-tight">Interactive Client Presentation Timelines</h2>
+                    <p class="text-xs text-slate-500 mt-1">Walk your clients through a clean, visual step-by-step process flow directly from your working file[cite: 1].</p>
                 </div>
                 <div class="flex space-x-2">
-                    <button onclick="loadTemplate('hdb')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-cyan-600 text-white transition">HDB Resale Template</button>
-                    <button onclick="loadTemplate('pte')" class="px-3.5 py-2 rounded-xl text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Private Resale Template</button>
-                    <button onclick="loadTemplate('transition')" class="px-3.5 py-2 rounded-xl text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Sell & Buy Transition</button>
+                    <button onclick="loadTemplate('hdb')" id="btn-tmpl-hdb" class="px-4 py-2.5 rounded-xl text-xs font-semibold bg-cyan-600 text-white transition shadow-sm">HDB Resale Flow</button>
+                    <button onclick="loadTemplate('pte')" id="btn-tmpl-pte" class="px-4 py-2.5 rounded-xl text-xs font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Private Resale Flow</button>
+                    <button onclick="loadTemplate('transition')" id="btn-tmpl-trans" class="px-4 py-2.5 rounded-xl text-xs font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Sell & Buy Transition</button>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Editable Timeline Builder -->
-                <div class="lg:col-span-2 bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl space-y-4">
-                    <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                        <h3 class="text-sm font-bold text-cyan-400">Milestone Sequence (Tap to Edit / Add Step)</h3>
-                        <button onclick="addMilestoneStep()" class="text-xs bg-slate-800 hover:bg-slate-700 text-cyan-400 px-3 py-1.5 rounded-xl font-semibold transition">+ Add Step</button>
-                    </div>
-                    <div id="timeline-editor-container" class="space-y-3 font-mono text-xs">
+                <!-- Visual Flow Process Container -->
+                <div class="lg:col-span-2 bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-4">
+                    <h3 id="flow-title" class="text-sm font-bold text-cyan-700 border-b border-slate-100 pb-3">HDB Resale Step-by-Step Milestone Flow</h3>
+                    <div id="flow-container" class="space-y-4 relative before:absolute before:inset-0 before:left-5 before:w-0.5 before:bg-slate-200">
                         <!-- Injected via JS -->
                     </div>
                 </div>
 
-                <!-- Comprehensive Working File Notes & Advisory Rules -->
+                <!-- Advisory Talking Points & Rules -->
                 <div class="space-y-4">
-                    <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-xl space-y-3">
-                        <h3 class="text-sm font-bold text-amber-400 border-b border-slate-800 pb-3">Working File Reference Rules[cite: 1]</h3>
-                        <div class="space-y-2.5 text-xs text-slate-300 leading-relaxed">
-                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
-                                <b>Option & Exercise Fees:</b> Not more than $\$5,000$ total, forming part of the purchase/sale price[cite: 1].
+                    <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+                        <h3 class="text-sm font-bold text-amber-700 border-b border-slate-100 pb-3">Key Consultation Rules[cite: 1]</h3>
+                        <div class="space-y-3 text-xs text-slate-700 leading-relaxed">
+                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                                <b>Ethnic Quota Check:</b> Must be verified at the start of every month on HDB portal[cite: 1].
                             </div>
-                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
-                                <b>Loan Prerequisites:</b> HDB loan requires valid HFE before optioning; Bank loan requires Letter of Offer before exercising[cite: 1].
+                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                                <b>Private Owner Wait-Out:</b> Sellers below 55 selling private property must wait 15 months before buying resale HDB[cite: 1].
                             </div>
-                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
-                                <b>Conveyancing Difference:</b> HDB conveyancing requires funds ready in OA by resale submission; Private lawyer allows sale proceeds utilization[cite: 1].
+                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                                <b>Option & Exercise Fees:</b> Max $\$5,000$ total, which forms part of the purchase/sale price[cite: 1].
                             </div>
                         </div>
                     </div>
-                    <a href="https://services2.hdb.gov.in/webapp/AA29A/AA29ASecurity.jsp" target="_blank" class="w-full block text-center bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-3 rounded-xl text-xs transition shadow-lg shadow-cyan-900/30">🔗 Launch HDB Flat Portal & HFE Check</a>
+                    <a href="https://services2.hdb.gov.in/webapp/AA29A/AA29ASecurity.jsp" target="_blank" class="w-full block text-center bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-3 rounded-xl text-xs transition shadow-md shadow-cyan-600/20">🔗 Launch HDB Flat Portal & HFE Check</a>
                 </div>
             </div>
         </div>
@@ -113,51 +111,51 @@
         <!-- TAB 2: PROCEEDS & NEGATIVE SALES -->
         <div id="tab-proceeds" class="space-y-6 max-w-5xl mx-auto w-full hidden">
             <div>
-                <h2 class="text-xl font-bold text-white tracking-tight">Net Cash Proceeds & Negative Sales Calculator</h2>
-                <p class="text-xs text-slate-400 mt-1">Computes cash proceeds and prorates CPF refunds (Seller 1 & Seller 2) when sale remainder is insufficient[cite: 1].</p>
+                <h2 class="text-xl font-bold text-slate-900 tracking-tight">Net Cash Proceeds & Negative Sales Calculator</h2>
+                <p class="text-xs text-slate-500 mt-1">Computes cash proceeds and prorates CPF refunds (Seller 1 & Seller 2) when sale remainder is insufficient[cite: 1].</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4 shadow-xl">
-                    <h3 class="text-sm font-bold text-cyan-400 border-b border-slate-800 pb-3">Financial Inputs</h3>
+                <div class="bg-white border border-slate-200 p-6 rounded-2xl space-y-4 shadow-sm">
+                    <h3 class="text-sm font-bold text-cyan-700 border-b border-slate-100 pb-3">Financial Inputs</h3>
                     <div class="space-y-3 text-xs">
                         <div>
-                            <label class="text-[11px] font-semibold text-slate-400">Selling Price (SGD)</label>
-                            <input type="number" id="p-price" value="800000" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-cyan-500 outline-none">
+                            <label class="text-[12px] font-semibold text-slate-600">Selling Price (SGD)</label>
+                            <input type="number" id="p-price" value="800000" class="w-full mt-1 bg-slate-50 border border-slate-200 p-3 rounded-xl text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
                         </div>
                         <div>
-                            <label class="text-[11px] font-semibold text-slate-400">Outstanding Loan (HDB or Bank)</label>
-                            <input type="number" id="p-loan" value="300000" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-cyan-500 outline-none">
+                            <label class="text-[12px] font-semibold text-slate-600">Outstanding Loan (HDB or Bank)</label>
+                            <input type="number" id="p-loan" value="300000" class="w-full mt-1 bg-slate-50 border border-slate-200 p-3 rounded-xl text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
                         </div>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="text-[11px] font-semibold text-slate-400">Seller 1 CPF Refund (Prin + Accrued)</label>
-                                <input type="number" id="p-cpf1" value="150000" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-cyan-500 outline-none">
+                                <label class="text-[12px] font-semibold text-slate-600">Seller 1 CPF Refund (Prin + Accrued)</label>
+                                <input type="number" id="p-cpf1" value="150000" class="w-full mt-1 bg-slate-50 border border-slate-200 p-3 rounded-xl text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
                             </div>
                             <div>
-                                <label class="text-[11px] font-semibold text-slate-400">Seller 2 CPF Refund (Prin + Accrued)</label>
-                                <input type="number" id="p-cpf2" value="120000" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-cyan-500 outline-none">
+                                <label class="text-[12px] font-semibold text-slate-600">Seller 2 CPF Refund (Prin + Accrued)</label>
+                                <input type="number" id="p-cpf2" value="120000" class="w-full mt-1 bg-slate-50 border border-slate-200 p-3 rounded-xl text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
                             </div>
                         </div>
-                        <button onclick="calculateProceeds()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-3 rounded-xl text-xs transition shadow-lg shadow-cyan-600/20">Compute Proceeds & Ratios</button>
+                        <button onclick="calculateProceeds()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-3 rounded-xl text-xs transition shadow-md shadow-cyan-600/20">Compute Proceeds & Ratios</button>
                     </div>
                 </div>
 
-                <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl flex flex-col justify-between space-y-4">
-                    <h3 class="text-sm font-bold text-white border-b border-slate-800 pb-3">Computation Results</h3>
+                <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm flex flex-col justify-between space-y-4">
+                    <h3 class="text-sm font-bold text-slate-900 border-b border-slate-100 pb-3">Computation Results</h3>
                     <div id="proceeds-results" class="space-y-3 text-xs font-mono hidden">
-                        <div class="p-4 bg-slate-950 rounded-xl border border-slate-800 space-y-2">
-                            <div class="flex justify-between text-slate-400"><span>Selling Price Less Loan:</span> <span id="res-rem" class="text-white font-bold"></span></div>
-                            <div class="flex justify-between text-slate-400"><span>Total CPF Refunds Required:</span> <span id="res-totcpf" class="text-rose-400 font-bold"></span></div>
-                            <div class="flex justify-between border-t border-slate-800 pt-2 text-sm font-bold"><span>Net Cash / Shortfall:</span> <span id="res-net" class="text-cyan-400"></span></div>
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                            <div class="flex justify-between text-slate-600"><span>Selling Price Less Loan:</span> <span id="res-rem" class="text-slate-900 font-bold"></span></div>
+                            <div class="flex justify-between text-slate-600"><span>Total CPF Refunds Required:</span> <span id="res-totcpf" class="text-rose-600 font-bold"></span></div>
+                            <div class="flex justify-between border-t border-slate-200 pt-2 text-sm font-bold"><span>Net Cash / Shortfall:</span> <span id="res-net" class="text-cyan-700"></span></div>
                         </div>
-                        <div id="neg-sales-box" class="p-3.5 bg-rose-950/40 rounded-xl border border-rose-800/60 text-rose-300 hidden leading-relaxed text-[11px]">
+                        <div id="neg-sales-box" class="p-3.5 bg-rose-50 rounded-xl border border-rose-200 text-rose-800 hidden leading-relaxed text-[12px]">
                             ⚠️ <b>Negative Sales Triggered:</b> Sale remainder is insufficient to cover total CPF refunds[cite: 1]. Refunds will be apportioned by respective ratios[cite: 1]. Selling below valuation requires cash top-up to OA[cite: 1].
                         </div>
                     </div>
                     <div class="flex space-x-2">
-                        <a href="https://www.cpf.gov.sg" target="_blank" class="flex-1 text-center bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2.5 rounded-xl text-xs transition">🔗 MyCPF Portal</a>
-                        <a href="https://services2.hdb.gov.in/webapp/AA29A/AA29ASecurity.jsp" target="_blank" class="flex-1 text-center bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2.5 rounded-xl text-xs transition">🔗 MyHDB Loan Check</a>
+                        <a href="https://www.cpf.gov.sg" target="_blank" class="flex-1 text-center bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2.5 rounded-xl text-xs transition border border-slate-200">🔗 MyCPF Portal</a>
+                        <a href="https://services2.hdb.gov.in/webapp/AA29A/AA29ASecurity.jsp" target="_blank" class="flex-1 text-center bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2.5 rounded-xl text-xs transition border border-slate-200">🔗 MyHDB Loan Check</a>
                     </div>
                 </div>
             </div>
@@ -166,58 +164,58 @@
         <!-- TAB 3: CPF RA & FRS CHECKER -->
         <div id="tab-ra" class="space-y-6 max-w-5xl mx-auto w-full hidden">
             <div>
-                <h2 class="text-xl font-bold text-white tracking-tight">CPF Retirement Account (RA) & Full Retirement Sum Checker</h2>
-                <p class="text-xs text-slate-400 mt-1">Evaluates 2026 FRS rules ($\$220,400$) for sellers aged 55 and above[cite: 1].</p>
+                <h2 class="text-xl font-bold text-slate-900 tracking-tight">CPF Retirement Account (RA) & Full Retirement Sum Checker</h2>
+                <p class="text-xs text-slate-500 mt-1">Evaluates 2026 FRS rules ($\$220,400$) for sellers aged 55 and above[cite: 1].</p>
             </div>
 
-            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl max-w-2xl space-y-4">
+            <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm max-w-2xl space-y-4">
                 <div class="space-y-3 text-xs">
                     <div>
-                        <label class="text-[11px] font-semibold text-slate-400">Seller Age</label>
-                        <input type="number" id="ra-age" value="56" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-cyan-500 outline-none">
+                        <label class="text-[12px] font-semibold text-slate-600">Seller Age</label>
+                        <input type="number" id="ra-age" value="56" class="w-full mt-1 bg-slate-50 border border-slate-200 p-3 rounded-xl text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
                     </div>
                     <div>
-                        <label class="text-[11px] font-semibold text-slate-400">Current RA Balance (SGD)</label>
-                        <input type="number" id="ra-bal" value="180000" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-cyan-500 outline-none">
+                        <label class="text-[12px] font-semibold text-slate-600">Current RA Balance (SGD)</label>
+                        <input type="number" id="ra-bal" value="180000" class="w-full mt-1 bg-slate-50 border border-slate-200 p-3 rounded-xl text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
                     </div>
-                    <button onclick="calculateRA()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-3 rounded-xl text-xs transition shadow-lg shadow-cyan-600/20">Evaluate RA & FRS Status</button>
+                    <button onclick="calculateRA()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-3 rounded-xl text-xs transition shadow-md shadow-cyan-600/20">Evaluate RA & FRS Status</button>
                 </div>
 
-                <div id="ra-results" class="bg-slate-950 border border-slate-800 p-4 rounded-xl text-xs font-mono space-y-2 hidden">
-                    <div class="text-cyan-400 font-bold">2026 FRS Benchmark: $220,400[cite: 1]</div>
-                    <div id="ra-output-text" class="text-slate-300 leading-relaxed text-[11px]"></div>
+                <div id="ra-results" class="bg-slate-50 border border-slate-200 p-4 rounded-xl text-xs font-mono space-y-2 hidden">
+                    <div class="text-cyan-700 font-bold">2026 FRS Benchmark: $220,400[cite: 1]</div>
+                    <div id="ra-output-text" class="text-slate-700 leading-relaxed text-[12px]"></div>
                 </div>
-                <a href="https://www.cpf.gov.sg" target="_blank" class="w-full block text-center bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2.5 rounded-xl text-xs transition">🔗 Check MyCPF Retirement Dashboard</a>
+                <a href="https://www.cpf.gov.sg" target="_blank" class="w-full block text-center bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2.5 rounded-xl text-xs transition border border-slate-200">🔗 Check MyCPF Retirement Dashboard</a>
             </div>
         </div>
 
         <!-- TAB 4: PROGRESSIVE PAYMENT ENGINE -->
         <div id="tab-progressive" class="space-y-6 max-w-5xl mx-auto w-full hidden">
             <div>
-                <h2 class="text-xl font-bold text-white tracking-tight">Private New Launch Progressive Payment Calculator</h2>
-                <p class="text-xs text-slate-400 mt-1">Calculate exact cash, CPF, and loan outlays across building stages based on LTV tiers[cite: 1].</p>
+                <h2 class="text-xl font-bold text-slate-900 tracking-tight">Private New Launch Progressive Payment Calculator</h2>
+                <p class="text-xs text-slate-500 mt-1">Calculate exact cash, CPF, and loan outlays across building stages based on LTV tiers[cite: 1].</p>
             </div>
 
-            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl space-y-4 max-w-3xl">
+            <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-4 max-w-3xl">
                 <div class="grid grid-cols-2 gap-4 text-xs">
                     <div>
-                        <label class="text-[11px] font-semibold text-slate-400">Purchase Price (SGD)</label>
-                        <input type="number" id="prog-price" value="2000000" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-cyan-500 outline-none">
+                        <label class="text-[12px] font-semibold text-slate-600">Purchase Price (SGD)</label>
+                        <input type="number" id="prog-price" value="2000000" class="w-full mt-1 bg-slate-50 border border-slate-200 p-3 rounded-xl text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
                     </div>
                     <div>
-                        <label class="text-[11px] font-semibold text-slate-400">Loan Tier & Outstanding Loans</label>
-                        <select id="prog-tier" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-cyan-500 outline-none">
+                        <label class="text-[12px] font-semibold text-slate-600">Loan Tier & Outstanding Loans</label>
+                        <select id="prog-tier" class="w-full mt-1 bg-slate-50 border border-slate-200 p-3 rounded-xl text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
                             <option value="75">1st Loan (75% LTV / 5% Cash Booking)</option>
                             <option value="45">2nd Loan (45% LTV / 10% Cash Booking)</option>
                             <option value="35">3rd Loan (35% LTV / 25% Cash Booking)</option>
                         </select>
                     </div>
                 </div>
-                <button onclick="calculateProgressive()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-3 rounded-xl text-xs transition shadow-lg shadow-cyan-600/20">Generate Progressive Schedule</button>
+                <button onclick="calculateProgressive()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-3 rounded-xl text-xs transition shadow-md shadow-cyan-600/20">Generate Progressive Schedule</button>
 
-                <div id="prog-box" class="bg-slate-950 border border-slate-800 rounded-xl overflow-hidden hidden text-xs font-mono">
+                <div id="prog-box" class="bg-slate-50 border border-slate-200 rounded-xl overflow-hidden hidden text-xs font-mono">
                     <table class="w-full text-left">
-                        <thead class="bg-slate-900 text-slate-400 border-b border-slate-800">
+                        <thead class="bg-slate-100 text-slate-700 border-b border-slate-200 font-semibold">
                             <tr>
                                 <th class="p-3">Milestone Stage</th>
                                 <th class="p-3">Timeline</th>
@@ -225,7 +223,7 @@
                                 <th class="p-3 text-right">Amount (SGD)</th>
                             </tr>
                         </thead>
-                        <tbody id="prog-tbody" class="divide-y divide-slate-800 text-slate-300 text-[11px]">
+                        <tbody id="prog-tbody" class="divide-y divide-slate-200 text-slate-700 text-[12px]">
                             <!-- Injected -->
                         </tbody>
                     </table>
@@ -236,21 +234,21 @@
         <!-- TAB 5: STAMP DUTY & SSD MATRIX -->
         <div id="tab-taxes" class="space-y-6 max-w-5xl mx-auto w-full hidden">
             <div>
-                <h2 class="text-xl font-bold text-white tracking-tight">Stamp Duty, ABSD & Post-4 July 2025 SSD Matrix</h2>
-                <p class="text-xs text-slate-400 mt-1">Instant computation for BSD, ABSD, and Seller's Stamp Duty holding periods[cite: 1].</p>
+                <h2 class="text-xl font-bold text-slate-900 tracking-tight">Stamp Duty, ABSD & Post-4 July 2025 SSD Matrix</h2>
+                <p class="text-xs text-slate-500 mt-1">Instant computation for BSD, ABSD, and Seller's Stamp Duty holding periods[cite: 1].</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl space-y-4">
-                    <h3 class="text-sm font-bold text-cyan-400 border-b border-slate-800 pb-3">BSD & ABSD Calculator</h3>
+                <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-4">
+                    <h3 class="text-sm font-bold text-cyan-700 border-b border-slate-100 pb-3">BSD & ABSD Calculator</h3>
                     <div class="space-y-3 text-xs">
                         <div>
-                            <label class="text-[11px] font-semibold text-slate-400">Purchase Price / Valuation (SGD)</label>
-                            <input type="number" id="tax-price" value="1500000" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-cyan-500 outline-none">
+                            <label class="text-[12px] font-semibold text-slate-600">Purchase Price / Valuation (SGD)</label>
+                            <input type="number" id="tax-price" value="1500000" class="w-full mt-1 bg-slate-50 border border-slate-200 p-3 rounded-xl text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
                         </div>
                         <div>
-                            <label class="text-[11px] font-semibold text-slate-400">Buyer Profile & Property Count</label>
-                            <select id="tax-profile" class="w-full mt-1 bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-white focus:border-cyan-500 outline-none">
+                            <label class="text-[12px] font-semibold text-slate-600">Buyer Profile & Property Count</label>
+                            <select id="tax-profile" class="w-full mt-1 bg-slate-50 border border-slate-200 p-3 rounded-xl text-sm font-mono text-slate-900 focus:border-cyan-600 outline-none">
                                 <option value="sc-1">Singapore Citizen (1st Property - 0% ABSD)</option>
                                 <option value="sc-2">Singapore Citizen (2nd Property - 20% ABSD)</option>
                                 <option value="sc-3">Singapore Citizen (3rd+ Property - 30% ABSD)</option>
@@ -259,33 +257,33 @@
                                 <option value="foreigner">Foreigner (Any Property - 60% ABSD)</option>
                             </select>
                         </div>
-                        <button onclick="calculateTaxes()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-3 rounded-xl text-xs transition shadow-lg shadow-cyan-600/20">Calculate Stamp Duties</button>
+                        <button onclick="calculateTaxes()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-3 rounded-xl text-xs transition shadow-md shadow-cyan-600/20">Calculate Stamp Duties</button>
                     </div>
 
-                    <div id="tax-results" class="bg-slate-950 border border-slate-800 p-4 rounded-xl text-xs font-mono space-y-2 hidden">
-                        <div class="flex justify-between text-slate-400"><span>Buyer's Stamp Duty (BSD):</span> <span id="out-bsd" class="text-white"></span></div>
-                        <div class="flex justify-between text-slate-400"><span>Additional BSD (ABSD):</span> <span id="out-absd" class="text-rose-400"></span></div>
-                        <div class="flex justify-between border-t border-slate-800 pt-2 text-sm font-bold"><span>Total Stamp Duty:</span> <span id="out-totaltax" class="text-cyan-400"></span></div>
+                    <div id="tax-results" class="bg-slate-50 border border-slate-200 p-4 rounded-xl text-xs font-mono space-y-2 hidden">
+                        <div class="flex justify-between text-slate-600"><span>Buyer's Stamp Duty (BSD):</span> <span id="out-bsd" class="text-slate-900 font-bold"></span></div>
+                        <div class="flex justify-between text-slate-600"><span>Additional BSD (ABSD):</span> <span id="out-absd" class="text-rose-600 font-bold"></span></div>
+                        <div class="flex justify-between border-t border-slate-200 pt-2 text-sm font-bold"><span>Total Stamp Duty:</span> <span id="out-totaltax" class="text-cyan-700"></span></div>
                     </div>
                 </div>
 
-                <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl space-y-4">
-                    <h3 class="text-sm font-bold text-amber-400 border-b border-slate-800 pb-3">Seller's Stamp Duty (SSD) On/After 4 Jul 2025</h3>
+                <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-4">
+                    <h3 class="text-sm font-bold text-amber-700 border-b border-slate-100 pb-3">Seller's Stamp Duty (SSD) On/After 4 Jul 2025</h3>
                     <div class="overflow-x-auto text-xs font-mono">
                         <table class="w-full text-left">
-                            <thead class="bg-slate-950 text-slate-400 border-b border-slate-800">
+                            <thead class="bg-slate-100 text-slate-700 border-b border-slate-200 font-semibold">
                                 <tr><th class="p-3">Holding Period</th><th class="p-3 text-right">SSD Rate</th></tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-800 text-slate-300 text-[11px]">
-                                <tr><td class="p-3">Sold within 1 Year</td><td class="p-3 text-right text-rose-400 font-bold">16%[cite: 1]</td></tr>
-                                <tr><td class="p-3">Sold between 1–2 Years</td><td class="p-3 text-right text-amber-400 font-bold">12%[cite: 1]</td></tr>
-                                <tr><td class="p-3">Sold between 2–3 Years</td><td class="p-3 text-right text-cyan-400 font-bold">8%[cite: 1]</td></tr>
-                                <tr><td class="p-3">Sold between 3–4 Years</td><td class="p-3 text-right text-emerald-400 font-bold">4%[cite: 1]</td></tr>
-                                <tr><td class="p-3">Sold after 4 Years</td><td class="p-3 text-right text-emerald-500 font-bold">0%[cite: 1]</td></tr>
+                            <tbody class="divide-y divide-slate-200 text-slate-700 text-[12px]">
+                                <tr><td class="p-3">Sold within 1 Year</td><td class="p-3 text-right text-rose-600 font-bold">16%[cite: 1]</td></tr>
+                                <tr><td class="p-3">Sold between 1–2 Years</td><td class="p-3 text-right text-amber-600 font-bold">12%[cite: 1]</td></tr>
+                                <tr><td class="p-3">Sold between 2–3 Years</td><td class="p-3 text-right text-cyan-700 font-bold">8%[cite: 1]</td></tr>
+                                <tr><td class="p-3">Sold between 3–4 Years</td><td class="p-3 text-right text-emerald-600 font-bold">4%[cite: 1]</td></tr>
+                                <tr><td class="p-3">Sold after 4 Years</td><td class="p-3 text-right text-emerald-700 font-bold">0%[cite: 1]</td></tr>
                             </tbody>
                         </table>
                     </div>
-                    <a href="https://www.iras.gov.sg" target="_blank" class="w-full block text-center bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2.5 rounded-xl text-xs transition">🔗 IRAS Property Tax Portal</a>
+                    <a href="https://www.iras.gov.sg" target="_blank" class="w-full block text-center bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2.5 rounded-xl text-xs transition border border-slate-200">🔗 IRAS Property Tax Portal</a>
                 </div>
             </div>
         </div>
@@ -293,30 +291,30 @@
         <!-- TAB 6: OFFICIAL PORTALS & HYPERLINKS HUB -->
         <div id="tab-portals" class="space-y-6 max-w-5xl mx-auto w-full hidden">
             <div>
-                <h2 class="text-xl font-bold text-white tracking-tight">Official Working File Portals & Hyperlinks Hub</h2>
-                <p class="text-xs text-slate-400 mt-1">Direct 1-tap access to all external websites and government portals referenced in your working file[cite: 1].</p>
+                <h2 class="text-xl font-bold text-slate-900 tracking-tight">Official Working File Portals & Hyperlinks Hub</h2>
+                <p class="text-xs text-slate-500 mt-1">Direct 1-tap access to all external websites and government portals referenced in your working file[cite: 1].</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
-                <a href="https://services2.hdb.gov.in/webapp/AA29A/AA29ASecurity.jsp" target="_blank" class="p-5 bg-slate-900 border border-slate-800 rounded-2xl hover:border-cyan-500 transition space-y-2 block shadow-xl">
-                    <div class="text-base font-bold text-cyan-400">HDB Flat Portal & HFE</div>
-                    <div class="text-[11px] text-slate-400">Check HDB flat details, financial info, resale applications, and HFE checks[cite: 1].</div>
+                <a href="https://services2.hdb.gov.in/webapp/AA29A/AA29ASecurity.jsp" target="_blank" class="p-5 bg-white border border-slate-200 rounded-2xl hover:border-cyan-600 transition space-y-2 block shadow-sm">
+                    <div class="text-base font-bold text-cyan-700">HDB Flat Portal & HFE</div>
+                    <div class="text-[12px] text-slate-500">Check HDB flat details, financial info, resale applications, and HFE checks[cite: 1].</div>
                 </a>
-                <a href="https://www.cpf.gov.sg" target="_blank" class="p-5 bg-slate-900 border border-slate-800 rounded-2xl hover:border-cyan-500 transition space-y-2 block shadow-xl">
-                    <div class="text-base font-bold text-emerald-400">MyCPF Home Ownership</div>
-                    <div class="text-[11px] text-slate-400">View CPF refunds, accrued interest, OA balances, and Retirement Account (RA) FRS status[cite: 1].</div>
+                <a href="https://www.cpf.gov.sg" target="_blank" class="p-5 bg-white border border-slate-200 rounded-2xl hover:border-cyan-600 transition space-y-2 block shadow-sm">
+                    <div class="text-base font-bold text-emerald-700">MyCPF Home Ownership</div>
+                    <div class="text-[12px] text-slate-500">View CPF refunds, accrued interest, OA balances, and Retirement Account (RA) FRS status[cite: 1].</div>
                 </a>
-                <a href="https://www.iras.gov.sg" target="_blank" class="p-5 bg-slate-900 border border-slate-800 rounded-2xl hover:border-cyan-500 transition space-y-2 block shadow-xl">
-                    <div class="text-base font-bold text-amber-400">IRAS MyTax Portal</div>
-                    <div class="text-[11px] text-slate-400">Review property tax accounts, owner-occupier rates, and prorated tax adjustments[cite: 1].</div>
+                <a href="https://www.iras.gov.sg" target="_blank" class="p-5 bg-white border border-slate-200 rounded-2xl hover:border-cyan-600 transition space-y-2 block shadow-sm">
+                    <div class="text-base font-bold text-amber-700">IRAS MyTax Portal</div>
+                    <div class="text-[12px] text-slate-500">Review property tax accounts, owner-occupier rates, and prorated tax adjustments[cite: 1].</div>
                 </a>
-                <a href="https://agent.propnex.com" target="_blank" class="p-5 bg-slate-900 border border-slate-800 rounded-2xl hover:border-cyan-500 transition space-y-2 block shadow-xl">
-                    <div class="text-base font-bold text-blue-400">PropNex Agent Suite</div>
-                    <div class="text-[11px] text-slate-400">Submit transaction eSubmissions, forms, and administrative requests[cite: 1].</div>
+                <a href="https://agent.propnex.com" target="_blank" class="p-5 bg-white border border-slate-200 rounded-2xl hover:border-cyan-600 transition space-y-2 block shadow-sm">
+                    <div class="text-base font-bold text-blue-700">PropNex Agent Suite</div>
+                    <div class="text-[12px] text-slate-500">Submit transaction eSubmissions, forms, and administrative requests[cite: 1].</div>
                 </a>
-                <a href="https://www.sla.gov.sg/ldau/MainPage.aspx" target="_blank" class="p-5 bg-slate-900 border border-slate-800 rounded-2xl hover:border-cyan-500 transition space-y-2 block shadow-xl">
-                    <div class="text-base font-bold text-purple-400">SLA LDAU Portal</div>
-                    <div class="text-[11px] text-slate-400">Submit Land Dealings Approval Unit applications for landed property inheritance[cite: 1].</div>
+                <a href="https://www.sla.gov.sg/ldau/MainPage.aspx" target="_blank" class="p-5 bg-white border border-slate-200 rounded-2xl hover:border-cyan-600 transition space-y-2 block shadow-sm">
+                    <div class="text-base font-bold text-purple-700">SLA LDAU Portal</div>
+                    <div class="text-[12px] text-slate-500">Submit Land Dealings Approval Unit applications for landed property inheritance[cite: 1].</div>
                 </a>
             </div>
         </div>
@@ -330,69 +328,64 @@
                 document.getElementById(`tab-${t}`).classList.add('hidden');
             });
             document.querySelectorAll('.nav-btn').forEach(b => {
-                b.className = "nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition";
+                b.className = "nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition";
             });
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-            btn.className = "nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-semibold bg-cyan-600 text-white transition shadow-lg shadow-cyan-900/30";
+            btn.className = "nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-semibold bg-cyan-600 text-white transition shadow-md shadow-cyan-600/20";
         }
 
-        // Comprehensive Interactive Timeline Builder
-        let currentTimeline = [];
-
-        const templates = {
+        // Visual Process Flow Timelines
+        const timelineFlows = {
             hdb: [
-                { step: "1. Listing Presentation & Initial Checks", detail: "Check ethnic quota at start of month[cite: 1]; verify HFE / MyHDB flat financial info[cite: 1]." },
-                { step: "2. Register Intent to Sell & Issue OTP", detail: "Collect option fee (max $1,000 cash/PayNow)[cite: 1]. Agree on price, extension of stay, contra." },
-                { step: "3. Submit Resale Application", detail: "Submit on HDB Flat Portal within 7 days[cite: 1]. Request valuation ($120) if required[cite: 1]." },
-                { step: "4. HDB Valuer Inspection & Approval", detail: "~2 weeks processing[cite: 1]. HDB loan requires valid HFE; Bank loan requires Letter of Offer[cite: 1]." },
-                { step: "5. First Appointment & Endorsement", detail: "~4 weeks[cite: 1]. Pay exercise fee ($1-$4,999)[cite: 1]. Endorse resale documents." },
-                { step: "6. Resale Completion & Handover", detail: "8 weeks total[cite: 1]. Cashier's order for outstanding amounts; CPF refunded to OA in 10-14 working days[cite: 1]." }
+                { title: "1. Listing Presentation & Initial Checks", timeline: "Day 1", desc: "Check ethnic quota at start of month[cite: 1]; inspect flat details and verify HFE / MyHDB financial eligibility[cite: 1]." },
+                { title: "2. Register Intent to Sell & Issue OTP", timeline: "Week 1", desc: "Collect option fee (max $1,000 via Cash/PayNow)[cite: 1]. Agree on price, extension of stay, and contra arrangements." },
+                { title: "3. Resale Submission & Valuation", timeline: "Within 7 Days[cite: 1]", desc: "Submit resale application on HDB Flat Portal[cite: 1]. Request valuation ($120) if required[cite: 1]." },
+                { title: "4. HDB Approval & Loan Letter", timeline: "~2–4 Weeks[cite: 1]", desc: "HDB approval. Note: HDB loan requires valid HFE before optioning; Bank loan requires Letter of Offer before exercising[cite: 1]." },
+                { title: "5. First Appointment & Document Endorsement", timeline: "~4 Weeks[cite: 1]", desc: "Pay exercise fee ($1 to $4,999)[cite: 1]. Endorse resale documents and settle administrative fees with HDB[cite: 1]." },
+                { title: "6. Resale Completion & Handover", timeline: "8 Weeks Total[cite: 1]", desc: "Cashier's order for outstanding payments. CPF refunded to OA within 10-14 working days[cite: 1]." }
             ],
             pte: [
-                { step: "1. Listing Presentation & Pricing", detail: "Review tenancy or vacant possession status[cite: 1]. Establish commission and timeline." },
-                { step: "2. Issue OTP & Collect 1% Fee", detail: "Deliver OTP to buyer's appointed law firm[cite: 1]. Option period typically 14/21 days[cite: 1]." },
-                { step: "3. Buyer Exercise OTP", detail: "Buyer exercises with 4% exercise fee payable to seller's law firm CVY account[cite: 1]." },
-                { step: "4. Law Firm Processing & Requisitions", detail: "Weeks 3–6[cite: 1]. Title searches, requisitions, and loan processing by legal counsel." },
-                { step: "5. CPF & Bank Loan Dispersals", detail: "Weeks 8–10[cite: 1]. Law firm prepares cashier's orders and stamp duty settlements." },
-                { step: "6. Completion & Vacant Possession", detail: "10–12 Weeks[cite: 1]. Handover keys; CPF refunded to OA within 10-14 working days[cite: 1]." }
+                { title: "1. Listing & Tenancy Review", timeline: "Day 1", desc: "Inspect unit, determine vacant possession or sale with tenancy, and confirm commission structure[cite: 1]." },
+                { title: "2. Issue OTP & Collect 1% Fee", timeline: "Day 1", desc: "Issue OTP to buyer and collect 1% option fee payable directly to seller[cite: 1]." },
+                { title: "3. Buyer Exercise OTP", timeline: "14 Days[cite: 1]", desc: "Buyer exercises OTP and tops up 4% exercise fee payable to seller's law firm CVY account[cite: 1]." },
+                { title: "4. Law Firm Processing & Requisitions", timeline: "Weeks 3–6[cite: 1]", desc: "Conveyancing law firms conduct title searches, requisitions, and preliminary checks." },
+                { title: "5. Loan & CPF Dispersals", timeline: "Weeks 8–10[cite: 1]", desc: "Bank loan and CPF board prepare fund disbursals for legal completion." },
+                { title: "6. Completion & Vacant Possession", timeline: "10–12 Weeks[cite: 1]", desc: "Key handover. CPF refunded back to OA within 10-14 working days[cite: 1]." }
             ],
             transition: [
-                { step: "1. Financial & CPF Calculation", detail: "Check existing loan, CPF refunds (Seller 1 & 2), and decide HDB vs Private conveyancing[cite: 1]." },
-                { step: "2. Sale of Existing Property", detail: "Complete sale to unlock CPF funds and cash proceeds[cite: 1]. Respect 15-month wait-out if applicable[cite: 1]." },
-                { step: "3. Purchase of Next Property", detail: "If using private conveyancing, refund can be utilised without pre-deduction at resale submission[cite: 1]." }
+                { title: "1. Financial & CPF Calculation", timeline: "Preparation", desc: "Review outstanding loans, CPF refunds (Seller 1 & 2), and select HDB vs Private conveyancing framework[cite: 1]." },
+                { title: "2. Sale of Existing Property", timeline: "Completion", desc: "Complete sale to unlock CPF funds and cash proceeds[cite: 1]. Respect 15-month wait-out period if moving to resale HDB[cite: 1]." },
+                { title: "3. Purchase of Next Property", timeline: "Next Stage", desc: "If using private conveyancing, sale refunds can be utilised for purchase without pre-deduction at resale submission[cite: 1]." }
             ]
         };
 
         function loadTemplate(type) {
-            currentTimeline = JSON.parse(JSON.stringify(templates[type]));
-            renderTimeline();
-        }
+            ['hdb', 'pte', 'trans'].forEach(t => {
+                const btn = document.getElementById(`btn-tmpl-${t}`);
+                if(t === type || (t === 'trans' && type === 'transition')) {
+                    btn.className = "px-4 py-2.5 rounded-xl text-xs font-semibold bg-cyan-600 text-white transition shadow-sm";
+                } else {
+                    btn.className = "px-4 py-2.5 rounded-xl text-xs font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 transition";
+                }
+            });
 
-        function renderTimeline() {
-            const container = document.getElementById('timeline-editor-container');
-            container.innerHTML = currentTimeline.map((item, idx) => `
-                <div class="p-3.5 bg-slate-950 rounded-xl border border-slate-800 space-y-2">
-                    <div class="flex justify-between items-center">
-                        <input type="text" value="${item.step}" onchange="updateStep(${idx}, 'step', this.value)" class="bg-transparent font-bold text-white text-xs w-3/4 outline-none border-b border-transparent focus:border-cyan-500">
-                        <button onclick="removeStep(${idx})" class="text-rose-400 text-[10px] hover:underline">Remove</button>
+            const container = document.getElementById('flow-container');
+            const data = timelineFlows[type];
+            
+            document.getElementById('flow-title').innerText = type === 'hdb' ? "HDB Resale Step-by-Step Milestone Flow" : (type === 'pte' ? "Private Resale Step-by-Step Milestone Flow" : "Sell & Buy Transition Flow");
+
+            container.innerHTML = data.map((step, idx) => `
+                <div class="relative flex items-start space-x-4 pl-2">
+                    <div class="w-7 h-7 rounded-full bg-cyan-600 text-white flex items-center justify-center font-bold text-xs z-10 shadow-sm shrink-0">${idx + 1}</div>
+                    <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl flex-1 shadow-sm space-y-1">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-slate-900 text-xs">${step.title}</span>
+                            <span class="text-cyan-700 font-mono text-[11px] font-semibold bg-cyan-50 px-2 py-0.5 rounded border border-cyan-200">${step.timeline}</span>
+                        </div>
+                        <p class="text-slate-600 text-[12px] leading-relaxed">${step.desc}</p>
                     </div>
-                    <input type="text" value="${item.detail}" onchange="updateStep(${idx}, 'detail', this.value)" class="bg-slate-900 p-2 rounded-lg text-slate-300 text-[11px] w-full outline-none border border-slate-800 focus:border-cyan-500">
                 </div>
             `).join('');
-        }
-
-        function updateStep(idx, field, val) {
-            currentTimeline[idx][field] = val;
-        }
-
-        function removeStep(idx) {
-            currentTimeline.splice(idx, 1);
-            renderTimeline();
-        }
-
-        function addMilestoneStep() {
-            currentTimeline.push({ step: "New Milestone", detail: "Enter details here..." });
-            renderTimeline();
         }
 
         loadTemplate('hdb');
@@ -487,11 +480,11 @@
             }
 
             document.getElementById('prog-tbody').innerHTML = sched.map(r => `
-                <tr class="hover:bg-slate-900 transition">
-                    <td class="p-3 font-bold text-white">${r[0]}</td>
-                    <td class="p-3 text-slate-400">${r[1]}</td>
-                    <td class="p-3 text-cyan-400">${r[2]}</td>
-                    <td class="p-3 text-right text-emerald-400">$${Math.round(r[3]).toLocaleString()}</td>
+                <tr class="hover:bg-slate-100 transition">
+                    <td class="p-3 font-bold text-slate-900">${r[0]}</td>
+                    <td class="p-3 text-slate-500">${r[1]}</td>
+                    <td class="p-3 text-cyan-700 font-semibold">${r[2]}</td>
+                    <td class="p-3 text-right text-emerald-700 font-bold">$${Math.round(r[3]).toLocaleString()}</td>
                 </tr>
             `).join('');
             document.getElementById('prog-box').classList.remove('hidden');
