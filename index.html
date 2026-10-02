@@ -11,8 +11,6 @@
         ::-webkit-scrollbar { width: 10px; height: 10px; }
         ::-webkit-scrollbar-track { background: #e2e8f0; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 5px; }
-        .custom-date-wrap { position: relative; display: inline-flex; align-items: center; }
-        .custom-date-wrap input[type="date"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; z-index: 10; }
     </style>
 </head>
 <body class="h-screen flex overflow-hidden select-none">
@@ -57,7 +55,7 @@
         </div>
 
         <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-[12px] text-slate-500 text-center">
-            Format: <span class="text-cyan-700 font-semibold">DD MMM YYYY</span>
+            Date Format: <span class="text-cyan-700 font-semibold">DD/MM/YY</span>
         </div>
     </aside>
 
@@ -241,15 +239,6 @@
             btn.className = "nav-btn w-full flex items-center space-x-3.5 px-4 py-3.5 rounded-xl font-semibold bg-cyan-600 text-white transition shadow-md shadow-cyan-600/20";
         }
 
-        function formatDateDDMMMYYYY(dateObj) {
-            if (isNaN(dateObj.getTime())) return "";
-            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-            const day = String(dateObj.getDate()).padStart(2, '0');
-            const month = months[dateObj.getMonth()];
-            const year = dateObj.getFullYear();
-            return `${day} ${month} ${year}`;
-        }
-
         let currentMode = 'hdb';
         let clientType = 'seller';
 
@@ -379,18 +368,11 @@
                 if(step.isExtension) extraAttrs = `id="input-extension-date" readonly`;
 
                 let isLocked = (step.isCooling || step.isCompletion || step.isExtension);
-                let initialFormatted = formatDateDDMMMYYYY(new Date(step.defaultDate));
 
                 let dateWidgetHtml = isLocked ? `
-                    <div class="bg-slate-100 text-slate-500 font-mono text-xs font-semibold px-3 py-1.5 rounded-lg cursor-not-allowed">
-                        <span id="disp-${idx}">${initialFormatted}</span>
-                    </div>
+                    <input type="date" id="${step.isCooling ? 'input-cooling-date' : (step.isCompletion ? 'input-completion-date' : 'input-extension-date')}" value="${step.defaultDate}" readonly class="bg-slate-100 text-slate-500 font-mono text-xs font-semibold px-2.5 py-1 rounded-lg outline-none cursor-not-allowed">
                 ` : `
-                    <div class="custom-date-wrap bg-white border border-slate-300 text-cyan-800 font-mono text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center space-x-2 shadow-sm hover:border-cyan-600 transition">
-                        <span id="disp-${idx}">${initialFormatted}</span>
-                        <span>📅</span>
-                        <input type="date" value="${step.defaultDate}" data-index="${idx}" ${extraAttrs} oninput="syncDateDisplay(this)">
-                    </div>
+                    <input type="date" value="${step.defaultDate}" ${extraAttrs} oninput="syncDateChanges(this)" class="bg-white border border-slate-300 text-cyan-800 font-mono text-xs font-semibold px-2.5 py-1 rounded-lg outline-none focus:border-cyan-600 shadow-sm">
                 `;
 
                 return `
@@ -413,13 +395,7 @@
             }
         }
 
-        function syncDateDisplay(input) {
-            const dateObj = new Date(input.value);
-            const idx = input.getAttribute('data-index');
-            const dispSpan = document.getElementById(`disp-${idx}`);
-            if(dispSpan && !isNaN(dateObj.getTime())) {
-                dispSpan.innerText = formatDateDDMMMYYYY(dateObj);
-            }
+        function syncDateChanges(input) {
             if(input.id === 'input-intent-date') handleIntentDateChange(input);
             if(input.id === 'input-otp-date') handleOtpDateChange(input);
             if(input.id === 'input-acceptance-date') handleAcceptanceDateChange(input);
@@ -443,8 +419,6 @@
                     let coolingDate = new Date(intentDate);
                     coolingDate.setDate(coolingDate.getDate() + 7);
                     coolingInput.value = coolingDate.toISOString().split('T')[0];
-                    const disp2 = document.getElementById('disp-2');
-                    if(disp2) disp2.innerText = formatDateDDMMMYYYY(coolingDate);
                     otpInput.min = coolingDate.toISOString().split('T')[0];
 
                     const otpDate = new Date(otpInput.value);
@@ -452,7 +426,7 @@
                         let expiryDate = new Date(otpDate);
                         expiryDate.setDate(expiryDate.getDate() + 21);
                         const deadlineDisp = document.getElementById('otp-deadline-disp');
-                        if(deadlineDisp) deadlineDisp.innerText = formatDateDDMMMYYYY(expiryDate);
+                        if(deadlineDisp) deadlineDisp.innerText = expiryDate.toISOString().split('T')[0];
                     }
                     validateOtpDate();
                 }
@@ -464,14 +438,10 @@
                     let compDate = new Date(accDate);
                     compDate.setDate(compDate.getDate() + 56);
                     completionInput.value = compDate.toISOString().split('T')[0];
-                    const disp9 = document.getElementById('disp-9');
-                    if(disp9) disp9.innerText = formatDateDDMMMYYYY(compDate);
 
                     let extDate = new Date(compDate);
                     extDate.setMonth(extDate.getMonth() + 3);
                     extensionInput.value = extDate.toISOString().split('T')[0];
-                    const disp10 = document.getElementById('disp-10');
-                    if(disp10) disp10.innerText = formatDateDDMMMYYYY(extDate);
                 }
             }
         }
